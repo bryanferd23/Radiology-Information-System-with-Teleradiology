@@ -1,0 +1,148 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgba(240,242,245);
+    font-size: .9rem !important;
+    font-weight: 350 !important;
+    margin-bottom: 2rem;
+}
+
+.navbar { 
+    height: 3.35rem;
+    background-color: rgba(39,87,44);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.navbar .nav-link {
+    height: 33px;
+    font-size: .85rem;
+    margin-top: .1rem;
+    margin-bottom: .2rem;
+    font-weight: bold;
+    padding: .35rem .8rem .45rem .8rem;
+}
+
+#x-ray-info {
+    margin-top: 2rem;
+    font-size: .8rem;
+}
+
+section {
+    display: grid;
+    place-items: center;
+}
+.card {
+    margin-top: 3rem;
+    width: 60rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 7px;
+}
+.card-header {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    padding: 1.5vh 1vw 0% 1vw;
+    margin-bottom: 0%;
+    position: relative;
+    top: -20px;
+    left: 1%;
+    width: 98%;
+    border-style: unset;
+    text-align: center;
+    background-color: rgba(39,87,44);
+    color: white;
+    border-radius: 7px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+.card-body {
+    display: grid;
+    place-content: center;
+}
+
+.carousel-inner img {
+    border-radius: 7px;
+    width: 100%;
+}
+
+#login-header {
+    text-align: center;
+    color: rgba(39,87,44);
+}
+#login-header i {
+    font-size: 65px;
+}
+#login-form, #forgot-pass-form {
+    width: 100%;
+    margin: 0 .5rem .5rem .5rem;
+}
+#forgot-pass-header {
+    font-size: 1.2rem;
+}
+#forgot-pass-header a{
+    color: var(--dark);
+    padding: 0;
+}
+#forgot-pass-header i{
+    padding-bottom: .2rem;
+}
+
+.progress.active .progress-bar {
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+
+.modal {
+    padding-top: 6rem;
+}
+.modal-header {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    font-size: 1.2rem;
+    padding: .7rem .2rem .7rem .2rem;
+    margin: 0px;
+    width: 102%;
+    border-style: unset;
+    position: relative;
+    top: -2rem;
+    left: -1%;
+    background-color: rgba(39,87,44);
+    color: white;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+.modal-content {
+    border-style: unset !important;
+    border: unset !important;
+    border-radius: 7px !important;
+}
+
+@media (max-width:992px){
+    .card {
+        width: 100%;
+    }
+    section {
+        margin: 0 2%;
+        width: 96%;
+    }
+}
+
+@media (max-width: 576px) {
+    h3 {
+        font-size: 1.5rem;
+    }
+    .lead {
+        font-size: 1.1rem;
+    }
+    section {
+        width: 100%;
+        margin: auto;
+    }
+    .card-header {
+        margin-top: 0;
+        left: 2%;
+        max-width: 96%;
+        text-align: center;
+    }
+}

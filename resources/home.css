@@ -1,0 +1,228 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: rgba(240,242,245);
+    font-size: .9rem !important;
+    font-weight: 350 !important;
+    margin-bottom: 2rem;
+}
+
+.navbar { 
+    background-color: rgba(39,87,44);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px, rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.nav-link {
+    margin-right: .5rem;
+}
+
+.navbar-brand {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    margin: auto 2rem auto 2rem;
+}
+
+.heading {
+    padding: 1rem 0 0 1rem;
+    margin: 0% 5rem 0 0;
+    width: 60rem;
+}
+
+section {
+    display: grid;
+    place-items: center;
+}
+
+.card {
+    margin-top: 3rem;
+    width: 60rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border-radius: 7px;
+}
+
+.card-header {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    padding: 1.5vh 1vw;
+    position: relative;
+    top: -15px;
+    left: 1%;
+    border-style: unset;
+    max-width: 29rem;
+    text-align: center;
+    background-color: rgba(39,87,44);
+    color: white;
+    border-radius: 5px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.card-body {
+    position: relative;
+    top: -15px;
+}
+
+.dropdown-menu {
+    background-color: rgba(39,87,44);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: unset;
+    overflow: hidden;
+    border-radius: 5px;
+}
+.dropdown-item {
+    font-size: .9rem;
+    color: rgb(197, 212, 199);
+    transition: all .2s;
+    height: 2.5rem;
+}
+
+.dropdown-item:hover::after {
+    content: "";
+    right: -5px;
+    width: 5px;
+    height: 2.47rem;
+    top: -2px;
+    position: fixed;
+    background: var(--yellow);
+    border-radius: 1px;
+}
+
+.dropdown-item:hover {
+   transform: translateX(-5px);
+   background-color: unset !important;
+   color: var(--yellow);
+}
+
+.dropdown-item i{
+    text-align: right;
+    font-size: 14px;
+    width: 14px;
+    margin: auto 0 auto auto;
+}
+
+#settings {
+    position: fixed;
+    font-size: .85rem;
+    right: 0;
+    top: .6rem;
+    text-decoration: unset;
+}
+#settings i {
+    margin: .3rem 0rem .3rem .3rem;
+    padding: 0px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 50px;
+    max-width: 50px;
+    min-width: 50px;
+    font-style: normal;
+    font-weight: 600;
+}
+#settings .fa-caret-down {
+    margin: .275rem -.7rem 0 -.7rem;
+    font-size: 20px;
+}
+#settings img {
+    margin: 2.5px 0px 2.5px 2.5px;
+}
+
+
+.nav-link:hover {
+    color: white !important;
+}
+
+#settings-dropdown-menu {
+    text-align: right;
+    position: absolute;
+    top: 2.5rem;
+}
+
+section input, section button, section select{
+    font-size: .9rem !important;
+}
+
+.form-row button {
+    width: 5rem;
+}
+
+.badge {
+    width: 4rem;
+    height: 1.1rem;
+    padding-top: .2rem;
+}
+
+.progress.active .progress-bar {
+    -webkit-transition: none !important;
+    transition: none !important;
+}
+
+#edit-profile i{
+    font-size: 30px;
+    color: white;
+    position: relative;
+    top: 10.5rem;
+}
+#profile-picture {
+    margin-top: -2rem;
+}
+.modal {
+    padding-top: 6rem;
+}
+.modal-content {
+    border-style: unset !important;
+    border: unset !important;
+    border-radius: 7px !important;
+}
+
+@media (max-width:1024px){
+    .heading {
+        width: 100%;
+        margin-right: 0;
+        padding-left: .5rem;
+    }
+    .card {
+        width: 100%;
+    }
+    section {
+        margin: 0 2%;
+        width: 96%;
+    }
+}
+
+@media (max-width:768px){
+    .navbar-brand {
+        margin: auto auto auto 1rem;
+    }
+    .heading {
+        font-size: 1.6rem;
+    }
+    section {
+        width: 100%;
+        margin: auto;
+    }
+    section .card-header {
+        left: 2%;
+        max-width: 96%;
+        text-align: center;
+    }
+    .dropdown-menu {
+        background-color: unset;
+        background-image: unset;
+        box-shadow: unset;
+    }
+    #settings-dropdown-menu {
+        background-color: rgba(39,87,44);
+    }
+    .nav-link {
+        margin: .5rem auto auto .5rem;
+    }
+    .nav-item {
+        margin: auto auto auto 0;
+    }
+    #user-list-body .badge {
+        margin: auto auto .25rem auto !important;
+    }
+}
