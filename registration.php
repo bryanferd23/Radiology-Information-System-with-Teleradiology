@@ -70,7 +70,7 @@
                                     <h5 class="modal-title" id="unlock-modalLabel">Registration is locked!</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <div id="unlock-modal-form-loading" class="progress mb-2 d-none">
+                                    <div class="progress mb-2 d-none">
                                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                                     </div>
                                     <div class="form-row">
@@ -103,7 +103,7 @@
                     <div class="alert alert-secondary mb-4 d-flex justify-content-center" role="alert">
                         <i>Please fill out the the necessary information</i>
                     </div>
-                    <div id="form-loading" class="progress mb-2 d-none">
+                    <div class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="form-row">

@@ -26,6 +26,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href='resources/home.css'>
+    
+    
   </head>
   <body>
 
@@ -44,7 +46,7 @@
                         Examination
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#"><i class="fas fa-plus-square mr-1"></i> Add patient</a>
+                        <a id="navlink2" class="dropdown-item" href="#"><i class="fas fa-plus-square mr-1"></i> Add patient</a>
                         <a class="dropdown-item" href="#"><i class="fas fa-list-ol mr-1"></i> Show list</a>
                     </div>
                 </div>
@@ -59,7 +61,7 @@
                     </div>
                 </div>
                 <div class="nav-item <?php if ($_SESSION['role'] != 'admin') echo 'd-none'?>">
-                    <a class="nav-link" id="navlink2" href="#">Administration</a>
+                    <a class="nav-link" id="navlink3" href="#">Administration</a>
                 </div>
             </div>
         </div>
@@ -103,6 +105,7 @@
         }
     ?>
 
+    <!-- Dashboard - nav_link_content #1 -->
     <section id="dashboard" class="nav_link_content">
             <h3 class="heading">Dashboard</h3>
         <div class="card">
@@ -111,6 +114,202 @@
             </div>
             <div class="card-body d-flex justify-content-center">
                 No info
+            </div>
+        </div>
+    </section>
+    <!-- Add patient - nav_link_content #2 -->
+    <section id="add-patient" class="nav_link_content">
+            <h3 class="heading">Examination</h3>
+        <div class="card">
+            <div class="card-header">
+                Add patient
+            </div>
+            <div class="card-body">
+                <form id="add-patient-form">
+                    <div class="progress mb-2 d-none">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div class="form-row mb-2">
+                        <div id="add-patient-alert" class="alert alert-danger w-100 text-center" role="alert">
+                            <!-- response goes here -->
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
+                        <div class="col mb-3">
+                            <label for="x_ray_no">X-ray No.</label>
+                            <input type="text" class="form-control" name="x_ray_no" id="x_ray_no" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="inf_no">Infirmary No.</label>
+                            <input type="text" class="form-control" name="inf_no" id="inf_no" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="or_no">OR No.</label>
+                            <input type="text" class="form-control" name="or_no" id="or_no" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="exam_date">Examination date</label>
+                            <input type="date" class="form-control" name="exam_date" id="exam_date" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6 mb-3">
+                            <label for="patient_fname">First name</label>
+                            <input type="text" class="form-control name" name="patient_fname" id="patient_fname" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label for="patient_lname">Last name</label>
+                            <input type="text" class="form-control name" name="patient_lname" id="patient_lname" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
+                        <div class="col mb-3">
+                            <label for="b_date">Birth date</label>
+                            <input type="date" class="form-control" name="b_date" id="b_date" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3 d-none">
+                            <label for="age">Age</label>
+                            <input type="number" class="form-control" name="age" id="age">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient_gender">Gender</label>
+                            <select class="custom-select" name="patient_gender" id="patient_gender" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient_cnumber">Mobile no.</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
+                                </div>
+                                <input type="text" class="form-control rounded-right number" name="patient_cnumber" id="patient_cnumber" required>
+                                <small class="form-text">
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="standing_or_status">Standing/Status</label>
+                            <select class="custom-select" name="standing_or_status" id="standing_or_status">
+                                <option selected disabled value="">Choose...</option>
+                                <option>Eependent</option>
+                                <option>Employee</option>
+                                <option>Student</option>
+                                <option>Outsider</option>
+                            </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="history_or_purpose">History/Purpose</label>
+                            <input type="text" class="form-control" name="history_or_purpose" id="history_or_purpose" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="physician">Physician</label>
+                            <select class="custom-select" name="physician" id="physician" required>
+                                <option selected disabled value="">Choose...</option>
+                                <option value="1">Elwin Jay, Yu, Internal Medicine</option>
+                                <option value="2">Merry Christ'l, Supnet-guinocor, Pediatrician</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
+                        <div class="col mb-3">
+                            <label for="procedure">Procedure</label>
+                            <select id="procedure" name="procedure" class="form-control">
+                                <option id="procedure-placeholder" selected disabled value="">Choose...</option>
+                                <optgroup label="Chest">
+                                    <option value="Chest AP">AP</option>
+                                    <option value="Chest PA">PA</option>
+                                    <option value="Chest APL">APL</option>
+                                    <option value="Chest PAL">PAL</option>
+                                    <option value="Chest APOL">APOL</option>
+                                    <option value="Chest PALO">PALO</option>
+                                </optgroup>
+                                <optgroup label="Bucky">
+                                    <option value="Bucky AP">AP</option>
+                                    <option value="Bucky PA">PA</option>
+                                </optgroup>
+                                <optgroup label="Extremities">
+                                    <option value="Extremities APL">APL</option>
+                                    <option value="Extremities PAL">PAL</option>
+                                    <option value="Extremities APOL">APOL</option>
+                                    <option value="Extremities PALO">PALO</option>
+                                </optgroup>
+                                <optgroup label="Skull">
+                                    <option value="Skull APL">APL</option>
+                                    <option value="Skull PAL">PAL</option>
+                                    <option value="Skull Waters view">Waters view</option>
+                                </optgroup>
+                                <optgroup label="Vertebrae">
+                                    <option value="Vertebrae APL">APL</option>
+                                    <option value="Vertebrae RAO">RAO</option>
+                                    <option value="Vertebrae LAO">LAO</option>
+                                </optgroup>
+                                <optgroup label="Pelvis">
+                                    <option value="Pelvis LAO">AP</option>
+                                </optgroup>
+                                <optgroup label="Shoulder">
+                                    <option value="Shoulder AP">AP</option>
+                                    <option value="Shoulder Internal Rotation">Internal Rotation</option>
+                                    <option value="Shoulder External Rotation">External Rotation</option>
+                                    <option value="Shoulder Scapular Y">Scapular Y</option>
+                                </optgroup>
+                                <optgroup label="Abdomin">
+                                    <option value="Abdomin FPU">FPU</option>
+                                </optgroup>
+                            </select>
+                            <small class="form-text text-muted">
+                                Select 1 (click) or more (ctr+click)
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="film_size">Film size</label>
+                            <select class="form-control" name="film_size" id="film_size">
+                                <option id="film_size-placeholder" selected disabled value="">Choose...</option>
+                                <option>8x10</option>
+                                <option>10x12</option>
+                                <option>11x14</option>
+                                <option>14x14</option>
+                                <option>14x17</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                Select 1 (click) or more (ctr+click)
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="spoils">No. of film spoilage</label>
+                            <input type="number" class="form-control" name="spoils" id="spoils" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="error">Reason for spoilage</label>
+                            <input type="text" class="form-control" name="error" id="error" required>
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <button class="btn btn-primary ml-auto" type="submit">Add</button>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
@@ -127,7 +326,7 @@
                         <strong>Note: </strong>
                         <i class="ml-2">A link to the registration page will be sent to the user and will use the code to unlock the page.</i>
                     </div>
-                    <div id="send-registration-email-loading" class="progress mb-2 d-none">
+                    <div class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="form-row mb-2">
@@ -241,7 +440,7 @@
                         <img id="profile-picture" src="resources/images/blank.jpg" width="200px" height="200px" class="rounded-circle">
                         <input type="file" class="custom-file-input d-none" name="customFile" id="customFile">
                     </div>
-                    <div id="edit-profile-loading" class="progress mb-2 d-none">
+                    <div class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="form-row mb-2">
@@ -305,7 +504,7 @@
             </div>
             <div class="card-body">
                 <form id="change-password-form">
-                    <div id="change-password-loading" class="progress mb-2 d-none">
+                    <div  class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="form-row mb-2">
@@ -346,8 +545,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
     <script src="resources/home.js"></script>
 </body>
 </html>

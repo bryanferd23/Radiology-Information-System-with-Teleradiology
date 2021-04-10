@@ -3,8 +3,8 @@
 $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
     if (!$con)
         exit(mysqli_connect_error());
-
-//create table users
+//-------------------------- USER related tables -----------------------------------------------------------//
+//USERS
 if (!$con->query('create table users(
             u_id int(12) auto_increment primary key, 
             u_name varchar(32) not null, 
@@ -19,7 +19,7 @@ if (!$con->query('create table users(
             status enum("ACTIVE","DISABLED") not null)'))
     echo mysqli_error($con);
 
-//create table login_tracker
+//login_tracker
 if(!$con->query('create table login_tracker(
             u_id int(12) not null,
             session_id varchar(32) not null,
@@ -30,14 +30,14 @@ if(!$con->query('create table login_tracker(
             unlock_time varchar(32) DEFAULT 0,
             foreign key(u_id) references users(u_id))'))
     echo mysqli_error($con);
-//create pending_reg table
+//pending_reg
 if(!$con->query('create table pending_registration(
             reg_id int(12) auto_increment primary key, 
             email varchar(32) not null, 
             reg_code varchar(72) not null,
             role varchar(32) not null)'))
     echo mysqli_error($con);
-//create pending_reg_tracker table
+//pending_reg_tracker
 if(!$con->query('create table pending_registration_tracker(
             reg_id int(12) not null,
             session_id varchar(32) not null,
@@ -48,67 +48,115 @@ if(!$con->query('create table pending_registration_tracker(
             unlock_time varchar(32) DEFAULT 0,
             foreign key(reg_id) references pending_registration(reg_id))'))
     echo mysqli_error($con);
-//create pending forgot pass table            
+//pending forgot pass          
 if(!$con->query('create table pending_forgot_pass(
             id int(12) PRIMARY KEY AUTO_INCREMENT, 
             u_id int(12) not null, 
             cooldown_time varchar(32) not null,
             FOREIGN KEY(u_id) REFERENCES users(u_id))'))
     echo mysqli_error($con);
-//create patients table            
+
+//--------------------------------=--- patient, physician, x-ray related tables -----------------------------------------------------//
+//unnormalized
+//x_ray_no, inf_no, or_no, b_date, name, age, status_or_standing, procedure, history_or_purpose, film_sizes, no_of_spoilage, reason_for_spoilage, physician, c_number, released
+
+//physician,   
+if(!$con->query('create table physicians(
+            id int(12) PRIMARY KEY AUTO_INCREMENT, 
+            fname varchar(32) not null,
+            lname varchar(32) not null,
+            specialization varchar(100) not null
+            '))
+    echo mysqli_error($con);
+
+//b_date, name, age, status_or_standing, c_number,
 if(!$con->query('create table patients(
             id int(12) PRIMARY KEY AUTO_INCREMENT, 
             fname varchar(32) not null,
             lname varchar(32) not null,
+            b_date datetime not null,
+            age int(3) not null,
             gender enum("Male", "Female") not null,
-            cnumber varchar(32) null,
+            standing_or_status enum("Dependent", "Employee", "Student", "Outsider"),
+            cnumber varchar(32) null
             '))
     echo mysqli_error($con);
-//create examination table        
+
+//x_ray_no, inf_no, or_no, history_or_purpose, no_of_film_spoilage, reason_for_spoilage, released
 if(!$con->query('create table examination(
             x_ray_no int(12) PRIMARY KEY not null,
+            inf_no int(12) not null,
+            or_no int(12) not null,
             patient_id int(12) not null,
-            clinical_history varchar(32) not null,
-            requesting_physician varchar(32) not null,
-            film_size enum("8x10", "10x14", "14x14", "14x17") not null,
-            FOREIGN KEY(patient_id) REFERENCES patients(id),
+            history_or_purpose varchar(32) not null,
+            no_of_film_spoilage int(2) not null,
+            reason_for_spoilage varchar(32) not null,
+            physician_id int(12) not null,
+            date date not null,
+            FOREIGN KEY(physician_id) REFERENCES physicians(id),
+            FOREIGN KEY(patient_id) REFERENCES patients(id)
             '))
     echo mysqli_error($con);
-//create for_reading table        
+
+//procedure, film_sizes
+if(!$con->query('create table procedures(
+            id int(12) PRIMARY KEY AUTO_INCREMENT, 
+            x_ray_no int(12) not null,
+            part_or_type enum("Chest", "Extremities", "Skull", "Vertebrae", "Shoulder", "Abdomin", "Bucky") not null,
+            views enum("AP","PA","APL","PAL","APOL","PALO","RAO","LAO","FPU","Internal Rotation","External Rotation","Waters view","Scapular Y") not null,
+            film_size enum("8x10", "10x12", "11x14", "14x14", "14x17") not null,
+            foreign key(x_ray_no) references examination(X_ray_no)
+            '))
+    echo mysqli_error($con);
+
+//radiographs
+if(!$con->query('create radiographs(
+            procedure_id int(12) not null,
+            img_file varchar(32) not null,
+            FOREIGN key(procedure_id) references procedures(id)
+            '))
+    echo mysqli_error($con);
+
+//for_reading
 if(!$con->query('create table for_reading(
             id int(12) PRIMARY KEY auto_increment,
-            patient_id int(12) not null,
             x_ray_no int(12) not null,
-            x_ray_img varchar(32) not null,
-            FOREIGN KEY(patient_id) REFERENCES patients(id),
-            FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no),
+            FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no)
             '))
     echo mysqli_error($con);
-//create findings_and_diagnoses table        
+
+//findings_and_diagnoses      
 if(!$con->query('create table findings_and_diagnoses(
             id int(12) PRIMARY KEY auto_increment,
             findings varchar(300) not null,
-            diagnosis varchar(150) not null,
+            diagnosis varchar(150) not null
             '))
     echo mysqli_error($con);
-//create x_ray_results table        
+
+//x_ray_results      
 if(!$con->query('create table x_ray_results(
-            id int(12) PRIMARY KEY auto_increment,
-            patient_id int(12) not null,
-            x_ray_no int(12) not null,
+            procedure_id int(12) not null,
             findings_and_diagnoses_id int(12) not null,
             FOREIGN KEY(findings_and_diagnoses_id) REFERENCES findings_and_diagnoses(id),
-            FOREIGN KEY(patient_id) REFERENCES patients(id),
-            FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no),
+            FOREIGN KEY(procedure_id) REFERENCES procedures(id)
             '))
     echo mysqli_error($con);
 
 
-//populate table
-//create account for admin
+//------------------ populate tables -------------------------------------------------------------------------//
 $hashadmin = password_hash("admin", PASSWORD_BCRYPT, array('cost' => 10));
+$hashradtech = password_hash("radtechmai2", PASSWORD_BCRYPT, array('cost' => 10));
 $con->query('insert into users
-    (u_name, u_pass, fname, lname, gender, cnumber, email, role, status) 
+    (u_name, u_pass, fname, lname, gender, cnumber, email, role, status, img_file) 
     values 
-    ("admin", "'.$hashadmin.'", "First name", "Lastname", "Male", "Add a contact #", "Add an email", "admin", "ACTIVE")');
+    ("admin", "'.$hashadmin.'", "Ferdiwil", "Perante", "Male", "9055426718", "ris.email.system@gmail.com", "admin", "ACTIVE", "1.jpg"),
+    ("radtechmai2", "'.$hashradtech.'", "Lainely Mai", "Bandilla", "Female", "9120984652", "aeonette24@gmail.com", "Radiologic technologist", "ACTIVE", "2.jpeg")');
+
+$con->query('insert into physicians
+    (fname, lname, specialization)
+    values 
+    ("Elwin Jay", "Yu", "Internal Medicine"),
+    ("Merry Christ\'l", "Supnet-guinocor", "Pediatrician")');
 ?>
+
+

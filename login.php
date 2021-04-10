@@ -186,7 +186,7 @@
                       <strong>Note: </strong>
                       <i class="ml-1">A new password will be sent to the email address associated with your account. Use the new password to login and change your password in settings.</i>
                   </div>
-                  <div id="forgot-pass-loading" class="progress mb-2 d-none">
+                  <div class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                   </div>
                   <div class="form-row">

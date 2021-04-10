@@ -176,6 +176,15 @@ section input, section button, section select{
     border: unset !important;
     border-radius: 7px !important;
 }
+#procedure, #film_size {
+    height: 35.6px;
+}
+#procedure .form-control, #film_size .form-control  {
+    height: 1.2rem;
+    border: unset;
+    border-radius: unset;
+    padding: 0 0 0 .1rem;
+}
 
 @media (max-width:1024px){
     .heading {
