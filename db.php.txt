@@ -65,7 +65,7 @@ if(!$con->query('create table physicians(
             id int(12) PRIMARY KEY AUTO_INCREMENT, 
             fname varchar(32) not null,
             lname varchar(32) not null,
-            specialization varchar(100) not null
+            specialization varchar(100) not null)
             '))
     echo mysqli_error($con);
 
@@ -78,7 +78,7 @@ if(!$con->query('create table patients(
             age int(3) not null,
             gender enum("Male", "Female") not null,
             standing_or_status enum("Dependent", "Employee", "Student", "Outsider"),
-            cnumber varchar(32) null
+            cnumber varchar(32) null)
             '))
     echo mysqli_error($con);
 
@@ -94,7 +94,7 @@ if(!$con->query('create table examination(
             physician_id int(12) not null,
             date date not null,
             FOREIGN KEY(physician_id) REFERENCES physicians(id),
-            FOREIGN KEY(patient_id) REFERENCES patients(id)
+            FOREIGN KEY(patient_id) REFERENCES patients(id))
             '))
     echo mysqli_error($con);
 
@@ -105,15 +105,15 @@ if(!$con->query('create table procedures(
             part_or_type enum("Chest", "Extremities", "Skull", "Vertebrae", "Shoulder", "Abdomin", "Bucky") not null,
             views enum("AP","PA","APL","PAL","APOL","PALO","RAO","LAO","FPU","Internal Rotation","External Rotation","Waters view","Scapular Y") not null,
             film_size enum("8x10", "10x12", "11x14", "14x14", "14x17") not null,
-            foreign key(x_ray_no) references examination(X_ray_no)
+            foreign key(x_ray_no) references examination(X_ray_no))
             '))
     echo mysqli_error($con);
 
 //radiographs
-if(!$con->query('create radiographs(
+if(!$con->query('create table radiographs(
             procedure_id int(12) not null,
             img_file varchar(32) not null,
-            FOREIGN key(procedure_id) references procedures(id)
+            FOREIGN key(procedure_id) references procedures(id))
             '))
     echo mysqli_error($con);
 
@@ -121,7 +121,7 @@ if(!$con->query('create radiographs(
 if(!$con->query('create table for_reading(
             id int(12) PRIMARY KEY auto_increment,
             x_ray_no int(12) not null,
-            FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no)
+            FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no))
             '))
     echo mysqli_error($con);
 
@@ -129,7 +129,7 @@ if(!$con->query('create table for_reading(
 if(!$con->query('create table findings_and_diagnoses(
             id int(12) PRIMARY KEY auto_increment,
             findings varchar(300) not null,
-            diagnosis varchar(150) not null
+            diagnosis varchar(150) not null)
             '))
     echo mysqli_error($con);
 
@@ -138,7 +138,7 @@ if(!$con->query('create table x_ray_results(
             procedure_id int(12) not null,
             findings_and_diagnoses_id int(12) not null,
             FOREIGN KEY(findings_and_diagnoses_id) REFERENCES findings_and_diagnoses(id),
-            FOREIGN KEY(procedure_id) REFERENCES procedures(id)
+            FOREIGN KEY(procedure_id) REFERENCES procedures(id))
             '))
     echo mysqli_error($con);
 
