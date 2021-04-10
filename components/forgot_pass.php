@@ -121,7 +121,7 @@
 
     function send_email($email, $u_name, $new_pass) {
         $sender_email = 'ris.email.system@gmail.com';
-        $sender_pass = 'ferdspogita';
+        $sender_pass = 'ris.email.system@gmail.com123';
         $sender_name = 'RISystem';
         $message_html = '<i>This is an automated message. Please do not reply to this email.</i>
                         <hr>
