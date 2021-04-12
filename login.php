@@ -58,13 +58,13 @@
                 <img src="resources/images/x-ray_room1.jpg" class="d-block" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="resources/images/x-ray_room2.jpg" class="d-block" alt="...">
+                <img src="resources/images/x-ray_room2.jpg" class="d-block" alt="..." loading="lazy">
               </div>
               <div class="carousel-item">
-                <img src="resources/images/x-ray_room3.jpg" class="d-block" alt="...">
+                <img src="resources/images/x-ray_room3.jpg" class="d-block" alt="..." loading="lazy">
               </div>
               <div class="carousel-item">
-                <img src="resources/images/x-ray_room4.jpg" class="d-block" alt="...">
+                <img src="resources/images/x-ray_room4.jpg" class="d-block" alt="..." loading="lazy">
               </div>
             </div>
             <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">

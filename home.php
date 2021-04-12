@@ -118,7 +118,7 @@
         </div>
     </section>
     <!-- Add patient - nav_link_content #2 -->
-    <section id="add-patient" class="nav_link_content">
+    <section id="add-patient" class="nav_link_content d-none">
             <h3 class="heading">Examination</h3>
         <div class="card">
             <div class="card-header">
@@ -143,19 +143,19 @@
                         </div>
                         <div class="col mb-3">
                             <label for="inf_no">Infirmary No.</label>
-                            <input type="text" class="form-control" name="inf_no" id="inf_no" required>
+                            <input type="number" class="form-control input-type-numbers" name="inf_no" id="inf_no" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col mb-3">
                             <label for="or_no">OR No.</label>
-                            <input type="text" class="form-control" name="or_no" id="or_no" required>
+                            <input type="number" class="form-control input-type-numbers" name="or_no" id="or_no" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col mb-3">
                             <label for="exam_date">Examination date</label>
-                            <input type="date" class="form-control" name="exam_date" id="exam_date" required>
+                            <input type="date" class="form-control is-valid input-type-date" name="exam_date" id="exam_date" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
@@ -163,13 +163,13 @@
                     <div class="form-row">
                         <div class="col-sm-6 mb-3">
                             <label for="patient_fname">First name</label>
-                            <input type="text" class="form-control name" name="patient_fname" id="patient_fname" required>
+                            <input type="text" class="form-control input-type-names" name="patient_fname" id="patient_fname" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col-sm-6 mb-3">
                             <label for="patient_lname">Last name</label>
-                            <input type="text" class="form-control name" name="patient_lname" id="patient_lname" required>
+                            <input type="text" class="form-control input-type-names" name="patient_lname" id="patient_lname" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
@@ -177,38 +177,38 @@
                     <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
                         <div class="col mb-3">
                             <label for="b_date">Birth date</label>
-                            <input type="date" class="form-control" name="b_date" id="b_date" required>
+                            <input type="date" class="form-control input-type-date" name="b_date" id="b_date" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col mb-3 d-none">
                             <label for="age">Age</label>
-                            <input type="number" class="form-control" name="age" id="age">
+                            <input type="number" class="form-control is-valid" name="age" id="age">
                         </div>
                         <div class="col mb-3">
                             <label for="patient_gender">Gender</label>
-                            <select class="custom-select" name="patient_gender" id="patient_gender" required>
+                            <select class="custom-select input-type-select" name="patient_gender" id="patient_gender" required>
                                 <option selected disabled value="">Choose...</option>
                                 <option>Male</option>
                                 <option>Female</option>
                             </select>
                         </div>
                         <div class="col mb-3">
-                            <label for="patient_cnumber">Mobile no.</label>
+                            <label for="patient_cnumber">Mobile no. (optional)</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
                                 </div>
-                                <input type="text" class="form-control rounded-right number" name="patient_cnumber" id="patient_cnumber" required>
+                                <input type="number" class="form-control rounded-right input-type-numbers" name="patient_cnumber" id="patient_cnumber">
                                 <small class="form-text">
                                 </small>
                             </div>
                         </div>
                         <div class="col mb-3">
                             <label for="standing_or_status">Standing/Status</label>
-                            <select class="custom-select" name="standing_or_status" id="standing_or_status">
+                            <select class="custom-select  input-type-select" name="standing_or_status" id="standing_or_status" required>
                                 <option selected disabled value="">Choose...</option>
-                                <option>Eependent</option>
+                                <option>Dependent</option>
                                 <option>Employee</option>
                                 <option>Student</option>
                                 <option>Outsider</option>
@@ -216,13 +216,13 @@
                         </div>
                         <div class="col mb-3">
                             <label for="history_or_purpose">History/Purpose</label>
-                            <input type="text" class="form-control" name="history_or_purpose" id="history_or_purpose" required>
+                            <input type="text" class="form-control input-type-sentence" name="history_or_purpose" id="history_or_purpose" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col mb-3">
                             <label for="physician">Physician</label>
-                            <select class="custom-select" name="physician" id="physician" required>
+                            <select class="custom-select input-type-select" name="physician" id="physician" required>
                                 <option selected disabled value="">Choose...</option>
                                 <option value="1">Elwin Jay, Yu, Internal Medicine</option>
                                 <option value="2">Merry Christ'l, Supnet-guinocor, Pediatrician</option>
@@ -232,8 +232,8 @@
                     <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
                         <div class="col mb-3">
                             <label for="procedure">Procedure</label>
-                            <select id="procedure" name="procedure" class="form-control">
-                                <option id="procedure-placeholder" selected disabled value="">Choose...</option>
+                            <select id="procedure" name="procedure" class="custom-select input-type-multiple-select" required>
+                                <option selected disabled value="">Choose...</option>
                                 <optgroup label="Chest">
                                     <option value="Chest AP">AP</option>
                                     <option value="Chest PA">PA</option>
@@ -276,13 +276,13 @@
                                 </optgroup>
                             </select>
                             <small class="form-text text-muted">
-                                Select 1 (click) or more (ctr+click)
+                                Select 1 (click) Select 1 or more (ctr+click)
                             </small>
                         </div>
                         <div class="col mb-3">
                             <label for="film_size">Film size</label>
-                            <select class="form-control" name="film_size" id="film_size">
-                                <option id="film_size-placeholder" selected disabled value="">Choose...</option>
+                            <select class="custom-select input-type-multiple-select" name="film_size" id="film_size" required>
+                                <option selected disabled value="">Choose...</option>
                                 <option>8x10</option>
                                 <option>10x12</option>
                                 <option>11x14</option>
@@ -290,18 +290,18 @@
                                 <option>14x17</option>
                             </select>
                             <small class="form-text text-muted">
-                                Select 1 (click) or more (ctr+click)
+                                Select 1 (click) Select 1 or more (ctr+click)
                             </small>
                         </div>
                         <div class="col mb-3">
-                            <label for="spoils">No. of film spoilage</label>
-                            <input type="number" class="form-control" name="spoils" id="spoils" required>
+                            <label for="no_of_film_spoilage">No. of film spoilage</label>
+                            <input type="number" class="form-control input-type-numbers" name="no_of_film_spoilage" id="no_of_film_spoilage" value="">
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col mb-3">
-                            <label for="error">Reason for spoilage</label>
-                            <input type="text" class="form-control" name="error" id="error" required>
+                            <label for="reason_for_spoilage">Reason for spoilage</label>
+                            <input type="text" class="form-control input-type-sentence" name="reason_for_spoilage" id="reason_for_spoilage" value="">
                             <small class="form-text text-muted">
                             </small>
                         </div>
@@ -337,21 +337,21 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="email">Email address</label>
-                            <input type="email" class="form-control email" name="email" id="email" required>
+                            <input type="email" class="form-control input-type-email" name="email" id="email" required>
                             <small class="form-text text-muted">
                                 Must be a valid e-mail address containing 3-32 characters long.
                             </small>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="reg_code">Code</label>
-                            <input type="text" class="form-control" name="reg_code" id="reg_code" required>
+                            <input type="text" class="form-control input-type-letters-numbers" name="reg_code" id="reg_code" required>
                             <small class="form-text text-muted">
                                 Must be 5-20 characters long, containing letters and numbers only.
                             </small>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="role">Role</label>
-                            <select class="custom-select" name="role" id="role" required>
+                            <select class="custom-select  input-type-select" name="role" id="role" required>
                                 <option selected disabled value="">Choose...</option>
                                 <option>Radiologic technologist</option>
                                 <option>Radiologist</option>
@@ -451,14 +451,14 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="fname">First name</label>
-                            <input type="text" class="form-control names" name="fname" id="fname">
+                            <input type="text" class="form-control input-type-names" name="fname" id="fname">
                             <small class="form-text text-muted">
                                 Must be a valid name, containing 2-32 characters long.
                             </small>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="lname">Last name</label>
-                            <input type="text" class="form-control names" name="lname" id="lname">
+                            <input type="text" class="form-control input-type-names" name="lname" id="lname">
                             <small class="form-text text-muted">
                                 Must be a valid name, containing 2-32 characters long.
                             </small>
@@ -467,7 +467,7 @@
                     <div class="form-row">
                         <div class="col-md-6 mb-3">
                             <label for="edit-profile-email">Email address</label>
-                            <input type="email" class="form-control email" name="edit-profile-email" id="edit-profile-email">
+                            <input type="email" class="form-control input-type-email" name="edit-profile-email" id="edit-profile-email">
                             <small class="form-text text-muted">
                                 Must be a valid e-mail address containing 3-32 characters long.
                             </small>
@@ -478,14 +478,14 @@
                                 <div class="input-group-prepend">
                                     <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
                                 </div>
-                                <input type="text" class="form-control rounded-right" name="cnumber" id="cnumber">
+                                <input type="number" class="form-control rounded-right input-type-numbers" name="cnumber" id="cnumber">
                                 <small class="form-text">
                                 </small>
                             </div>
                         </div>
                         <div class="col-md-3 mb-3">
                             <label for="gender">Gender</label>
-                            <select class="custom-select" name="gender" id="gender">
+                            <select class="custom-select input-type-select" name="gender" id="gender">
                                 <option>Male</option>
                                 <option>Female</option>
                             </select>
@@ -521,7 +521,7 @@
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="new_u_pass">New password</label>
-                            <input type="password" class="form-control" name="new_u_pass" id="new_u_pass" required>
+                            <input type="password" class="form-control input-type-letters-numbers" name="new_u_pass" id="new_u_pass" required>
                             <small class="form-text">
                                 Must be 8-20 characters long, containing letters and numbers only.
                             </small>

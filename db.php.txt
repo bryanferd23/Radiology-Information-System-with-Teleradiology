@@ -1,5 +1,17 @@
 <?php
-//connect database
+//connect
+$con = mysqli_connect("localhost", "root", "");
+    if (!$con)
+        exit(mysqli_connect_error());
+
+
+//drop db
+if (!$con->query('drop database if exists vsu_i_ris'))
+    echo mysqli_error($con);
+//create db db
+if (!$con->query('create database vsu_i_ris'))
+echo mysqli_error($con);
+//connect to db
 $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
     if (!$con)
         exit(mysqli_connect_error());
@@ -74,7 +86,7 @@ if(!$con->query('create table patients(
             id int(12) PRIMARY KEY AUTO_INCREMENT, 
             fname varchar(32) not null,
             lname varchar(32) not null,
-            b_date datetime not null,
+            b_date date not null,
             age int(3) not null,
             gender enum("Male", "Female") not null,
             standing_or_status enum("Dependent", "Employee", "Student", "Outsider"),
@@ -84,15 +96,15 @@ if(!$con->query('create table patients(
 
 //x_ray_no, inf_no, or_no, history_or_purpose, no_of_film_spoilage, reason_for_spoilage, released
 if(!$con->query('create table examination(
-            x_ray_no int(12) PRIMARY KEY not null,
+            x_ray_no varchar(12) PRIMARY KEY not null,
             inf_no int(12) not null,
             or_no int(12) not null,
+            date date not null,
             patient_id int(12) not null,
             history_or_purpose varchar(32) not null,
-            no_of_film_spoilage int(2) not null,
-            reason_for_spoilage varchar(32) not null,
             physician_id int(12) not null,
-            date date not null,
+            no_of_film_spoilage int(2) null,
+            reason_for_spoilage varchar(32) null,
             FOREIGN KEY(physician_id) REFERENCES physicians(id),
             FOREIGN KEY(patient_id) REFERENCES patients(id))
             '))
@@ -101,11 +113,11 @@ if(!$con->query('create table examination(
 //procedure, film_sizes
 if(!$con->query('create table procedures(
             id int(12) PRIMARY KEY AUTO_INCREMENT, 
-            x_ray_no int(12) not null,
-            part_or_type enum("Chest", "Extremities", "Skull", "Vertebrae", "Shoulder", "Abdomin", "Bucky") not null,
+            x_ray_no varchar(12) not null,
+            type enum("Chest", "Extremities", "Skull", "Vertebrae", "Shoulder", "Abdomin", "Bucky") not null,
             views enum("AP","PA","APL","PAL","APOL","PALO","RAO","LAO","FPU","Internal Rotation","External Rotation","Waters view","Scapular Y") not null,
             film_size enum("8x10", "10x12", "11x14", "14x14", "14x17") not null,
-            foreign key(x_ray_no) references examination(X_ray_no))
+            foreign key(x_ray_no) references examination(x_ray_no))
             '))
     echo mysqli_error($con);
 
@@ -120,7 +132,7 @@ if(!$con->query('create table radiographs(
 //for_reading
 if(!$con->query('create table for_reading(
             id int(12) PRIMARY KEY auto_increment,
-            x_ray_no int(12) not null,
+            x_ray_no varchar(12) not null,
             FOREIGN KEY(x_ray_no) REFERENCES examination(x_ray_no))
             '))
     echo mysqli_error($con);
