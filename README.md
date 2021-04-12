@@ -38,6 +38,8 @@ Web-based Radiological Information System (Progress: 30%)
 
 -edit account (profile w/ image and change password)
 
+-adding patient (radtech role only)
+
 
 --------------------------------------------------
 **Under the hood?**
