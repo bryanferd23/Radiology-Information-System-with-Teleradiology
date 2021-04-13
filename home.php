@@ -35,34 +35,48 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
-        <a id="navlink1" class="navbar-brand" data-toggle="collapse" data-target=".navbar-collapse.show" href="#">RISystem</a>
+        <a id="navlink1" class="navbar-brand navlinks" data-toggle="collapse" data-target=".navbar-collapse.show" href="#">RISystem</a>
         <div class="collapse navbar-collapse" data-toggle="collapse" data-target=".navbar-collapse.show" id="collapsibleNavId">
             <div class="navbar-nav">
-                <div class="nav-item <?php if ($_SESSION['role'] != 'admin') echo 'd-none'?>">
-                    <a class="nav-link" href="#">Patients</a>
-                </div>
-                <div class="nav-item dropdown <?php if ($_SESSION['role'] == 'admin') echo 'd-none'?>">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Examination
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a id="navlink2" class="dropdown-item" href="#"><i class="fas fa-plus-square mr-1"></i> Add patient</a>
-                        <a class="dropdown-item" href="#"><i class="fas fa-list-ol mr-1"></i> Show list</a>
-                    </div>
-                </div>
-                <div class="nav-item dropdown <?php if ($_SESSION['role'] == 'admin') echo 'd-none'?>">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Teleradiology
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="#"><i class="fas fa-file-upload mr-1"></i> Send X-Ray Image</a>
-                        <a class="dropdown-item" href="#"><i class="far fa-eye-slash mr-1"></i> Pending interpretation</a>
-                        <a class="dropdown-item" href="#"><i class="fas fa-print mr-1"></i> Results</a>
-                    </div>
-                </div>
-                <div class="nav-item <?php if ($_SESSION['role'] != 'admin') echo 'd-none'?>">
-                    <a class="nav-link" id="navlink3" href="#">Administration</a>
-                </div>
+                <?php 
+                    if ($_SESSION['role'] == 'admin') {
+                        echo '
+                        <div class="nav-item">
+                            <a class="nav-link navlinks" href="#">Patients</a>
+                        </div>
+                        ';
+                        echo '
+                        <div class="nav-item">
+                            <a class="nav-link navlinks" id="navlink4" href="#">Administration</a>
+                        </div>
+                        ';
+                    }
+                    else {
+                        echo '
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Examination
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a id="navlink2" class="dropdown-item navlinks" href="#"><i class="fas fa-plus-square mr-1"></i> Add patient</a>
+                                <a id="navlink3" class="dropdown-item navlinks" href="#"><i class="fas fa-list-ol mr-1"></i> Show list</a>
+                            </div>
+                        </div>
+                            ';
+                        echo '
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Teleradiology
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item navlinks" href="#"><i class="fas fa-file-upload mr-1"></i> Send X-Ray Image</a>
+                                <a class="dropdown-item navlinks" href="#"><i class="far fa-eye-slash mr-1"></i> Pending interpretation</a>
+                                <a class="dropdown-item navlinks" href="#"><i class="fas fa-print mr-1"></i> Results</a>
+                            </div>
+                        </div>
+                        ';
+                    }
+                ?>
             </div>
         </div>
         <div id="settings-container">
@@ -75,7 +89,7 @@
                     </a>';
             ?>
             <div id="settings-dropdown-menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a id="edit-account" class="dropdown-item" href="#"><i class="fas fa-user-edit mr-1"></i> Edit account</a>
+                <a id="edit-account" class="dropdown-item navlinks" href="#"><i class="fas fa-user-edit mr-1"></i> Edit account</a>
                 <a id="logout" class="dropdown-item" href="#"><i class="fas fa-sign-out-alt mr-1"></i> Logout</a>
             </div>  
         </div>
@@ -117,313 +131,379 @@
             </div>
         </div>
     </section>
-    <!-- Add patient - nav_link_content #2 -->
-    <section id="add-patient" class="nav_link_content d-none">
-            <h3 class="heading">Examination</h3>
-        <div class="card">
-            <div class="card-header">
-                Add patient
-            </div>
-            <div class="card-body">
-                <form id="add-patient-form">
-                    <div class="progress mb-2 d-none">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                    </div>
-                    <div class="form-row mb-2">
-                        <div id="add-patient-alert" class="alert alert-danger w-100 text-center" role="alert">
-                            <!-- response goes here -->
+
+    <?php
+        if ($_SESSION['role'] == 'Radiologic technologist') {
+            echo '
+            <!-- Add patient - nav_link_content #2 -->
+        <section id="add-patient" class="nav_link_content d-none">
+                <h3 class="heading">Examination</h3>
+            <div class="card">
+                <div class="card-header">
+                    Add patient
+                </div>
+                <div class="card-body">
+                    <form id="add-patient-form">
+                        <div class="progress mb-2 d-none">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                         </div>
-                    </div>
-                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
-                        <div class="col mb-3">
-                            <label for="x_ray_no">X-ray No.</label>
-                            <input type="text" class="form-control" name="x_ray_no" id="x_ray_no" required>
-                            <small class="form-text text-muted">
-                            </small>
+                        <div class="form-row mb-2">
+                            <div id="add-patient-alert" class="alert alert-danger w-100 text-center" role="alert">
+                                <!-- response goes here -->
+                            </div>
                         </div>
-                        <div class="col mb-3">
-                            <label for="inf_no">Infirmary No.</label>
-                            <input type="number" class="form-control input-type-numbers" name="inf_no" id="inf_no" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="or_no">OR No.</label>
-                            <input type="number" class="form-control input-type-numbers" name="or_no" id="or_no" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="exam_date">Examination date</label>
-                            <input type="date" class="form-control is-valid input-type-date" name="exam_date" id="exam_date" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-sm-6 mb-3">
-                            <label for="patient_fname">First name</label>
-                            <input type="text" class="form-control input-type-names" name="patient_fname" id="patient_fname" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                        <div class="col-sm-6 mb-3">
-                            <label for="patient_lname">Last name</label>
-                            <input type="text" class="form-control input-type-names" name="patient_lname" id="patient_lname" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
-                        <div class="col mb-3">
-                            <label for="b_date">Birth date</label>
-                            <input type="date" class="form-control input-type-date" name="b_date" id="b_date" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                        <div class="col mb-3 d-none">
-                            <label for="age">Age</label>
-                            <input type="number" class="form-control is-valid" name="age" id="age">
-                        </div>
-                        <div class="col mb-3">
-                            <label for="patient_gender">Gender</label>
-                            <select class="custom-select input-type-select" name="patient_gender" id="patient_gender" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="patient_cnumber">Mobile no. (optional)</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
-                                </div>
-                                <input type="number" class="form-control rounded-right input-type-numbers" name="patient_cnumber" id="patient_cnumber">
-                                <small class="form-text">
+                        <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
+                            <div class="col mb-3">
+                                <label for="x_ray_no">X-ray No.</label>
+                                <input type="text" class="form-control" name="x_ray_no" id="x_ray_no" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="inf_no">Infirmary No.</label>
+                                <input type="number" class="form-control input-type-numbers" name="inf_no" id="inf_no" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="or_no">OR No.</label>
+                                <input type="number" class="form-control input-type-numbers" name="or_no" id="or_no" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="exam_date">Examination date</label>
+                                <input type="date" class="form-control is-valid input-type-date" name="exam_date" id="exam_date" required>
+                                <small class="form-text text-muted">
                                 </small>
                             </div>
                         </div>
-                        <div class="col mb-3">
-                            <label for="standing_or_status">Standing/Status</label>
-                            <select class="custom-select  input-type-select" name="standing_or_status" id="standing_or_status" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option>Dependent</option>
-                                <option>Employee</option>
-                                <option>Student</option>
-                                <option>Outsider</option>
-                            </select>
+                        <div class="form-row">
+                            <div class="col-sm-6 mb-3">
+                                <label for="patient_fname">First name</label>
+                                <input type="text" class="form-control input-type-names" name="patient_fname" id="patient_fname" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col-sm-6 mb-3">
+                                <label for="patient_lname">Last name</label>
+                                <input type="text" class="form-control input-type-names" name="patient_lname" id="patient_lname" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
                         </div>
-                        <div class="col mb-3">
-                            <label for="history_or_purpose">History/Purpose</label>
-                            <input type="text" class="form-control input-type-sentence" name="history_or_purpose" id="history_or_purpose" required>
-                            <small class="form-text text-muted">
-                            </small>
+                        <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
+                            <div class="col mb-3">
+                                <label for="b_date">Birth date</label>
+                                <input type="date" class="form-control input-type-date" name="b_date" id="b_date" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3 d-none">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control is-valid" name="age" id="age">
+                            </div>
+                            <div class="col mb-3">
+                                <label for="patient_gender">Gender</label>
+                                <select class="custom-select input-type-select" name="patient_gender" id="patient_gender" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                </select>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="patient_cnumber">Mobile no. (optional)</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
+                                    </div>
+                                    <input type="number" class="form-control rounded-right input-type-numbers" name="patient_cnumber" id="patient_cnumber">
+                                    <small class="form-text">
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="standing_or_status">Standing/Status</label>
+                                <select class="custom-select  input-type-select" name="standing_or_status" id="standing_or_status" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <option>Dependent</option>
+                                    <option>Employee</option>
+                                    <option>Student</option>
+                                    <option>Outsider</option>
+                                </select>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="history_or_purpose">History/Purpose</label>
+                                <input type="text" class="form-control input-type-sentence" name="history_or_purpose" id="history_or_purpose" required>
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="physician">Physician</label>
+                                <select class="custom-select input-type-select" name="physician" id="physician" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <option value="1">Elwin Jay, Yu, Internal Medicine</option>
+                                    <option value="2">Merry Christ\'l, Supnet-guinocor, Pediatrician</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col mb-3">
-                            <label for="physician">Physician</label>
-                            <select class="custom-select input-type-select" name="physician" id="physician" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option value="1">Elwin Jay, Yu, Internal Medicine</option>
-                                <option value="2">Merry Christ'l, Supnet-guinocor, Pediatrician</option>
-                            </select>
+                        <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
+                            <div class="col mb-3">
+                                <label for="procedure">Procedure</label>
+                                <select id="procedure" name="procedure" class="custom-select input-type-multiple-select" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <optgroup label="Chest">
+                                        <option value="Chest AP">AP</option>
+                                        <option value="Chest PA">PA</option>
+                                        <option value="Chest APL">APL</option>
+                                        <option value="Chest PAL">PAL</option>
+                                        <option value="Chest APOL">APOL</option>
+                                        <option value="Chest PALO">PALO</option>
+                                    </optgroup>
+                                    <optgroup label="Bucky">
+                                        <option value="Bucky AP">AP</option>
+                                        <option value="Bucky PA">PA</option>
+                                    </optgroup>
+                                    <optgroup label="Extremities">
+                                        <option value="Extremities APL">APL</option>
+                                        <option value="Extremities PAL">PAL</option>
+                                        <option value="Extremities APOL">APOL</option>
+                                        <option value="Extremities PALO">PALO</option>
+                                    </optgroup>
+                                    <optgroup label="Skull">
+                                        <option value="Skull APL">APL</option>
+                                        <option value="Skull PAL">PAL</option>
+                                        <option value="Skull Waters view">Waters view</option>
+                                    </optgroup>
+                                    <optgroup label="Vertebrae">
+                                        <option value="Vertebrae APL">APL</option>
+                                        <option value="Vertebrae RAO">RAO</option>
+                                        <option value="Vertebrae LAO">LAO</option>
+                                    </optgroup>
+                                    <optgroup label="Pelvis">
+                                        <option value="Pelvis LAO">AP</option>
+                                    </optgroup>
+                                    <optgroup label="Shoulder">
+                                        <option value="Shoulder AP">AP</option>
+                                        <option value="Shoulder Internal Rotation">Internal Rotation</option>
+                                        <option value="Shoulder External Rotation">External Rotation</option>
+                                        <option value="Shoulder Scapular Y">Scapular Y</option>
+                                    </optgroup>
+                                    <optgroup label="Abdomin">
+                                        <option value="Abdomin FPU">FPU</option>
+                                    </optgroup>
+                                </select>
+                                <small class="form-text text-muted">
+                                    Select 1 (click) Select 1 or more (ctr+click)
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="film_size">Film size</label>
+                                <select class="custom-select input-type-multiple-select" name="film_size" id="film_size" required>
+                                    <option selected disabled value="">Choose...</option>
+                                    <option>8x10</option>
+                                    <option>10x12</option>
+                                    <option>11x14</option>
+                                    <option>14x14</option>
+                                    <option>14x17</option>
+                                </select>
+                                <small class="form-text text-muted">
+                                    Select 1 (click) Select 1 or more (ctr+click)
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="no_of_film_spoilage">No. of film spoilage</label>
+                                <input type="number" class="form-control input-type-numbers" name="no_of_film_spoilage" id="no_of_film_spoilage" value="">
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
+                            <div class="col mb-3">
+                                <label for="reason_for_spoilage">Reason for spoilage</label>
+                                <input type="text" class="form-control input-type-sentence" name="reason_for_spoilage" id="reason_for_spoilage" value="">
+                                <small class="form-text text-muted">
+                                </small>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
-                        <div class="col mb-3">
-                            <label for="procedure">Procedure</label>
-                            <select id="procedure" name="procedure" class="custom-select input-type-multiple-select" required>
-                                <option selected disabled value="">Choose...</option>
-                                <optgroup label="Chest">
-                                    <option value="Chest AP">AP</option>
-                                    <option value="Chest PA">PA</option>
-                                    <option value="Chest APL">APL</option>
-                                    <option value="Chest PAL">PAL</option>
-                                    <option value="Chest APOL">APOL</option>
-                                    <option value="Chest PALO">PALO</option>
-                                </optgroup>
-                                <optgroup label="Bucky">
-                                    <option value="Bucky AP">AP</option>
-                                    <option value="Bucky PA">PA</option>
-                                </optgroup>
-                                <optgroup label="Extremities">
-                                    <option value="Extremities APL">APL</option>
-                                    <option value="Extremities PAL">PAL</option>
-                                    <option value="Extremities APOL">APOL</option>
-                                    <option value="Extremities PALO">PALO</option>
-                                </optgroup>
-                                <optgroup label="Skull">
-                                    <option value="Skull APL">APL</option>
-                                    <option value="Skull PAL">PAL</option>
-                                    <option value="Skull Waters view">Waters view</option>
-                                </optgroup>
-                                <optgroup label="Vertebrae">
-                                    <option value="Vertebrae APL">APL</option>
-                                    <option value="Vertebrae RAO">RAO</option>
-                                    <option value="Vertebrae LAO">LAO</option>
-                                </optgroup>
-                                <optgroup label="Pelvis">
-                                    <option value="Pelvis LAO">AP</option>
-                                </optgroup>
-                                <optgroup label="Shoulder">
-                                    <option value="Shoulder AP">AP</option>
-                                    <option value="Shoulder Internal Rotation">Internal Rotation</option>
-                                    <option value="Shoulder External Rotation">External Rotation</option>
-                                    <option value="Shoulder Scapular Y">Scapular Y</option>
-                                </optgroup>
-                                <optgroup label="Abdomin">
-                                    <option value="Abdomin FPU">FPU</option>
-                                </optgroup>
-                            </select>
-                            <small class="form-text text-muted">
-                                Select 1 (click) Select 1 or more (ctr+click)
-                            </small>
+                        <div class="form-row mt-3">
+                            <button class="btn btn-primary ml-auto" type="submit">Add</button>
                         </div>
-                        <div class="col mb-3">
-                            <label for="film_size">Film size</label>
-                            <select class="custom-select input-type-multiple-select" name="film_size" id="film_size" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option>8x10</option>
-                                <option>10x12</option>
-                                <option>11x14</option>
-                                <option>14x14</option>
-                                <option>14x17</option>
-                            </select>
-                            <small class="form-text text-muted">
-                                Select 1 (click) Select 1 or more (ctr+click)
-                            </small>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="no_of_film_spoilage">No. of film spoilage</label>
-                            <input type="number" class="form-control input-type-numbers" name="no_of_film_spoilage" id="no_of_film_spoilage" value="">
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                        <div class="col mb-3">
-                            <label for="reason_for_spoilage">Reason for spoilage</label>
-                            <input type="text" class="form-control input-type-sentence" name="reason_for_spoilage" id="reason_for_spoilage" value="">
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <button class="btn btn-primary ml-auto" type="submit">Add</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <section id="administration" class="nav_link_content d-none">
-        <h3 class="heading">Administration</h3>
-        <div id="send-registration-email" class="card">
-            <div class="card-header">
-                Send registration email to the user
-            </div>
-            <div class="card-body">
-                <form id="send-registration-email-form">
-                    <div class="alert alert-secondary mb-2 d-flex" role="alert">
-                        <strong>Note: </strong>
-                        <i class="ml-2">A link to the registration page will be sent to the user and will use the code to unlock the page.</i>
-                    </div>
-                    <div class="progress mb-2 d-none">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                    </div>
-                    <div class="form-row mb-2">
-                        <div id="send-registration-email-alert" class="alert w-100 text-center" role="alert">
-                            <!-- response goes here -->
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="col-md-6 mb-3">
-                            <label for="email">Email address</label>
-                            <input type="email" class="form-control input-type-email" name="email" id="email" required>
-                            <small class="form-text text-muted">
-                                Must be a valid e-mail address containing 3-32 characters long.
-                            </small>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="reg_code">Code</label>
-                            <input type="text" class="form-control input-type-letters-numbers" name="reg_code" id="reg_code" required>
-                            <small class="form-text text-muted">
-                                Must be 5-20 characters long, containing letters and numbers only.
-                            </small>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <label for="role">Role</label>
-                            <select class="custom-select  input-type-select" name="role" id="role" required>
-                                <option selected disabled value="">Choose...</option>
-                                <option>Radiologic technologist</option>
-                                <option>Radiologist</option>
-                            </select>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-row mt-3">
-                        <button class="btn btn-primary ml-auto" type="submit">Send</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="user-list-container" class="card">
-            <div class="card-header">
-                User list
-            </div>
-            <div class="card-body text-center d-flex justify-content-around">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead class="text-secondary">
-                            <tr>
-                                <th>ID</th>
-                                <th>NAME</th>
-                                <th>EMAIL</th>
-                                <th>ROLE</th>
-                                <th>ACTION</th>
-                            </tr>
-                        </thead>
-                        <tbody id="user-list-body">
-                            <!-- list goes here -->
-                        </tbody>
-                    </table>
+                    </form>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Modal -->
-    <section id="user-info-container">
-        <div id="view-user-modal" class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content text-center">
-                    <div class="modal-body">
-                        <div class="mb-2">
-                            <img src="" class="rounded-circle" width="200px" height="200px">
-                        </div>
-                        <div class="mb-4">
-                            <!-- fname and lname -->
-                        </div>
-                        <div class="mb-1">
-                            <!-- role -->
-                        </div>
-                        <div class="mb-1">
-                            <!-- email -->
-                        </div>
-                        <div class="mb-1">
-                            <!-- cnumber -->
-                        </div>
-                        <div class="mb-1">
-                            <!-- gender -->
-                        </div>
-                        <div class="mb-1 badge">
-                            <!-- status -->
-                        </div>
-                    </div>
-                </div>
+        </section>
+        ';
+        }
+    ?>
+    <!-- patient list - nav_link_content #3 -->
+    <section id="dashboard" class="nav_link_content d-none">
+            <h3 class="heading">Examination</h3>
+        <div class="card">
+            <div class="card-header">
+                Patient list
+            </div>
+            <div class="card-body d-flex justify-content-center">
+                No info
             </div>
         </div>
     </section>
+    <?php
+        if ($_SESSION['role'] != 'admin') {
+            echo'
+            <!-- upload x-ray image - nav_link_content #4 -->
+            <section id="dashboard" class="nav_link_content d-none">
+                    <h3 class="heading">Teleradiology</h3>
+                <div class="card">
+                    <div class="card-header">
+                        Send X-Ray image
+                    </div>
+                    <div class="card-body d-flex justify-content-center">
+                        No info
+                    </div>
+                </div>
+            </section>
+            <!-- Pending interpretation - nav_link_content #5 -->
+            <section id="dashboard" class="nav_link_content d-none">
+                    <h3 class="heading">Teleradiology</h3>
+                <div class="card">
+                    <div class="card-header">
+                        Pending interpretation
+                    </div>
+                    <div class="card-body d-flex justify-content-center">
+                        No info
+                    </div>
+                </div>
+            </section>
+            <!-- Results - nav_link_content #6 -->
+            <section id="dashboard" class="nav_link_content d-none">
+                    <h3 class="heading">Teleradiology</h3>
+                <div class="card">
+                    <div class="card-header">
+                        Results
+                    </div>
+                    <div class="card-body d-flex justify-content-center">
+                        No info
+                    </div>
+                </div>
+            </section>
+            ';
+        }
+    ?>
+    <?php
+        if ($_SESSION['role'] == 'admin') {
+            echo'
+            <section id="administration" class="nav_link_content d-none">
+                <h3 class="heading">Administration</h3>
+                <div id="send-registration-email" class="card">
+                    <div class="card-header">
+                        Send registration email to the user
+                    </div>
+                    <div class="card-body">
+                        <form id="send-registration-email-form">
+                            <div class="alert alert-secondary mb-2 d-flex" role="alert">
+                                <strong>Note: </strong>
+                                <i class="ml-2">A link to the registration page will be sent to the user and will use the code to unlock the page.</i>
+                            </div>
+                            <div class="progress mb-2 d-none">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="form-row mb-2">
+                                <div id="send-registration-email-alert" class="alert w-100 text-center" role="alert">
+                                    <!-- response goes here -->
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="email">Email address</label>
+                                    <input type="email" class="form-control input-type-email" name="email" id="email" required>
+                                    <small class="form-text text-muted">
+                                        Must be a valid e-mail address containing 3-32 characters long.
+                                    </small>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="reg_code">Code</label>
+                                    <input type="text" class="form-control input-type-letters-numbers" name="reg_code" id="reg_code" required>
+                                    <small class="form-text text-muted">
+                                        Must be 5-20 characters long, containing letters and numbers only.
+                                    </small>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label for="role">Role</label>
+                                    <select class="custom-select  input-type-select" name="role" id="role" required>
+                                        <option selected disabled value="">Choose...</option>
+                                        <option>Radiologic technologist</option>
+                                        <option>Radiologist</option>
+                                    </select>
+                                    <small class="form-text text-muted">
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="form-row mt-3">
+                                <button class="btn btn-primary ml-auto" type="submit">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div id="user-list-container" class="card">
+                    <div class="card-header">
+                        User list
+                    </div>
+                    <div class="card-body text-center d-flex justify-content-around">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="text-secondary">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>NAME</th>
+                                        <th>EMAIL</th>
+                                        <th>ROLE</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="user-list-body">
+                                    <!-- list goes here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modal -->
+            <section id="user-info-container">
+                <div id="view-user-modal" class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content text-center">
+                            <div class="modal-body">
+                                <div class="mb-2">
+                                    <img src="" class="rounded-circle" width="200px" height="200px">
+                                </div>
+                                <div class="mb-4">
+                                    <!-- fname and lname -->
+                                </div>
+                                <div class="mb-1">
+                                    <!-- role -->
+                                </div>
+                                <div class="mb-1">
+                                    <!-- email -->
+                                </div>
+                                <div class="mb-1">
+                                    <!-- cnumber -->
+                                </div>
+                                <div class="mb-1">
+                                    <!-- gender -->
+                                </div>
+                                <div class="mb-1 badge">
+                                    <!-- status -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            ';
+        }
+    ?>
 
     <section id="edit-account" class="nav_link_content d-none">
         <h3 class="heading">Edit account</h3>

@@ -206,6 +206,7 @@ section input, section button, section select{
     }
     .heading {
         font-size: 1.6rem;
+        padding-left: 2.25%;
     }
     section {
         width: 100%;

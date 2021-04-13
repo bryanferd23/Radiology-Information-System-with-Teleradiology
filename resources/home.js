@@ -7,30 +7,37 @@ const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
 //--------------- Run the scipt below when the document is ready or has loaded ---------------------------------------//
 $(document).ready(function () {
     var temp;
-    var nav_links = [$("#navlink1"), $("#navlink2"), $("#navlink3"), $("#edit-account")];
-    var nav_link_content = $(".nav_link_content");
     var today = (new Date()).toISOString().substr(0, 10);
-    
 
     $('section .alert').hide();
     $("#welcome-message").fadeTo(15000, 500).slideUp(500, function(){
         $("#welcome-message").slideUp(500);
     });
     //--- switch content when navigation links is clicked --------------------------//
-    $.each(nav_links, function (indexInArray) { 
-         nav_links[indexInArray].on('click', function(e) {
+    $.each($('.navlinks'), function (indexInArray) { 
+        $(this).on('click', function(e) {
              e.preventDefault();
-            
-            if (nav_links[indexInArray].html() == "Administration") {
+            if ($(this).html().match("Administration")) {
                 get_user_list();
             }
-            if (nav_links[indexInArray].html().match("Add patient")) {
+            if ($(this).html().match("Add patient")) {
                 $('#exam_date').val(today);
             }
-
-
-             nav_link_content.addClass('d-none');
-             nav_link_content.eq(indexInArray).removeClass('d-none');
+            $(".nav_link_content").addClass('d-none');
+            $(".nav_link_content").eq(indexInArray).css({
+                'opacity': 0,
+                'margin-left': '-5rem'
+            })
+            $(".nav_link_content").eq(indexInArray).removeClass('d-none');
+            $(".nav_link_content").eq(indexInArray).animate({
+                'transition-timing-function': 'ease-in-out',
+                'margin-left': '0',
+                'opacity': .75,
+            }, 250, function() {
+                $(".nav_link_content").eq(indexInArray).css({
+                    'opacity': 1,
+                })
+            })
          })
     });
 
