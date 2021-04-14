@@ -106,8 +106,8 @@
                   </div>
                 </form>
               </div>
-              <div id="search-response" class="text-center mb-5">
-                    
+              <div id="search-response" class="text-center mt-5"  style="min-height: 100px;">
+                    <!-- x-ray result response goes here -->
               </div>
             </div>
           </div>

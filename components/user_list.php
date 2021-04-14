@@ -5,6 +5,8 @@
         exit;
     }
     else {
+        if (!isset($_SESSION['loggedin']))
+            header("location: ../login.php");
         $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
         if (!$con)
             exit(mysqli_connect_error());

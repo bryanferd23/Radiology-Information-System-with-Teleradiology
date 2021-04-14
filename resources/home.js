@@ -23,6 +23,9 @@ $(document).ready(function () {
             if ($(this).html().match("Add patient")) {
                 $('#exam_date').val(today);
             }
+            if ($(this).html().match("Patients") || $(this).html().match("Show list")) {
+                populate_patient_list(today);
+            }
             $(".nav_link_content").addClass('d-none');
             $(".nav_link_content").eq(indexInArray).css({
                 'opacity': 0,
@@ -546,12 +549,12 @@ $(document).ready(function () {
         var input_tag = $(this);
 
         if (input) {
-            let YearNow = today.substr(0, 4)
-            let MonthNow = today.substr(6, 7)
-            let DayNow = today.substr(9, 10)
-            let BDay = $(this).val().substr(9,10)
-            let BYear = $(this).val().substr(0, 4)
-            let BMonth = $(this).val().substr(6, 7)
+            let YearNow = today.substring(0, 4)
+            let MonthNow = today.substring(5, 7)
+            let DayNow = today.substring(8, 10)
+            let BDay = $(this).val().substring(8,10)
+            let BYear = $(this).val().substring(0, 4)
+            let BMonth = $(this).val().substring(5, 7)
             let Age = (YearNow - BYear) - 1;
             
             if (MonthNow > BMonth || (MonthNow == BMonth && DayNow >= BDay))
@@ -780,7 +783,7 @@ $(document).ready(function () {
                         $('#add-patient-form select').prop('selectedIndex', 0);
                         x_ray_no = x_ray_no[0] + '-' + (parseInt(x_ray_no[1]) + 1)
                         $('#x_ray_no').val(x_ray_no);
-                        $('#navlink2').click();
+                        $('.navlinks').eq(1).click();
                         alert_tag.addClass('alert-success');
                     }
                     else
@@ -804,13 +807,97 @@ $(document).ready(function () {
             });
         }
     })
+
+    //--- append userlist of another date when see more is clicked ---//
+    $("#patient-list-see-more").on('click', function(e) {
+        e.preventDefault();
+        let h5s = $("#patient-list .card-body").find('h5');
+        let len = h5s.length - 1;
+        let posttable = '</tbody></table></div>';
+        let date = h5s.eq(len).html();
+        $.ajax({
+            type: "GET",
+            url: "components/get_patient.php",
+            data: {"known_date": date},
+            dataType: "html",
+            success: function (response) {
+                if (response.match("END")){
+                    $("#patient-list-see-more").html(response);
+                    $("#patient-list-see-more").addClass("text-secondary");
+                }
+                else{
+                    pretable = set_pretable(response);
+                    get_patient_list(response, pretable, posttable)
+                }
+            }
+        });
+    }) 
+
 });
 
+function set_pretable(date) {
+    return '\
+    <div class="table-responsive mb-4">\
+        <h5 class="text-center mb-4">'+date+'</h5>\
+        <table class="table table-hover border-bottom">\
+            <thead class="text-secondary">\
+                <tr>\
+                    <th>XRAY NO</th>\
+                    <th>FIRST NAME</th>\
+                    <th>LAST NAME</th>\
+                    <th></th>\
+                </tr>\
+            </thead>\
+            <tbody id="patient-list-body">\
+            ';
+}
+
+function populate_patient_list(today) {
+    let Year = today.substring(0, 4);
+    let Month = today.substring(5, 7);
+    let Day = today.substring(8, 10);
+    let date = Year+"-"+Month+"-"+Day;
+
+    $("#patient-list .card-body").html('');
+    let posttable = '</tbody></table></div>';
+
+    get_patient_list(date, set_pretable("Today"), posttable);
+    let i = "1";
+    date = Year+"-"+Month+"-"+(Day - i++);
+    get_patient_list(date, set_pretable("Yesterday"), posttable);
+    date = Year+"-"+Month+"-"+(Day - i++);
+    get_patient_list(date, set_pretable(date), posttable);
+    $("#patient-list-see-more").html('See more')
+    $("#patient-list-see-more").removeClass("text-secondary");
+}
 
 
 
 //functions
-//--- get all user list ---------------------------------------------------------------//
+function get_patient_list(date, pretable, posttable) {
+    $.ajax({
+        type: "GET",
+        url: "components/get_patient.php",
+        data: {'patient_list': date},
+        dataType: "JSON",
+        success: function (response) {
+            if (response[0]) {
+                let table = '';
+                for (row in response) {
+                    table += '<tr>';
+                    for(data in response[row]) {
+                        if (data == 'x_ray_no' || data == 'p_fname' || data == 'p_lname') {
+                            table += '<td class="align-middle">' + response[row][data] + '</td>';
+                        }
+                    }
+                    table += '<td id="" class="align-middle"><a href="#" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
+                    table += '</tr>';
+                }
+                $('#patient-list .card-body').append(pretable+table+posttable);
+            }
+        }
+    });
+}
 function get_user_list() {
     $.ajax({
         type: "GET",
@@ -818,7 +905,7 @@ function get_user_list() {
         data: {"user_list":"ok"},
         dataType: "json",
         success: function (response) {
-            var table = '';
+            let table = '';
             for (row in response) {
                 table += '<tr>';
                 for(data in response[row]) {
