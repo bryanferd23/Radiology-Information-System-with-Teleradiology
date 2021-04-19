@@ -1,5 +1,5 @@
 # RISystem
-Web-based Radiological Information System (Progress: 35%)
+Web-based Radiological Information System (Progress: 40%)
 
 --------------------------------------------------
 **Component folder**
@@ -39,6 +39,8 @@ Web-based Radiological Information System (Progress: 35%)
 -edit account (profile w/ image and change password)
 
 -adding patient (radtech role only)
+
+-view patient list
 
 
 --------------------------------------------------
