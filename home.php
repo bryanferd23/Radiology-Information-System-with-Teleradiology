@@ -7,7 +7,7 @@
     $current_time = time();
     if (isset($_SESSION['destroy_after']) && $current_time > $_SESSION['destroy_after']) {
             session_destroy();
-            header("location: ..login.php");
+            header("location: login.php");
     }
     else
         $_SESSION['destroy_after'] = $current_time + 3600;
@@ -155,7 +155,7 @@
                             <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
                                 <div class="col mb-3">
                                     <label for="x_ray_no">X-ray No.</label>
-                                    <input type="text" class="form-control" name="x_ray_no" id="x_ray_no" required>
+                                    <input type="text" class="form-control input-type-x-ray-no" name="x_ray_no" id="x_ray_no" required>
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>
@@ -336,15 +336,37 @@
     ?>
     <!-- patient list - nav_link_content #3 -->
     <section id="patient-list" class="nav_link_content d-none">
-            <h3 class="heading">Examination</h3>
+        <h3 class="heading">Examination</h3>
         <div class="card pb-4">
             <div class="card-header">
                 Patient list
             </div>
             <div class="card-body text-center">
+                <div class="mt-4 d-flex justify-content-center">
+                    <div>
+                    <form id="patient-list-search-form">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <button id="patient-list-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="#">x-ray no.</a>
+                                    <a class="dropdown-item" href="#">last name</a>
+                                    <a class="dropdown-item" href="#">date</a>
+                                </div>
+                            </div>
+                            <input type="text" name="patient-list-search-input" id="patient-list-search-input" class="form-control" required>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+                <div id="patient-list-card-body-table">
 
+                </div>
             </div>
-            <div class="text-center" style="margin-top:-2rem; z-index:1">
+            <div class="text-center">
                 <h6><a id="patient-list-see-more" href="#" style="text-decoration:unset">See more</a></h6>
             </div>
         </div>

@@ -64,7 +64,7 @@
             echo '<section id="modal-container">
                     <!-- Modal -->
                     <div class="modal fade" id="unlock-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-                        <form id="unlock-modal-form" class="modal-dialog modal-dialog-centered">
+                        <form id="unlock-modal-form" class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="unlock-modalLabel">Registration is locked!</h5>

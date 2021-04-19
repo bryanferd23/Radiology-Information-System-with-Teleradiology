@@ -34,6 +34,7 @@ body {
 section {
     display: grid;
     place-items: center;
+    width: 100%;
 }
 
 .card {
@@ -64,21 +65,21 @@ section {
     top: -15px;
 }
 
-.dropdown-menu {
+nav .dropdown-menu {
     background-color: rgba(39,87,44);
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     border: unset;
     overflow: hidden;
     border-radius: 5px;
 }
-.dropdown-item {
+nav .dropdown-item {
     font-size: .9rem;
     color: rgb(197, 212, 199);
     transition: all .2s;
     height: 2.5rem;
 }
 
-.dropdown-item:hover::after {
+nav .dropdown-item:hover::after {
     content: "";
     right: -5px;
     width: 5px;
@@ -89,13 +90,13 @@ section {
     border-radius: 1px;
 }
 
-.dropdown-item:hover {
+nav .dropdown-item:hover {
    transform: translateX(-5px);
    background-color: unset !important;
    color: var(--yellow);
 }
 
-.dropdown-item i{
+nav .dropdown-item i{
     text-align: right;
     font-size: 14px;
     width: 14px;
@@ -189,18 +190,22 @@ section input, section button, section select{
     .heading {
         width: 100%;
         margin-right: 0;
-        padding-left: .5rem;
+        padding-left: 1rem;
     }
     .card {
-        width: 100%;
+        margin: 3rem 1rem 0 1rem;
+        width: 98%;
     }
     section {
-        margin: 0 2%;
-        width: 96%;
+        width: 100%;   
     }
 }
 
 @media (max-width:768px){
+    .card {
+        margin: 3rem 0 0 0;
+        width: 100%;
+    }
     .navbar-brand {
         margin: auto auto auto 1rem;
     }
@@ -217,7 +222,7 @@ section input, section button, section select{
         max-width: 96%;
         text-align: center;
     }
-    .dropdown-menu {
+    nav .dropdown-menu {
         background-color: unset;
         background-image: unset;
         box-shadow: unset;

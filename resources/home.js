@@ -661,7 +661,7 @@ $(document).ready(function () {
         }
     })
 
-    $("#x_ray_no").on('keyup', function() {
+    $(".input-type-x-ray-no").on('keyup', function() {
         var input = $(this).val();
         var input_tag = $(this);
         var small_tag = $(this).next();
@@ -811,14 +811,16 @@ $(document).ready(function () {
     //--- append userlist of another date when see more is clicked ---//
     $("#patient-list-see-more").on('click', function(e) {
         e.preventDefault();
-        let h5s = $("#patient-list .card-body").find('h5');
+        let h5s = $("#patient-list-card-body-table").find('h5');
         let len = h5s.length - 1;
         let posttable = '</tbody></table></div>';
         let date = h5s.eq(len).html();
+        if (date == undefined)
+            date = today;
         $.ajax({
             type: "GET",
             url: "components/get_patient.php",
-            data: {"known_date": date},
+            data: {"unknown_date": date},
             dataType: "html",
             success: function (response) {
                 if (response.match("END")){
@@ -827,17 +829,35 @@ $(document).ready(function () {
                 }
                 else{
                     pretable = set_pretable(response);
-                    get_patient_list(response, pretable, posttable)
+                    get_patient_list(response, pretable, posttable, "date")
                 }
             }
         });
     }) 
 
+    $("#patient-list-search-form .dropdown-item").on('click', function (e) {  
+        e.preventDefault();
+            $("#patient-list-search-by").html($(this).html())
+        if($(this).html() == "date") {
+            $("#patient-list-search-input").attr("type", "date");
+        }
+        else {
+            $("#patient-list-search-input").attr("type", "text");
+        }
+    })
+
+    $("#patient-list-search-form").on('submit', function(e) {
+        e.preventDefault();
+        let posttable = '</tbody></table></div>';
+        $("#patient-list-card-body-table").html('');
+        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html());
+        $("#patient-list-see-more").addClass("d-none");
+    })
 });
 
 function set_pretable(date) {
     return '\
-    <div class="table-responsive mb-4">\
+    <div class="table-responsive mt-5">\
         <h5 class="text-center mb-4">'+date+'</h5>\
         <table class="table table-hover border-bottom">\
             <thead class="text-secondary">\
@@ -857,16 +877,20 @@ function populate_patient_list(today) {
     let Month = today.substring(5, 7);
     let Day = today.substring(8, 10);
     let date = Year+"-"+Month+"-"+Day;
-
-    $("#patient-list .card-body").html('');
+    
+    $("#patient-list-card-body-table").html('');
     let posttable = '</tbody></table></div>';
-
-    get_patient_list(date, set_pretable("Today"), posttable);
+    //patient today
+    get_patient_list(date, set_pretable("Today"), posttable, "gdate");
     let i = "1";
     date = Year+"-"+Month+"-"+(Day - i++);
-    get_patient_list(date, set_pretable("Yesterday"), posttable);
-    date = Year+"-"+Month+"-"+(Day - i++);
-    get_patient_list(date, set_pretable(date), posttable);
+    //patient yesterday
+    get_patient_list(date, set_pretable("Yesterday"), posttable, "gdate");
+    //If no patient today & yesterday get the inserted last date and display
+    if ($("#patient-list-card-body-table").html() == '') {
+        $("#patient-list-see-more").click();
+    }
+    $("#patient-list-see-more").removeClass("d-none");
     $("#patient-list-see-more").html('See more')
     $("#patient-list-see-more").removeClass("text-secondary");
 }
@@ -874,11 +898,19 @@ function populate_patient_list(today) {
 
 
 //functions
-function get_patient_list(date, pretable, posttable) {
+function get_patient_list(data, pretable, posttable, temp1) {
+    let form = '';
+    if (temp1 == "x-ray no.")
+        form = {"x_ray_no": data}
+    else  if (temp1 == "last name")
+        form = {"lname": data}
+    else
+        form = {"date": data};
+    
     $.ajax({
         type: "GET",
         url: "components/get_patient.php",
-        data: {'patient_list': date},
+        data: form,
         dataType: "JSON",
         success: function (response) {
             if (response[0]) {
@@ -893,7 +925,11 @@ function get_patient_list(date, pretable, posttable) {
                     table += '<td id="" class="align-middle"><a href="#" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
                     table += '</tr>';
                 }
-                $('#patient-list .card-body').append(pretable+table+posttable);
+                $('#patient-list-card-body-table').append(pretable+table+posttable);
+            }
+            else {
+                if (temp1 != "gdate")
+                    $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">Search result/s</h5><p>No info</p>');
             }
         }
     });

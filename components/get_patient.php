@@ -1,7 +1,7 @@
 <?php
     session_start();
 
-    if (!isset($_GET['patient_list']) && !isset($_GET['known_date'])) {
+    if (!isset($_GET['unknown_date']) && !isset($_GET['x_ray_no']) && !isset($_GET['lname']) && !isset($_GET['date']) && !isset($_GET['info'])) {
         header('location: ../home.php');
         exit;
     }
@@ -13,8 +13,8 @@
         exit(mysqli_connect_error());
     
     //$today = date("Y-m-d");
-    if (isset($_GET['known_date'])) {
-        if ($stmt=$con->prepare('SELECT date from examination WHERE date < "'.$_GET['known_date'].'"')) {
+    if (isset($_GET['unknown_date'])) {
+        if ($stmt=$con->prepare('SELECT date from examination WHERE date < "'.$_GET['unknown_date'].'"')) {
             if ($stmt->execute()) {
                 $stmt->store_result();
                 if ($stmt->affected_rows > 0) {
@@ -29,10 +29,25 @@
             }
         }
     }
-    if ($stmt=$con->prepare('SELECT 
-                            x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, d.fname as d_fname, d.lname as d_lname, no_of_film_spoilage, reason_for_spoilage, p.fname as p_fname, p.lname as p_lname, b_date, age, gender, standing_or_status, cnumber 
-                            FROM examination e INNER JOIN patients p, physicians d 
-                            WHERE p.id = e.patient_id && physician_id = d.id && date = "'.$_GET['patient_list'].'"')) {
+    else if (isset($_GET['info'])){
+        $stmt='SELECT x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, d.fname as d_fname, d.lname as d_lname, no_of_film_spoilage, reason_for_spoilage, p.fname as p_fname, p.lname as p_lname, b_date, age, gender, standing_or_status, cnumber 
+                FROM examination e INNER JOIN patients p, physicians d 
+                WHERE p.id = e.patient_id && physician_id = d.id && x_ray_no = "'.$_GET['info'].'"';
+    }
+    else {
+        $stmt='SELECT x_ray_no, fname as p_fname, lname as p_lname FROM examination INNER JOIN patients WHERE ';
+        if (isset($_GET['x_ray_no'])) {
+            $stmt .= 'patient_id = id && x_ray_no = "'.$_GET['x_ray_no'].'"';
+        }
+        else if (isset($_GET['lname'])) {
+            $stmt .= 'patient_id = id && lname = "'.$_GET['lname'].'"';
+        }
+        else {
+            $stmt .= 'patient_id = id && date = "'.$_GET['date'].'"';
+        }
+    }
+    
+    if ($stmt=$con->prepare($stmt)) {
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             $array = array();
@@ -44,6 +59,7 @@
             exit;
         }
     }
+    
     echo mysqli_errno($con);
     $con->close();
     exit;
