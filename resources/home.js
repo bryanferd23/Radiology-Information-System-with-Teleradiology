@@ -815,8 +815,10 @@ $(document).ready(function () {
         let len = h5s.length - 1;
         let posttable = '</tbody></table></div>';
         let date = h5s.eq(len).html();
+        
         if (date == undefined)
             date = today;
+        
         $.ajax({
             type: "GET",
             url: "components/get_patient.php",
@@ -829,7 +831,7 @@ $(document).ready(function () {
                 }
                 else{
                     pretable = set_pretable(response);
-                    get_patient_list(response, pretable, posttable, "date")
+                    get_patient_list(response, pretable, posttable, "date", true)
                 }
             }
         });
@@ -850,7 +852,7 @@ $(document).ready(function () {
         e.preventDefault();
         let posttable = '</tbody></table></div>';
         $("#patient-list-card-body-table").html('');
-        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html());
+        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html(), true);
         $("#patient-list-see-more").addClass("d-none");
     })
 });
@@ -881,11 +883,13 @@ function populate_patient_list(today) {
     $("#patient-list-card-body-table").html('');
     let posttable = '</tbody></table></div>';
     //patient today
-    get_patient_list(date, set_pretable("Today"), posttable, "gdate");
+    get_patient_list(date, set_pretable("Today"), posttable, "gdate", false);
     let i = "1";
     date = Year+"-"+Month+"-"+(Day - i++);
     //patient yesterday
-    get_patient_list(date, set_pretable("Yesterday"), posttable, "gdate");
+    get_patient_list(date, set_pretable("Yesterday"), posttable, "gdate", true);
+    date = Year+"-"+Month+"-"+(Day - i);
+    get_patient_list(date, set_pretable(date), posttable, "gdate", true);
     //If no patient today & yesterday get the inserted last date and display
     if ($("#patient-list-card-body-table").html() == '') {
         $("#patient-list-see-more").click();
@@ -898,7 +902,7 @@ function populate_patient_list(today) {
 
 
 //functions
-function get_patient_list(data, pretable, posttable, temp1) {
+function get_patient_list(data, pretable, posttable, temp1, async) {
     let form = '';
     if (temp1 == "x-ray no.")
         form = {"x_ray_no": data}
@@ -912,6 +916,7 @@ function get_patient_list(data, pretable, posttable, temp1) {
         url: "components/get_patient.php",
         data: form,
         dataType: "JSON",
+        async: async,
         success: function (response) {
             if (response[0]) {
                 let table = '';

@@ -15,7 +15,8 @@
     $lname = strtolower($_POST['patient_lname']);
 
 //--- first check if patient already exist else insert patient --------------------------------------------------------------------------------------------------//
-    if ($stmt=$con->prepare('SELECT id FROM patients WHERE fname = "'.$fname.'" && lname = "'.$lname.'"')) {
+    if ($stmt=$con->prepare('SELECT id FROM patients WHERE fname = ? && lname = ?')) {
+        $stmt->bind_param('ss', $fname, $lname);
         if ($stmt->execute()) {
             $stmt->store_result();
             if ($stmt->num_rows() > 0) {
@@ -65,12 +66,16 @@
         else
             echo 'X-ray number already exist!';
     }
+
+
+
     //delete patient if there is an error inserting from tables
     //if patient already exist this will not take effect because of foreign key checks which is what we want
     //we only want to delete the newly created patient
+    //no need to bind_param since $patient_id is the auto_increment from the table
     $stmt = $con->prepare('DELETE from patients WHERE id = '.$patient_id.'');
     if ($stmt->execute()) {
-        $stmt=$con->prepare('ALTER TABLE patients AUTO_INCREMENT='.$patient_id.'');
+        $stmt=$con->prepare('ALTER TABLE patients AUTO_INCREMENT = '.$patient_id.'');
         $stmt->execute();
     }
     $con->close();

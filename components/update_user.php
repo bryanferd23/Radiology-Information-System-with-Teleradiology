@@ -38,7 +38,8 @@
     function change_pass($con) {
         $hashed_pass = password_hash($_POST['new_u_pass2'], PASSWORD_BCRYPT, array('cost' => 10));
 
-        if($stmt = $con->prepare('UPDATE users SET u_pass = "'.$hashed_pass.'" WHERE u_id = '.$_SESSION['uid'].'')) {
+        if($stmt = $con->prepare('UPDATE users SET u_pass = ? WHERE u_id = ?')) {
+            $stmt->bind_param('si', $hashed_pass, $_SESSION['uid']);
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) 
                     return true;
@@ -53,7 +54,8 @@
 
     function old_pass_valid($con) {
         $upass = '';
-        if($stmt = $con->prepare('SELECT u_pass FROM users WHERE u_id = '.$_SESSION['uid'].'')) {
+        if($stmt = $con->prepare('SELECT u_pass FROM users WHERE u_id = ?')) {
+            $stmt->bind_param('i', $_SESSION['uid']);
             if ($stmt->execute()) {
                 $stmt->store_result();
                 if ($stmt->num_rows() > 0) {
@@ -78,26 +80,67 @@
 
 
     function update_user_profile($con) {
-        $u_id = $_SESSION['uid'];
-        $stmt = "UPDATE users SET ";
-
         //--- for update status ---//
         if (isset($_POST['change_status_to']) && isset($_POST['u_id'])) {
-            $stmt .= 'status="'.$_POST['change_status_to'].'"';
-            $u_id = $_POST['u_id'];
+            if ($stmt=$con->prepare('UPDATE users SET status = ? WHERE u_id = ?')) {
+                $stmt->bind_param('si', $_POST['change_status_to'], $_POST['u_id']);
+                if ($stmt->execute()) {
+                    if ($stmt->affected_rows > 0)
+                        return true;
+                    else
+                        return false;
+                }
+            }
+            echo mysqli_error($con);
+            $con->close();
+            exit;
         }
-        else {
-            //--- for update profile ---//
-            if ($_POST['fname'] != '')
-                $stmt .= 'fname="'.$_POST['fname'].'",';
-            if ($_POST['lname'] != '')
-                $stmt .= 'lname="'.$_POST['lname'].'",';
-            if ($_POST['edit-profile-email'] != '')
-                $stmt .= 'email="'.$_POST['edit-profile-email'].'",';
-            if ($_POST['cnumber'] != '')
-                $stmt .= 'cnumber="'.$_POST['cnumber'].'",';
-            $stmt .= 'gender="'.$_POST['gender'].'"';
+
+        $u_id = $_SESSION['uid'];
+        //--- for update profile ---//
+        if ($_POST['fname'] != '') {
+            if ($stmt=$con->prepare('UPDATE users SET fname = ? WHERE u_id = ?')) {
+                $stmt->bind_param('si', $_POST['fname'], $u_id);
+                if (!$stmt->execute())
+                    return false;
+            }
+            else
+                return false;
         }
+        if ($_POST['lname'] != '') {
+            if ($stmt=$con->prepare('UPDATE users SET lname = ? WHERE u_id = ?')) {
+                $stmt->bind_param('si', $_POST['lname'], $u_id);
+                if (!$stmt->execute())
+                    return false;
+            }
+            else
+                return false;
+        }
+        if ($_POST['edit-profile-email'] != '') {
+            if ($stmt=$con->prepare('UPDATE users SET email = ? WHERE u_id = ?')) {
+                $stmt->bind_param('si', $_POST['edit-profile-email'], $u_id);
+                if (!$stmt->execute())
+                    return false;
+            }
+            else
+                return false;
+        }
+        if ($_POST['cnumber'] != '') {
+            if ($stmt=$con->prepare('UPDATE users SET cnumber = ? WHERE u_id = ?')) {
+                $stmt->bind_param('si', $_POST['cnumber'], $u_id);
+                if (!$stmt->execute())
+                    return false;
+            }
+            else 
+                return false;
+        }
+        if ($stmt=$con->prepare('UPDATE users SET gender = ? WHERE u_id = ?')) {
+            $stmt->bind_param('si', $_POST['gender'], $u_id);
+            if (!$stmt->execute())
+                return false;
+        }
+        else
+            return false;
             
         //--- if a file is uploaded check and validate the file and add to statement ---//
         if ($_FILES['customFile']['error'] == 0 && $_FILES['customFile']['name'] != ''){
@@ -121,27 +164,25 @@
                 exit('Image size too large! Please select an image 2mb and below..');
             }
             else {
-                $stmt .= ',img_file="'.$new_filename.'"';
                 //--- change file name to "none" since updating the column with the same data (filename) will result to affected rows = 0 ---//
-                $query = $con->prepare('UPDATE users SET img_file = "none" WHERE u_id = '.$u_id.'');
+                $query = $con->prepare('UPDATE users SET img_file = "none" WHERE u_id = ?');
+                $query->bind_param('i', $u_id);
                 $query->execute();
-                if (!move_uploaded_file($uploaded_file, $uploadto.$new_filename))
+                if (!move_uploaded_file($uploaded_file, $uploadto.$new_filename)) {
                     echo 'File upload failed!';
+                }
+                else {
+                    if ($stmt = $con->prepare('UPDATE users SET img_file = ? WHERE u_id = ?')) {
+                        $stmt->bind_param('si', $new_filename, $u_id);
+                        if (!$stmt->execute())
+                            return false;
+                    }
+                    else
+                        return false;
+                }
             }
         }
-
-        $stmt .= ' WHERE u_id = '.$u_id.'';
-        if ($stmt = $con->prepare($stmt)) {
-            if ($stmt->execute()) {
-                if ($stmt->affected_rows > 0)
-                    return true;
-                else
-                    return false;
-            }
-        }
-        echo mysqli_error($con);
-        $con->close();
-        exit;
+        return true;
     }
 
     //--- validate image file ---//

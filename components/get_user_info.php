@@ -8,18 +8,24 @@
     $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
     if (!$con)
         exit(mysqli_connect_error());
-    $stmt = 'wat';
-    if (isset($_GET['contacts']))
-        $stmt = 'SELECT * FROM users WHERE role="Radiologic technologist" && status="ACTIVE" LIMIT 1';
-    else if (isset($_GET['u_id']))
-        $stmt = 'SELECT * FROM users WHERE u_id='.$_GET['u_id'];
-    else if (isset($_GET['user_list']))
-        $stmt = 'SELECT u_id, fname, email, role, status FROM users ORDER BY u_id ASC';
-    else
-        $stmt = 'SELECT * FROM users WHERE u_id='.$_SESSION['uid'];
+
     
-    if ($stmt = $con->prepare($stmt)) {
-        $stmt->execute();
+    if (isset($_GET['contacts'])) {
+        $stmt = $con->prepare('SELECT * FROM users WHERE role="Radiologic technologist" && status="ACTIVE" LIMIT 1');
+    }
+    else if (isset($_GET['u_id'])) {
+        $stmt = $con->prepare('SELECT * FROM users WHERE u_id= ?');
+        $stmt->bind_param('i', $_GET['u_id']);
+    }
+    else if (isset($_GET['user_list'])) {
+        $stmt = $con->prepare('SELECT u_id, fname, email, role, status FROM users ORDER BY u_id ASC');
+    }
+    else {
+        $stmt = $con->prepare('SELECT * FROM users WHERE u_id= ?');
+        $stmt->bind_param('i', $_SESSION['uid']);
+    }
+    
+    if ($stmt->execute()) {
         $result = $stmt->get_result();
         if ($result->num_rows > 0) {
             if (isset($_GET['user_list'])) {

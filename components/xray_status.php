@@ -5,11 +5,11 @@
         exit;
     }
 
-    $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
+    /*$con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
     if (!$con)
         exit(mysqli_connect_error());
-    
+    */
     echo 'Searching...!';
-    $con->close();
+    //$con->close();
     exit;
 ?>

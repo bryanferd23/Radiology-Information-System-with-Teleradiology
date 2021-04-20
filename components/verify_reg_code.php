@@ -59,7 +59,8 @@
             }
         }
 
-        $stmt=$con->prepare('SELECT email, reg_code, role FROM pending_registration WHERE reg_id = '.$reg_id.'');
+        $stmt=$con->prepare('SELECT email, reg_code, role FROM pending_registration WHERE reg_id = ?');
+        $stmt->bind_param('i', $reg_id);
         if ($stmt->execute()) {
             $stmt->store_result();
             if ($stmt->num_rows() > 0) {

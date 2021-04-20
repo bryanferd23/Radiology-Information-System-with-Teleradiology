@@ -11,7 +11,8 @@
         $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
         if (!$con)
             exit(mysqli_connect_error());
-        if ($stmt = $con->prepare('SELECT * FROM pending_registration WHERE reg_id = '.$_REQUEST['reg_id'].'')) {
+        if ($stmt = $con->prepare('SELECT * FROM pending_registration WHERE reg_id = ?')) {
+            $stmt->bind_param('i', $_REQUEST['reg_id']);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows() <= 0) {

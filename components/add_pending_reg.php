@@ -24,7 +24,8 @@
             if (send_email($_POST['email'], $_POST['reg_code'], $_POST['role'], $con))
                 echo 'Success!';
             else {
-                $stmt = $con->prepare('DELETE from pending_registration WHERE email = "'.$_POST['email'].'"');
+                $stmt = $con->prepare('DELETE from pending_registration WHERE email = ?');
+                $stmt->bind_param('s', $_POST['email']);
                 $stmt->execute();
                 echo 'Failed to send an email! Please make sure you have a working internet connection!';
             }
@@ -38,7 +39,8 @@
     exit;
 
     function check_email_availability($con, $email) {
-        if ($stmt=$con->prepare('SELECT reg_id FROM pending_registration WHERE email = "'.$email.'"')) {
+        if ($stmt=$con->prepare('SELECT reg_id FROM pending_registration WHERE email = ?')) {
+            $stmt->bind_param('s', $email);
             if ($stmt->execute()) {
                 $stmt->store_result();
                 if ($stmt->num_rows() > 0) {
@@ -47,7 +49,8 @@
                     exit;
                 }
                 else{
-                    if ($stmt=$con->prepare('SELECT u_id FROM users WHERE email = "'.$email.'"')) {
+                    if ($stmt=$con->prepare('SELECT u_id FROM users WHERE email = ?')) {
+                        $stmt->bind_param('s', $email);
                         if ($stmt->execute()) {
                             $stmt->store_result();
                             if ($stmt->num_rows() > 0)

@@ -11,7 +11,8 @@
 
 
     if (isset($_GET['check_u_name_availability'])) {
-        if ($stmt = $con->prepare('SELECT u_id FROM users WHERE u_name = "'.$_GET['check_u_name_availability'].'"')) {
+        if ($stmt = $con->prepare('SELECT u_id FROM users WHERE u_name = ?')) {
+            $stmt->bind_param('s', $_GET['check_u_name_availability']);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows() <= 0) {
@@ -52,15 +53,18 @@
 
 
     function remove_from_pending_registration($con) {
-        if ($stmt=$con->prepare('SELECT reg_id FROM pending_registration WHERE email = "'.$_POST['email'].'"')) {
+        if ($stmt=$con->prepare('SELECT reg_id FROM pending_registration WHERE email = ?')) {
+            $stmt->bind_param('s', $_POST['email']);
             if ($stmt->execute()) {
                 $result = $stmt->get_result();
                 //--- remove pending tracker record for reg_id to avoid foregin key constrains ---//
                 //--- then remove reg_id from pending registration ---//
                 while ($row = $result->fetch_assoc()) {
-                    $stmt = $con->prepare('DELETE FROM pending_registration_tracker WHERE reg_id = '.$row['reg_id'].'');
+                    $stmt = $con->prepare('DELETE FROM pending_registration_tracker WHERE reg_id = ?');
+                    $stmt->bind_param('i', $row['reg_id']);
                     $stmt->execute();
-                    $stmt = $con->prepare('DELETE FROM pending_registration WHERE reg_id = '.$row['reg_id'].'');
+                    $stmt = $con->prepare('DELETE FROM pending_registration WHERE reg_id = ?');
+                    $stmt->bind_param('i', $row['reg_id']);
                     $stmt->execute();
                 }
                 session_unset();

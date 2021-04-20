@@ -15,7 +15,8 @@
         exit(mysqli_connect_error());
 
 //--- check if email exist in users ---///
-    if ($stmt=$con->prepare('SELECT u_id, u_name FROM users WHERE email = "'.$_POST['email'].'"')) {
+    if ($stmt=$con->prepare('SELECT u_id, u_name FROM users WHERE email = ?')) {
+        $stmt->bind_param('s', $_POST['email']);
         if ($stmt->execute()) {
             $stmt->store_result();
             if ($stmt->num_rows() > 0) {
@@ -27,16 +28,14 @@
                     if (add_to_pending_forgot_pass($con, $u_id)) {
                         //--- generate new pass and change pass in users table ---//
                         $new_pass = bin2hex(random_bytes(8));
-                        if (change_pass($con, $new_pass, $u_id)) {
-                            if (send_email($_POST['email'], $u_name, $new_pass))
+                        if (send_email($_POST['email'], $u_name, $new_pass)) {
+                            if (change_pass($con, $new_pass, $u_id));
                                 echo 'Success! a new password was sent to your email.';
-                            else {
-                                //--- remove from pending table since email was not sent ---//
-                                if (remove_from_pending_forgot_pass($con, $u_id))
-                                    echo 'Failed to send an email. Make sure you have a working internet connection!';
-                                else
-                                    echo 'Failed to send an email. Make sure you have a working internet connection...';
-                            }
+                        }
+                        else {
+                            //--- remove from pending table since email was not sent ---//
+                            if (remove_from_pending_forgot_pass($con, $u_id))
+                                echo 'Failed to send an email. Make sure you have a working internet connection!';
                         }
                     }
                 }
@@ -54,7 +53,8 @@
     exit;
 
     function remove_from_pending_forgot_pass($con, $u_id) {
-        if ($stmt = $con->prepare('DELETE FROM pending_forgot_pass WHERE u_id = '.$u_id.'')) {
+        if ($stmt = $con->prepare('DELETE FROM pending_forgot_pass WHERE u_id = ?')) {
+            $stmt->bind_param('i', $u_id);
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0)
                     return true;
@@ -69,7 +69,8 @@
 
     function change_pass($con, $new_pass, $u_id) {
         $hash = password_hash($new_pass, PASSWORD_BCRYPT, array('cost' => 10));
-        if ($stmt=$con->prepare('UPDATE users SET u_pass = "'.$hash.'" WHERE u_id = '.$u_id.'')) {
+        if ($stmt=$con->prepare('UPDATE users SET u_pass = ? WHERE u_id = ?')) {
+            $stmt->bind_param('si', $hash, $u_id);
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0 )
                     return true;
@@ -82,7 +83,8 @@
 
     function add_to_pending_forgot_pass($con, $u_id) {
         $cooldown_time = time()+60*5;
-        if ($stmt=$con->prepare('INSERT INTO pending_forgot_pass (u_id, cooldown_time) VALUE ('.$u_id.', "'.$cooldown_time.'")')) {
+        if ($stmt=$con->prepare('INSERT INTO pending_forgot_pass (u_id, cooldown_time) VALUE (?, ?)')) {
+            $stmt->bind_param('is', $u_id, $cooldown_time);
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0)
                     return true;
@@ -97,7 +99,8 @@
 
     function not_in_pending_forgot_pass($con, $u_id) {
         $cooldown_time = '';
-        if ($stmt=$con->prepare('SELECT cooldown_time FROM pending_forgot_pass WHERE u_id = '.$u_id.'')) {
+        if ($stmt=$con->prepare('SELECT cooldown_time FROM pending_forgot_pass WHERE u_id = ?')) {
+            $stmt->bind_param('i', $u_id);
             if ($stmt->execute())  {
                 $stmt->store_result();
                 if ($stmt->num_rows() <= 0)
@@ -105,7 +108,8 @@
                 $stmt->bind_result($cooldown_time);
                 $stmt->fetch();
                 if ($cooldown_time <= time()) {
-                    if ($stmt=$con->prepare('DELETE FROM pending_forgot_pass WHERE u_id = '.$u_id.'')) {
+                    if ($stmt=$con->prepare('DELETE FROM pending_forgot_pass WHERE u_id = ?')) {
+                        $stmt->bind_param('i', $u_id);
                         if ($stmt->execute())
                             return true;
                     }

@@ -169,6 +169,33 @@ $con->query('insert into physicians
     values 
     ("Elwin Jay", "Yu", "Internal Medicine"),
     ("Merry Christ\'l", "Supnet-guinocor", "Pediatrician")');
+
+
+$con->query('INSERT INTO patients
+(fname, lname, b_date, age, gender, standing_or_status, cnumber) 
+values
+("ferdiwil","perante","1990-07-02",30,"Male","Student","9614359029")');
+$con->query('INSERT INTO examination
+(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+("12-1212","15235","52351","2021-04-20",1,"P.E",1)');
+$con->query('INSERT INTO procedures
+(x_ray_no, type, views, film_size) 
+values
+("12-1212","Chest","PA","14x14")');
+
+$con->query('INSERT INTO patients
+(fname, lname, b_date, age, gender, standing_or_status, cnumber) 
+values
+("lainely","bandilla","1990-07-02",30,"Female","Employee","9614359029")');
+$con->query('INSERT INTO examination
+(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+("12-1213","15234","52353","2021-04-20",1,"renewal",1)');
+$con->query('INSERT INTO procedures
+(x_ray_no, type, views, film_size) 
+values
+("12-1213","Chest","PA","11x14")');
 ?>
 
 
