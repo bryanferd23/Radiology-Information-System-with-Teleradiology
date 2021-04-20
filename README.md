@@ -26,11 +26,9 @@ Web-based Radiological Information System (Progress: 45%)
 --------------------------------------------------
 **What works?**
 
--login/logout
+-login/logout (authentication)
 
--authentication
-
--forgot password (email a new pass)
+-forgot password (emails a new pass)
 
 -add user by sending registration email (admin account only)
 
