@@ -8,7 +8,7 @@ Web-based Radiological Information System (Progress: 45%)
 
 **Resources folder**
 
--css, JS, images
+-css, js, images
 
 
 **Vendor folder**
@@ -38,7 +38,7 @@ Web-based Radiological Information System (Progress: 45%)
 
 -edit account (profile w/ image and change password)
 
--adding patient (radtech role only)
+-add patient (radtech role only)
 
 -view patient list
 
@@ -54,6 +54,6 @@ Web-based Radiological Information System (Progress: 45%)
 
 -restrict access to web page (will redirect if requirements are not met)
 
--blocks device from logging in/unlock the registration page if failed 10 times (still applies even if the cookies are cleared)
+-blocks device from logging in or from unlocking registration page if failed 10 times (still applies even if the cookies & sessions are cleared)
 
 -prepared statement (protects from SQL injection)
