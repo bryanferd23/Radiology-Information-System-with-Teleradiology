@@ -16,13 +16,13 @@ body {
 }
 
 .nav-link {
-    margin-right: .5rem;
+    margin-right: 2.5rem;
 }
 
 .navbar-brand {
     font-family: 'Roboto', sans-serif;
     font-size: 1.1rem;
-    margin: auto 2rem auto 2rem;
+    margin: auto 3.5rem auto 2rem;
 }
 
 .heading {
@@ -111,7 +111,7 @@ nav .dropdown-item i{
     text-decoration: unset;
 }
 #settings i {
-    margin: .3rem 0rem .3rem .3rem;
+    margin: .325rem 0rem .3rem .3rem;
     padding: 0px;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -160,8 +160,8 @@ section input, section button, section select{
 }
 
 #edit-profile i{
-    font-size: 30px;
-    color: white;
+    font-size: 28px;
+    color: rgba(255, 255, 255, 0.712);
     position: relative;
     top: 10.5rem;
 }
@@ -238,5 +238,17 @@ section input, section button, section select{
     }
     #user-list-body .badge {
         margin: auto auto .25rem auto !important;
+    }
+    section  {
+        font-size: .85rem !important;
+    }
+    section input, section button, section select, section .dropdown-menu{
+        font-size: .85rem !important;
+    }
+    #settings {
+        font-size: .8rem;
+    }
+    #settings i {
+        margin: .375rem 0rem .3rem .3rem;
     }
 }

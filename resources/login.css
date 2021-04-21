@@ -17,7 +17,6 @@ body {
 }
 
 .navbar .nav-link {
-    height: 33px;
     font-size: .85rem;
     margin-top: .1rem;
     margin-bottom: .2rem;
@@ -144,5 +143,16 @@ section {
         left: 2%;
         max-width: 96%;
         text-align: center;
+    }
+    body {
+            font-size: .85rem !important;
+    }
+    input, button {
+        font-size: .85rem !important;
+    }
+    #login-container .modal-body{
+        width: 96%;
+        margin-left: 2%;
+        margin-right: 2%;
     }
 }
