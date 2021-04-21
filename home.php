@@ -215,7 +215,7 @@
                                     <label for="patient_cnumber">Mobile no. (optional)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
+                                            <span class="input-group-text rounded-left">+63</span>
                                         </div>
                                         <input type="number" class="form-control rounded-right input-type-numbers" name="patient_cnumber" id="patient_cnumber">
                                         <small class="form-text">
@@ -368,6 +368,7 @@
             </div>
             <div class="text-center">
                 <h6><a id="patient-list-see-more" href="#" style="text-decoration:unset">See more</a></h6>
+                <h6><a id="patient-list-go-back" href="#" style="text-decoration:unset">Go back</a></h6>
             </div>
         </div>
     </section>

@@ -242,7 +242,7 @@ section input, section button, section select{
     section  {
         font-size: .85rem !important;
     }
-    section input, section button, section select, section .dropdown-menu{
+    section input, section button, section select, section .dropdown-menu, section span{
         font-size: .85rem !important;
     }
     #settings {

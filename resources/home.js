@@ -4,11 +4,15 @@ const regex_numbers = /^[0-9]+$/;
 const regex_names = /^([a-zA-z]+[,.]?[ ]?|[a-z]+['-]?)+$/;
 const regex_x_ray_no = /^([0-9][0-9][-][0-9]+)$/;
 const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
+
+var temp;
+var date = new Date();
+var today = date.toISOString().substr(0, 10)
+date.setDate(date.getDate()-1);
+var yesterday = date.toISOString().substr(0, 10);
+
 //--------------- Run the scipt below when the document is ready or has loaded ---------------------------------------//
 $(document).ready(function () {
-    var temp;
-    var today = (new Date()).toISOString().substr(0, 10);
-
     $('section .alert').hide();
     $("#welcome-message").fadeTo(15000, 500).slideUp(500, function(){
         $("#welcome-message").slideUp(500);
@@ -24,7 +28,7 @@ $(document).ready(function () {
                 $('#exam_date').val(today);
             }
             if ($(this).html().match("Patients") || $(this).html().match("Show list")) {
-                populate_patient_list(today);
+                populate_patient_list();
             }
             $(".nav_link_content").addClass('d-none');
             $(".nav_link_content").eq(indexInArray).css({
@@ -816,9 +820,11 @@ $(document).ready(function () {
         let posttable = '</tbody></table></div>';
         let date = h5s.eq(len).html();
         
-        if (date == undefined)
+        if (date == undefined || date == "Today")
             date = today;
-        
+        if (date == "Yesterday")
+            date = yesterday;
+
         $.ajax({
             type: "GET",
             url: "components/get_patient.php",
@@ -831,7 +837,7 @@ $(document).ready(function () {
                 }
                 else{
                     pretable = set_pretable(response);
-                    get_patient_list(response, pretable, posttable, "date", true)
+                    get_patient_list(response, pretable, posttable, "date")
                 }
             }
         });
@@ -852,8 +858,12 @@ $(document).ready(function () {
         e.preventDefault();
         let posttable = '</tbody></table></div>';
         $("#patient-list-card-body-table").html('');
-        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html(), true);
+        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html());
         $("#patient-list-see-more").addClass("d-none");
+        $("#patient-list-go-back").removeClass('d-none');
+    })
+    $("#patient-list-go-back").on('click', function () {
+        populate_patient_list();
     })
 });
 
@@ -874,35 +884,19 @@ function set_pretable(date) {
             ';
 }
 
-function populate_patient_list(today) {
-    let Year = today.substring(0, 4);
-    let Month = today.substring(5, 7);
-    let Day = today.substring(8, 10);
-    let date = Year+"-"+Month+"-"+Day;
-    
+function populate_patient_list() {
     $("#patient-list-card-body-table").html('');
-    let posttable = '</tbody></table></div>';
-    //patient today
-    get_patient_list(date, set_pretable("Today"), posttable, "gdate", false);
-    let i = "1";
-    date = Year+"-"+Month+"-"+(Day - i++);
-    //patient yesterday
-    get_patient_list(date, set_pretable("Yesterday"), posttable, "gdate", true);
-    date = Year+"-"+Month+"-"+(Day - i);
-    get_patient_list(date, set_pretable(date), posttable, "gdate", true);
-    //If no patient today & yesterday get the inserted last date and display
-    if ($("#patient-list-card-body-table").html() == '') {
-        $("#patient-list-see-more").click();
-    }
+    $("#patient-list-see-more").click();
     $("#patient-list-see-more").removeClass("d-none");
-    $("#patient-list-see-more").html('See more')
+    $("#patient-list-see-more").html('See more');
+    $("#patient-list-go-back").addClass('d-none');
     $("#patient-list-see-more").removeClass("text-secondary");
 }
 
 
 
 //functions
-function get_patient_list(data, pretable, posttable, temp1, async) {
+function get_patient_list(data, pretable, posttable, temp1) {
     let form = '';
     if (temp1 == "x-ray no.")
         form = {"x_ray_no": data}
@@ -916,7 +910,6 @@ function get_patient_list(data, pretable, posttable, temp1, async) {
         url: "components/get_patient.php",
         data: form,
         dataType: "JSON",
-        async: async,
         success: function (response) {
             if (response[0]) {
                 let table = '';
@@ -935,6 +928,15 @@ function get_patient_list(data, pretable, posttable, temp1, async) {
             else {
                 if (temp1 != "gdate")
                     $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">Search result/s</h5><p>No info</p>');
+            }
+        }, complete: function() {
+            let h5s = $('#patient-list-card-body-table').find('h5');
+            
+            for (let i = 0; i < 2; i++) {
+                if (h5s.eq(i).html() == today)
+                    h5s.eq(i).html("Today");
+                if (h5s.eq(i).html() == yesterday)
+                    h5s.eq(i).html("Yesterday");
             }
         }
     });

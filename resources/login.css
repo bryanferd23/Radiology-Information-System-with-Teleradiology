@@ -155,4 +155,10 @@ section {
         margin-left: 2%;
         margin-right: 2%;
     }
+    .navbar .nav-link {
+        font-size: .8rem;
+    }
+    #x-ray-info {
+        font-size: .75rem;
+    }
 }
