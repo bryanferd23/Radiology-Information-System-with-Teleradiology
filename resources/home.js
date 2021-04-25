@@ -10,7 +10,8 @@ var date = new Date();
 var today = date.toISOString().substr(0, 10)
 date.setDate(date.getDate()-1);
 var yesterday = date.toISOString().substr(0, 10);
-
+date.setDate(date.getDate()+2);
+var tom = date.toISOString().substr(0, 10);
 //--------------- Run the scipt below when the document is ready or has loaded ---------------------------------------//
 $(document).ready(function () {
     $('section .alert').hide();
@@ -568,6 +569,10 @@ $(document).ready(function () {
                 if ($(this).attr('id') == 'b_date') {
                     $('#age').val(Age);
                 }
+                if ($(this).attr('id') == 'patient-info-b_date') {
+                    $('#patient-info-age').val(Age);
+                    $('#patient-info-age').addClass('is-valid');
+                }
                 input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
             }
             else 
@@ -621,19 +626,14 @@ $(document).ready(function () {
         placeholder.html(temp)
     })
     $('.input-type-multiple-select option').on('click', function(e) {
-        let all_options = '';
-        let select = '';
+        let select = $(this).parent();
         let isProcedure = false;
 
-        if ($(this).parent().prop('label')) {
-            all_options = $('#procedure option');
-            select = $('#procedure');
+        if (select.prop('label')) {
+            select = select.parent();
             isProcedure = true;
         }
-        else {
-            select = $('#film_size');
-            all_options = $('#film_size option');
-        }
+        all_options = select.find('option');
 
         if (e.ctrlKey) {
             if (isProcedure) {
@@ -820,11 +820,13 @@ $(document).ready(function () {
         let posttable = '</tbody></table></div>';
         let date = h5s.eq(len).html();
         
-        if (date == undefined || date == "Today")
+        if (date == undefined)
+            date = tom;
+        if (date == "Today")
             date = today;
         if (date == "Yesterday")
             date = yesterday;
-
+        
         $.ajax({
             type: "GET",
             url: "components/get_patient.php",
@@ -837,8 +839,14 @@ $(document).ready(function () {
                 }
                 else{
                     pretable = set_pretable(response);
-                    get_patient_list(response, pretable, posttable, "date")
+                    get_patient_list(response, pretable, posttable, "date");
                 }
+            },
+            complete: function() {
+                $("#patient-list .progress").addClass('d-none');
+                $("#patient-list .progress-bar").css({
+                    width: "0%"
+                });
             }
         });
     }) 
@@ -865,6 +873,170 @@ $(document).ready(function () {
     $("#patient-list-go-back").on('click', function () {
         populate_patient_list();
     })
+
+    $(this).on('click', '#patient-list-card-body-table .fa-chevron-circle-right', function() {
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+        let inputs = $("#patient-info-form input");
+        let selects = $("#patient-info-form select");
+        inputs.val('').attr('disabled', true);
+        selects.val('').attr('disabled', true);
+        $('#patient-info-alert').hide();
+
+        $.ajax({
+            type: "GET",
+            url: "components/get_patient.php",
+            data: {"info": x_ray_no},
+            dataType: "json",
+            success: function (response) {
+                let input_index = 0; let select_index = 0; let all_index = 0; let multi_select_index = 3;
+                let physican = '';
+                for (row in response) {
+                    for(col in response[row]) {
+                        if (input_index == 7)
+                            input_index++;
+                        if (all_index == 5|| all_index == 8) {
+                            inputs.eq(input_index++).val(response[row][col]).attr("disabled", true);
+                        }
+                        else if (all_index == 9 || all_index == 11) {
+                            selects.eq(select_index++).attr("disabled", true).children().eq(0).html(response[row][col]);
+                        }
+                        else if (all_index == 13 || all_index == 14 || all_index == 15) {
+                            physican+=response[row][col]+" ";
+                        }
+                        else if (all_index == 0 || all_index == 1) {
+                            selects.eq(multi_select_index++).attr("disabled", true).children().eq(0).html(response[row][col]);
+                        }
+                        else {
+                            inputs.eq(input_index++).attr('placeholder', (response[row][col] == "0" || response[row][col] == null || response[row][col] == "") ? "":response[row][col]).attr("disabled", true);
+                        }
+
+                        if (all_index == 15)
+                            selects.eq(select_index++).attr("disabled", true).children().eq(0).html(physican);
+                        all_index++;
+                    }
+                }
+            }, 
+            complete: function() {
+                inputs.removeClass('is-valid');
+                selects.removeClass('is-valid');
+                inputs.removeClass('is-invalid');
+                selects.removeClass('is-invalid');
+                $("#patient-info-edit").removeClass('d-none');
+                $("#patient-info-update").addClass('d-none');
+                $("#patient-info .modal").modal("show");
+            }
+        });
+    })
+    $("#patient-info-edit").on('click', function(e) {
+        e.preventDefault();
+
+        $(this).addClass('d-none');
+        $("#patient-info-update").removeClass('d-none');
+        let inputs = $("#patient-info-form input");
+        let selects = $("#patient-info-form select");
+        
+        inputs.attr('disabled', false);
+        selects.attr('disabled', false);
+    })
+    $("#patient-info-form").on('submit', function(e) {
+        e.preventDefault();
+        let inputs = $("#patient-info-form input");
+        let selects = $("#patient-info-form select");
+        var alert_tag = $('#patient-info-alert');
+        var loading_tag_container = $("#patient-info .progress");
+        var loading_tag = $("#patient-info .progress-bar");
+        var button = $(this);
+        
+        //--- check if the form was changed ---//
+        //--- if changed proceed to ajax else return and do nothing ---//
+        if ( (inputs.hasClass('is-valid') || selects.hasClass('is-valid')) && !button.data('requestRunning')) {
+            button.data('requestRunning', true); 
+            //--- transfer all the value with is-valid class to a form ---//
+           var form = new FormData();
+
+            if (inputs.hasClass('is-valid')) {
+                for (elem in inputs) {
+                    if (inputs.eq(elem).hasClass('is-valid'))
+                     form.append(inputs.eq(elem).attr('name'), inputs.eq(elem).val());
+                }
+            }
+            if (selects.hasClass('is-valid')) {
+                for (elem in selects) {
+                    if (selects.eq(elem).hasClass('is-valid')) {
+                        if (selects.eq(elem).attr('id').match("patient-info-procedure") || selects.eq(elem).attr('id').match("patient-info-film_size")) {
+                            if (!form.has('patient-info-procedure') && !form.has('patient-info-film_size')) {
+                                form.append("patient-info-procedure", $("#patient-info-procedure").children().eq(0).html());
+                                form.append("patient-info-film_size", $("#patient-info-film_size").children().eq(0).html());
+                            }
+                        }
+                        else
+                            form.append(selects.eq(elem).attr('name'), selects.eq(elem).val());
+                    }
+                }
+            }
+            
+            form.append('update_patient', 'ok?');
+
+            //for (var pair of form.entries()) {
+            //    console.log(pair[0]+ ', ' + pair[1]); 
+            //}
+            
+            alert_tag.hide();
+            alert_tag.removeClass('alert-success');
+            alert_tag.removeClass('alert-danger');
+            loading_tag_container.removeClass('d-none');
+            loading_tag.animate({
+                width: "100%"
+            }, 250);
+
+            //proceed to ajax
+            $.ajax({
+                type: "post",
+                url: "components/update_patient.php",
+                data: form,
+                processData: false,
+                contentType: false,
+                dataType: "html",
+                success: function (response) {
+                    loading_tag.finish();
+                    alert_tag.finish();
+                    loading_tag_container.addClass('d-none');
+                    loading_tag.css({
+                        width: "0%"
+                    });
+                    if (response.match('Success!'))  {
+                        alert_tag.addClass('alert-success');
+                    }
+                    else
+                        alert_tag.addClass('alert-danger');
+                    
+                    alert_tag.html(response).css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.slideUp(500);
+                    });
+                },
+                //--- if ajax request is complete, set request running to false---//
+                complete: function() {
+                    button.data('requestRunning', false);
+                    let h5s = $("#patient-list-card-body-table").find('h5');
+                    let len = h5s.length - 1;
+                    let date = h5s.eq(len).html();
+                    
+                    if (date.match("Search"))
+                        $("#patient-list-search-form").submit();
+                    else
+                        populate_patient_list();
+                }
+            });
+        }
+    })
+    
 });
 
 function set_pretable(date) {
@@ -885,12 +1057,21 @@ function set_pretable(date) {
 }
 
 function populate_patient_list() {
-    $("#patient-list-card-body-table").html('');
+    $("#patient-list-card-body-table").html('').addClass('d-none');
     $("#patient-list-see-more").click();
     $("#patient-list-see-more").removeClass("d-none");
     $("#patient-list-see-more").html('See more');
     $("#patient-list-go-back").addClass('d-none');
     $("#patient-list-see-more").removeClass("text-secondary");
+    
+    
+    $("#patient-list .progress").removeClass('d-none');
+    $("#patient-list .progress-bar").animate({
+        width: "100%"
+    }, 200, function() {
+        $("#patient-list-card-body-table").removeClass('d-none')
+        $("#patient-list .progress-bar").finish();
+    });
 }
 
 
@@ -920,7 +1101,7 @@ function get_patient_list(data, pretable, posttable, temp1) {
                             table += '<td class="align-middle">' + response[row][data] + '</td>';
                         }
                     }
-                    table += '<td id="" class="align-middle"><a href="#" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
+                    table += '<td class="align-middle"><a href="javascript:void(0)" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
                     table += '</tr>';
                 }
                 $('#patient-list-card-body-table').append(pretable+table+posttable);

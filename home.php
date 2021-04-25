@@ -215,7 +215,7 @@
                                     <label for="patient_cnumber">Mobile no. (optional)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text rounded-left">+63</span>
+                                            <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
                                         </div>
                                         <input type="number" class="form-control rounded-right input-type-numbers" name="patient_cnumber" id="patient_cnumber">
                                         <small class="form-text">
@@ -334,6 +334,212 @@
         ';
         }
     ?>
+    <section id="patient-info">
+        <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-body">
+                <div style="top:-30px" class="modal-header card-header d-flex justify-content-center">
+                    Patient information
+                </div>
+                <div class="d-flex justify-content-center">
+                <form id="patient-info-form">
+                    <?php
+                        if ($_SESSION['role'] == 'Radiologic technologist') {
+                            echo '  <div style="position:absolute;top:50px;right:1rem;z-index:999">
+                                        <button id="patient-info-edit" class="btn btn-primary ml-auto">Edit</button>
+                                    </div>';
+                        }
+                    ?>
+                    <div class="progress mb-2 d-none">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div class="form-row mb-2">
+                        <div id="patient-info-alert" class="alert alert-danger w-100 text-center" role="alert">
+                            <!-- response goes here -->
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4 mt-4">
+                        <div class="col mb-3">
+                            <label for="patient-info-x_ray_no">X-ray No.</label>
+                            <input type="text" class="form-control input-type-x-ray-no" name="patient-info-x_ray_no" id="patient-info-x_ray_no">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-inf_no">Infirmary No.</label>
+                            <input type="number" class="form-control input-type-numbers" name="patient-info-inf_no" id="patient-info-inf_no">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-or_no">OR No.</label>
+                            <input type="number" class="form-control input-type-numbers" name="patient-info-or_no" id="patient-info-or_no">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-exam_date">Examination date</label>
+                            <input type="date" class="form-control input-type-date" name="patient-info-exam_date" id="patient-info-exam_date">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-6 mb-3">
+                            <label for="patient-info-patient_fname">First name</label>
+                            <input type="text" class="form-control input-type-names" name="patient-info-patient_fname" id="patient-info-patient_fname">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label for="patient-info-patient_lname">Last name</label>
+                            <input type="text" class="form-control input-type-names" name="patient-info-patient_lname" id="patient-info-patient_lname">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
+                        <div class="col mb-3">
+                            <label for="patient-info-b_date">Birth date</label>
+                            <input type="date" class="form-control input-type-date" name="patient-info-b_date" id="patient-info-b_date">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3 d-none">
+                            <label for="patient-info-age">Age</label>
+                            <input type="number" class="form-control is-valid" name="patient-info-age" id="patient-info-age">
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-patient_gender">Gender</label>
+                            <select class="custom-select input-type-select" name="patient-info-patient_gender" id="patient-info-patient_gender">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="1">Male</option>
+                                <option value="2">Female</option>
+                            </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-patient_cnumber">Mobile no. (optional)</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
+                                </div>
+                                <input type="number" class="form-control rounded-right input-type-numbers" name="patient-info-patient_cnumber" id="patient-info-patient_cnumber">
+                                <small class="form-text">
+                                </small>
+                            </div>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-standing_or_status">Standing/Status</label>
+                            <select class="custom-select  input-type-select" name="patient-info-standing_or_status" id="patient-info-standing_or_status">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="1">Dependent</option>
+                                <option value="2">Employee</option>
+                                <option value="3">Student</option>
+                                <option value="4">Outsider</option>
+                            </select>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-history_or_purpose">History/Purpose</label>
+                            <input type="text" class="form-control input-type-sentence" name="patient-info-history_or_purpose" id="patient-info-history_or_purpose">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-physician">Physician</label>
+                            <select class="custom-select input-type-select" name="patient-info-physician" id="patient-info-physician">
+                                <option selected disabled value="">Choose...</option>
+                                <option value="1">Elwin Jay, Yu, Internal Medicine</option>
+                                <option value="2">Merry Christ'l, Supnet-guinocor, Pediatrician</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
+                        <div class="col mb-3">
+                            <label for="patient-info-procedure">Procedure</label>
+                            <select id="patient-info-procedure" name="patient-info-procedure" class="custom-select input-type-multiple-select">
+                                <option selected disabled value="">Choose...</option>
+                                <optgroup label="Chest">
+                                    <option value="Chest AP">AP</option>
+                                    <option value="Chest PA">PA</option>
+                                    <option value="Chest APL">APL</option>
+                                    <option value="Chest PAL">PAL</option>
+                                    <option value="Chest APOL">APOL</option>
+                                    <option value="Chest PALO">PALO</option>
+                                </optgroup>
+                                <optgroup label="Bucky">
+                                    <option value="Bucky AP">AP</option>
+                                    <option value="Bucky PA">PA</option>
+                                </optgroup>
+                                <optgroup label="Extremities">
+                                    <option value="Extremities APL">APL</option>
+                                    <option value="Extremities PAL">PAL</option>
+                                    <option value="Extremities APOL">APOL</option>
+                                    <option value="Extremities PALO">PALO</option>
+                                </optgroup>
+                                <optgroup label="Skull">
+                                    <option value="Skull APL">APL</option>
+                                    <option value="Skull PAL">PAL</option>
+                                    <option value="Skull Waters view">Waters view</option>
+                                </optgroup>
+                                <optgroup label="Vertebrae">
+                                    <option value="Vertebrae APL">APL</option>
+                                    <option value="Vertebrae RAO">RAO</option>
+                                    <option value="Vertebrae LAO">LAO</option>
+                                </optgroup>
+                                <optgroup label="Pelvis">
+                                    <option value="Pelvis LAO">AP</option>
+                                </optgroup>
+                                <optgroup label="Shoulder">
+                                    <option value="Shoulder AP">AP</option>
+                                    <option value="Shoulder Internal Rotation">Internal Rotation</option>
+                                    <option value="Shoulder External Rotation">External Rotation</option>
+                                    <option value="Shoulder Scapular Y">Scapular Y</option>
+                                </optgroup>
+                                <optgroup label="Abdomin">
+                                    <option value="Abdomin FPU">FPU</option>
+                                </optgroup>
+                            </select>
+                            <small class="form-text text-muted">
+                                Select 1 (click) Select 1 or more (ctr+click)
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-film_size">Film size</label>
+                            <select class="custom-select input-type-multiple-select" name="patient-info-film_size" id="patient-info-film_size">
+                                <option selected disabled value="">Choose...</option>
+                                <option>8x10</option>
+                                <option>10x12</option>
+                                <option>11x14</option>
+                                <option>14x14</option>
+                                <option>14x17</option>
+                            </select>
+                            <small class="form-text text-muted">
+                                Select 1 (click) Select 1 or more (ctr+click)
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-no_of_film_spoilage">No. of film spoilage</label>
+                            <input type="number" class="form-control input-type-numbers" name="patient-info-no_of_film_spoilage" id="patient-info-no_of_film_spoilage" value="">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                        <div class="col mb-3">
+                            <label for="patient-info-reason_for_spoilage">Reason for spoilage</label>
+                            <input type="text" class="form-control input-type-sentence" name="patient-info-reason_for_spoilage" id="patient-info-reason_for_spoilage" value="">
+                            <small class="form-text text-muted">
+                            </small>
+                        </div>
+                    </div>
+                    <div id="patient-info-update" class="form-row mt-3 d-none">
+                        <button class="btn btn-primary ml-auto" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+                </div></div></div>
+    </section>
+
     <!-- patient list - nav_link_content #3 -->
     <section id="patient-list" class="nav_link_content d-none">
         <h3 class="heading">Examination</h3>
@@ -361,6 +567,9 @@
                         </div>
                     </form>
                     </div>
+                </div>
+                <div class="progress mt-5 mb-2 d-none">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                 </div>
                 <div id="patient-list-card-body-table">
 

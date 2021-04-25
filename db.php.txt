@@ -103,8 +103,8 @@ if(!$con->query('create table examination(
             patient_id int(12) not null,
             history_or_purpose varchar(32) not null,
             physician_id int(12) not null,
-            no_of_film_spoilage int(2) null,
-            reason_for_spoilage varchar(32) null,
+            no_of_film_spoilage int(2) null default 0,
+            reason_for_spoilage varchar(32) null default "none",
             FOREIGN KEY(physician_id) REFERENCES physicians(id),
             FOREIGN KEY(patient_id) REFERENCES patients(id))
             '))
@@ -172,30 +172,46 @@ $con->query('insert into physicians
 
 
 $con->query('INSERT INTO patients
-(fname, lname, b_date, age, gender, standing_or_status, cnumber) 
+    (fname, lname, b_date, age, gender, standing_or_status, cnumber) 
 values
-("ferdiwil","perante","1990-07-02",30,"Male","Student","9614359029")');
+    ("ferdiwil","perante","1990-07-02",30,"Male","Student","9614359029")');
 $con->query('INSERT INTO examination
-(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
 values
-("12-1212","15235","52351","2021-04-20",1,"P.E",1)');
+    ("12-1212","15235","52351","2021-04-20",1,"P.E",1)');
 $con->query('INSERT INTO procedures
-(x_ray_no, type, views, film_size) 
+    (x_ray_no, type, views, film_size) 
 values
-("12-1212","Chest","PA","14x14")');
+    ("12-1212","Chest","PA","14x14")');
+
 
 $con->query('INSERT INTO patients
-(fname, lname, b_date, age, gender, standing_or_status, cnumber) 
+    (fname, lname, b_date, age, gender, standing_or_status) 
 values
-("lainely","bandilla","1990-07-02",30,"Female","Employee","9614359029")');
+    ("steve","jobs","1980-07-02",40,"Male","Student")');
 $con->query('INSERT INTO examination
-(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
 values
-("12-1213","15234","52353","2021-04-20",1,"renewal",1)');
+    ("12-1211","15235","52351","2021-04-19",2,"Cough",2)');
 $con->query('INSERT INTO procedures
-(x_ray_no, type, views, film_size) 
+    (x_ray_no, type, views, film_size) 
 values
-("12-1213","Chest","PA","11x14")');
+    ("12-1211","Chest","PA","14x14")');
+
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status, cnumber) 
+values
+    ("lainely","bandilla","1990-07-02",30,"Female","Employee","9120984652")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1213","15234","52353","2021-04-21",1,"renewal",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1213","Chest","PA","11x14")');
+
 ?>
 
 
