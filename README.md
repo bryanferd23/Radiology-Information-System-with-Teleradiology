@@ -1,5 +1,5 @@
 # RISystem
-Web-based Radiological Information System (Progress: 45%)
+Web-based Radiological Information System (Progress: 50%)
 
 --------------------------------------------------
 **Component folder**
@@ -32,7 +32,7 @@ Web-based Radiological Information System (Progress: 45%)
 
 -add user by sending registration email (admin account only)
 
--view and disable/activate user (admin account only)
+-view, disable, and activate user (admin account only)
 
 -edit account (profile w/ image and change password)
 
@@ -41,6 +41,8 @@ Web-based Radiological Information System (Progress: 45%)
 -view patient list
 
 -search patient by(x-ray no, last name, date)
+
+-edit patient (radtech role only)
 
 
 --------------------------------------------------
@@ -55,3 +57,5 @@ Web-based Radiological Information System (Progress: 45%)
 -blocks device from logging in or from unlocking registration page if failed 10 times (still applies even if the cookies & sessions are cleared)
 
 -prepared statement (protects from SQL injection)
+
+-contact info in landing page reflects on (disable, enable, and edit of account)
