@@ -39,17 +39,31 @@
         <div class="collapse navbar-collapse" data-toggle="collapse" data-target=".navbar-collapse.show" id="collapsibleNavId">
             <div class="navbar-nav">
                 <?php 
-                    if ($_SESSION['role'] == 'admin') {
+                    if ($_SESSION['role'] != 'Radiologic technologist') {
                         echo '
                         <div class="nav-item">
                             <a class="nav-link navlinks" href="#">Patients</a>
-                        </div>
-                        ';
-                        echo '
-                        <div class="nav-item">
-                            <a class="nav-link navlinks" href="#">Administration</a>
-                        </div>
-                        ';
+                        </div>';
+                        if ($_SESSION['role'] == 'Radiologist') {
+                            echo '
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Teleradiology
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item navlinks" href="#"><i class="far fa-eye-slash mr-1"></i> For reading</a>
+                                    <a class="dropdown-item navlinks" href="#"><i class="fas fa-print mr-1"></i> Recent diagnoses</a>
+                                </div>
+                            </div>
+                            ';
+                        }
+                        else {
+                            echo '
+                            <div class="nav-item">
+                                <a class="nav-link navlinks" href="#">Administration</a>
+                            </div>
+                            ';
+                        }
                     }
                     else {
                         echo '
@@ -62,8 +76,6 @@
                                 <a class="dropdown-item navlinks" href="#"><i class="fas fa-list-ol mr-1"></i> Show list</a>
                             </div>
                         </div>
-                            ';
-                        echo '
                         <div class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Teleradiology
@@ -542,7 +554,12 @@
 
     <!-- patient list - nav_link_content #3 -->
     <section id="patient-list" class="nav_link_content d-none">
-        <h3 class="heading">Examination</h3>
+        <?php
+            $heading = 'Examination';
+            if ($_SESSION['role'] != 'Radiologic technologist')
+                $heading = 'Patients';
+            echo'<h3 class="heading">'.$heading.'</h3>';
+        ?>
         <div class="card pb-4">
             <div class="card-header">
                 Patient list
@@ -584,25 +601,32 @@
 
     <?php
         if ($_SESSION['role'] != 'admin') {
+            $header1 = 'For reading';
+            $header2 = 'Recent diagnoses';
+            if ($_SESSION['role'] == 'Radiologic technologist') {
+                echo'
+                <!-- upload x-ray image - nav_link_content #4 -->
+                <section class="nav_link_content d-none">
+                        <h3 class="heading">Teleradiology</h3>
+                    <div class="card">
+                        <div class="card-header">
+                            Send X-Ray image
+                        </div>
+                        <div class="card-body d-flex justify-content-center">
+                            No info
+                        </div>
+                    </div>
+                </section>';
+                $header1 = 'Pending interpretation';
+                $header2 = 'Results';
+            }
             echo'
-            <!-- upload x-ray image - nav_link_content #4 -->
-            <section class="nav_link_content d-none">
-                    <h3 class="heading">Teleradiology</h3>
-                <div class="card">
-                    <div class="card-header">
-                        Send X-Ray image
-                    </div>
-                    <div class="card-body d-flex justify-content-center">
-                        No info
-                    </div>
-                </div>
-            </section>
             <!-- Pending interpretation - nav_link_content #5 -->
             <section class="nav_link_content d-none">
                     <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
-                        Pending interpretation
+                        '.$header1.'
                     </div>
                     <div class="card-body d-flex justify-content-center">
                         No info
@@ -614,7 +638,7 @@
                     <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
-                        Results
+                        '.$header2.'
                     </div>
                     <div class="card-body d-flex justify-content-center">
                         No info

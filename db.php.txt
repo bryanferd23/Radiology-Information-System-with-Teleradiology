@@ -158,11 +158,13 @@ if(!$con->query('create table x_ray_results(
 //------------------ populate tables -------------------------------------------------------------------------//
 $hashadmin = password_hash("admin", PASSWORD_BCRYPT, array('cost' => 10));
 $hashradtech = password_hash("radtechmai2", PASSWORD_BCRYPT, array('cost' => 10));
+$hashradiologist = password_hash("radiologist", PASSWORD_BCRYPT, array('cost' => 10));
 $con->query('insert into users
     (u_name, u_pass, fname, lname, gender, cnumber, email, role, status, img_file) 
     values 
-    ("admin", "'.$hashadmin.'", "Ferdiwil", "Perante", "Male", "9055426718", "ris.email.system@gmail.com", "admin", "ACTIVE", "1.jpg"),
-    ("radtechmai2", "'.$hashradtech.'", "Lainely Mai", "Bandilla", "Female", "9120984652", "aeonette24@gmail.com", "Radiologic technologist", "ACTIVE", "2.jpeg")');
+    ("admin", "'.$hashadmin.'", "Ferdiwil", "Perante", "Male", "9055426718", "ferdz.waine.mai@gmail.com", "admin", "ACTIVE", "1.jpg"),
+    ("radtechmai2", "'.$hashradtech.'", "Lainely Mai", "Bandilla", "Female", "9120984652", "aeonette24@gmail.com", "Radiologic technologist", "ACTIVE", "2.jpeg"),
+    ("radiologist", "'.$hashradiologist.'", "Peter", "Solaña", "male", "9150944653", "ris.email.system@gmail.com", "Radiologist", "ACTIVE", "blank.jpg")');
 
 $con->query('insert into physicians
     (fname, lname, specialization)
@@ -178,25 +180,11 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
 values
-    ("12-1212","15235","52351","2021-04-20",1,"P.E",1)');
+    ("12-1212","12345","23456","2021-04-20",1,"P.E",1)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
     ("12-1212","Chest","PA","14x14")');
-
-
-$con->query('INSERT INTO patients
-    (fname, lname, b_date, age, gender, standing_or_status) 
-values
-    ("steve","jobs","1980-07-02",40,"Male","Student")');
-$con->query('INSERT INTO examination
-    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
-values
-    ("12-1211","15235","52351","2021-04-19",2,"Cough",2)');
-$con->query('INSERT INTO procedures
-    (x_ray_no, type, views, film_size) 
-values
-    ("12-1211","Chest","PA","14x14")');
 
 
 $con->query('INSERT INTO patients
@@ -206,12 +194,134 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
 values
-    ("12-1213","15234","52353","2021-04-21",1,"renewal",1)');
+    ("12-1213","12346","23457","2021-04-20",2,"Cough",2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
-    ("12-1213","Chest","PA","11x14")');
+    ("12-1213","Chest","PA","14x14")');
 
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1214","12347","23458","2021-04-22",1,"Cough",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1214","Chest","PA","14x14")');
+
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1215","12348","23459","2021-04-22",2,"Renew",2)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1215","Chest","PA","14x14")');
+
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("steve","jobs","1980-07-02",40,"Male","Outsider")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1216","12349","23460","2021-04-23",3,"Checkup",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1216","Chest","PA","11x14")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("steven","rogers","1990-07-02",30,"Male","Outsider")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1217","12350","23461","2021-04-23",4,"Checkup",2)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1217","Chest","PA","14x14")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("kevin","durant","1990-07-02",30,"Male","Outsider")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1218","12351","23462","2021-04-23",5,"injury",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1218","Extremities","PAL","14x17")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("kevin","carter","1990-07-02",30,"Male","Outsider")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1219","12352","23463","2021-04-23",6,"injury",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1219","Extremities","APL","14x17")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("michael","jordan","1990-07-02",30,"Male","Outsider")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1220","12353","23464","2021-04-24",7,"followup",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1220","Chest","PA","14x14")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("michael","jackson","1990-07-02",30,"Male","Employee")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1221","12354","23465","2021-04-24",8,"Renewal",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1221","Chest","PA","14x14")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("peter","parker","1990-07-02",30,"Male","Employee")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1222","12355","23466","2021-04-24",9,"Renewal",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1222","Chest","PA","14x14")');
+
+$con->query('INSERT INTO patients
+    (fname, lname, b_date, age, gender, standing_or_status) 
+values
+    ("michael","v","1990-07-02",30,"Male","Employee")');
+$con->query('INSERT INTO examination
+    (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id) 
+values
+    ("12-1223","12356","23467","2021-04-24",10,"Renewal",1)');
+$con->query('INSERT INTO procedures
+    (x_ray_no, type, views, film_size) 
+values
+    ("12-1223","Chest","PA","14x14")');
 ?>
 
 
