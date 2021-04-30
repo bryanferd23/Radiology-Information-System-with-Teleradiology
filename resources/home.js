@@ -1036,7 +1036,26 @@ $(document).ready(function () {
             });
         }
     })
-    
+    $("#send-x-ray-image-form1").on('submit', function(e) {
+        e.preventDefault();
+
+        $(this).addClass('d-none');
+        $("#send-x-ray-image-form2").removeClass('d-none');
+        $("#step2").removeClass('step2');
+        $("#step2").addClass('step2-active');
+    })
+    $("#send-x-ray-image-form2-back").on('click', function(e) {
+        e.preventDefault();
+        $("#step2").removeClass('step2-active');
+        $("#step2").addClass('step2');
+        $("#send-x-ray-image-form1").removeClass('d-none');
+        $("#send-x-ray-image-form2").addClass('d-none');
+    })
+    $("#send-x-ray-image-form2").on('submit', function(e) {
+        e.preventDefault();
+
+        alert('submitted')
+    })
 });
 
 function set_pretable(date) {

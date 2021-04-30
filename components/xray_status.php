@@ -9,7 +9,7 @@
     if (!$con)
         exit(mysqli_connect_error());
     */
-    echo 'Searching...!';
+    echo 'Sorry this feature is still in developement..';
     //$con->close();
     exit;
 ?>

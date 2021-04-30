@@ -598,7 +598,7 @@
             </div>
         </div>
     </section>
-
+                        
     <?php
         if ($_SESSION['role'] != 'admin') {
             $header1 = 'For reading';
@@ -612,8 +612,42 @@
                         <div class="card-header">
                             Send X-Ray image
                         </div>
-                        <div class="card-body d-flex justify-content-center">
-                            No info
+                        <div class="card-body">
+                            <div class="col-md-5 ml-auto mr-auto mt-4 mb-4">
+                                <div class="form-row justify-content-center">
+                                    <h5 class="border-bottom pb-1">STEPS</h5>
+                                </div>
+                                <div class="form-row d-flex justify-content-center">
+                                    <div id="step1" class="steps step1-active"><i class="fa fa-file-code" aria-hidden="true"></i></div>
+                                    <div id="step2" class="steps step2"><i class="fa fa-file-upload" aria-hidden="true"></i></div>
+                                </div>  
+                            </div>
+                            <form id="send-x-ray-image-form1">
+                                <div class="mb-2">
+                                    <div class="alert w-100 text-center" role="alert">
+                                        <!-- response goes here -->
+                                    </div>
+                                </div>
+                                <div class="col-sm-5 ml-auto mr-auto mt-4 mb-4">
+                                    <label for="send-x-ray-image-x-ray-no">X-Ray No.</label>
+                                    <input type="text" class="form-control input-type-x-ray-no" name="send-x-ray-image-x-ray-no" id="send-x-ray-image-x-ray-no" required>
+                                    <small class="form-text text-muted">
+                                    </small>
+                                </div>
+                                <button class="btn btn-primary float-right" type="submit">Next</button>
+                            </form>
+                            <form id="send-x-ray-image-form2" class="d-none">
+                                <div class="mb-2">
+                                    <div class="alert w-100 text-center" role="alert">
+                                        <!-- response goes here -->
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center mt-4 mb-4">
+                                    nothing
+                                </div>
+                                <button class="btn btn-secondary" id="send-x-ray-image-form2-back">Back</button>
+                                <button class="btn btn-primary float-right" type="submit">Send</button>
+                            </form>
                         </div>
                     </div>
                 </section>';

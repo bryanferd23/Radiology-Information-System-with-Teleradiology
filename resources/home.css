@@ -186,6 +186,53 @@ section input, section button, section select{
     padding: 0 0 0 .1rem;
 }
 
+.step1-active::after {
+    position: absolute;
+    content: "";
+    margin-top: .5rem;
+    margin-left: 9px;
+    height: .25rem;
+    width: 2.06rem;
+    background-color: var(--primary);
+}
+
+.step2::before {
+    position: absolute;
+    content: "";
+    margin-top: .5rem;
+    margin-left: -2.7rem;
+    height: .25rem;
+    width: 2.06rem;
+    background-color: var(--secondary);
+}
+
+.step2-active::before {
+    position: absolute;
+    content: "";
+    margin-top: .5rem;
+    margin-left: -2.7rem;
+    height: .25rem;
+    width: 2.06rem;
+    background-color: var(--primary);
+}
+
+.steps {
+    height:30px; 
+    margin-left: 2rem;
+    margin-right: 2rem;
+    width:30px;
+    border-radius:999px;
+    padding-top:.25rem;
+    padding-left:.65rem;
+    background-color: var(--secondary);
+    color: white;
+    font-weight: bold;
+}
+
+.step1-active, .step2-active {
+    background-color: var(--primary);
+}
+
 @media (max-width:1024px){
     .heading {
         width: 100%;
