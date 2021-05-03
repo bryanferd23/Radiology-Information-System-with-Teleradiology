@@ -44,6 +44,8 @@ Web-based Radiological Information System (Progress: 50%)
 
 -edit patient (radtech role only)
 
+-sending/uploading of X-ray image(radtech role only)
+
 
 --------------------------------------------------
 **Under the hood?**
