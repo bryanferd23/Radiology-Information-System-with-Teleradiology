@@ -358,8 +358,8 @@
                 <form id="patient-info-form">
                     <?php
                         if ($_SESSION['role'] == 'Radiologic technologist') {
-                            echo '  <div style="position:absolute;top:50px;right:1rem;z-index:999">
-                                        <button id="patient-info-edit" class="btn btn-primary ml-auto">Edit</button>
+                            echo '  <div style="position:absolute;top:55px;right:1rem;z-index:999">
+                                        <h6><a id="patient-info-edit" href="" class="ml-auto mr-2" style="text-decoration:unset"><i class="far fa-edit"></i> Edit</a></h6>
                                     </div>';
                         }
                     ?>
@@ -560,13 +560,12 @@
                 $heading = 'Patients';
             echo'<h3 class="heading">'.$heading.'</h3>';
         ?>
-        <div class="card pb-4">
+        <div class="card">
             <div class="card-header">
                 Patient list
             </div>
             <div class="card-body text-center">
-                <div class="mt-4 d-flex justify-content-center">
-                    <div>
+                <div class="mt-2 mb-5 d-flex justify-content-center">
                     <form id="patient-list-search-form">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -583,18 +582,17 @@
                             </div>
                         </div>
                     </form>
-                    </div>
                 </div>
-                <div class="progress mt-5 mb-2 d-none">
+                <div class="progress mt-3 d-none">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                 </div>
                 <div id="patient-list-card-body-table">
 
                 </div>
             </div>
-            <div class="text-center">
-                <h6><a id="patient-list-see-more" href="#" style="text-decoration:unset">See more</a></h6>
-                <h6><a id="patient-list-go-back" href="#" style="text-decoration:unset">Go back</a></h6>
+            <div class="text-center mb-4">
+                <h6><a id="patient-list-see-more" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-down"></i> See more</a></h6>
+                <h6><a id="patient-list-go-back" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-left"></i> Back</a></h6>
             </div>
         </div>
     </section>
@@ -613,18 +611,18 @@
                             Send X-Ray image
                         </div>
                         <div class="card-body">
-                            <div class="col-md-5 ml-auto mr-auto mt-4 mb-4">
+                            <div class="col-md-5 ml-auto mr-auto mt-1 mb-3">
                                 <div class="form-row justify-content-center">
-                                    <h5 class="border-bottom pb-1">STEPS</h5>
+                                    <h5 id="send-x-ray-image-h5">STEP 1</h5>
                                 </div>
-                                <div class="form-row d-flex justify-content-center">
-                                    <div id="step1" class="steps step1-active"><i class="fa fa-file-code" aria-hidden="true"></i></div>
-                                    <div id="step2" class="steps step2"><i class="fa fa-file-upload" aria-hidden="true"></i></div>
+                                <div class="d-flex justify-content-center">
+                                    <div id="step1" class="steps step1" style="margin-right:3rem"><i class="fa fa-file-code" aria-hidden="true"></i></div>
+                                    <div id="step2" class="steps step2" style="margin-left:3rem"><i class="fa fa-file-upload" aria-hidden="true"></i></div>
                                 </div>  
                             </div>
-                            <form id="send-x-ray-image-form1">
+                            <form id="send-x-ray-image-form1" class="mt-5">
                                 <div class="mb-2">
-                                    <div class="alert w-100 text-center" role="alert">
+                                    <div id="send-x-ray-image-form1-alert" class="alert w-100 text-center" role="alert">
                                         <!-- response goes here -->
                                     </div>
                                 </div>
@@ -634,19 +632,19 @@
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>
-                                <button class="btn btn-primary float-right" type="submit">Next</button>
+                                <button class="btn btn-primary float-right" type="submit">Next<i class="fas fa-long-arrow-alt-right ml-1"></i></button>
                             </form>
                             <form id="send-x-ray-image-form2" class="d-none">
                                 <div class="mb-2">
-                                    <div class="alert w-100 text-center" role="alert">
+                                    <div id="send-x-ray-image-form2-alert" class="alert w-100 text-center" role="alert">
                                         <!-- response goes here -->
                                     </div>
                                 </div>
-                                <div class="col-md-12 text-center mt-4 mb-4">
-                                    nothing
+                                <div id="send-x-ray-image-form2-body" class="justify-content-center">
+                                    
                                 </div>
-                                <button class="btn btn-secondary" id="send-x-ray-image-form2-back">Back</button>
-                                <button class="btn btn-primary float-right" type="submit">Send</button>
+                                <h6 class="float-left pt-2"><a id="send-x-ray-image-form2-back" href="" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-left mr-1"></i>Back</a></h6>
+                                <button id="send-x-ray-image-form2-send-button" class="btn btn-primary float-right" type="submit">Send</button>
                             </form>
                         </div>
                     </div>
@@ -812,7 +810,7 @@
                     </div>
                     <div class="mb-2 text-center">
                         <img id="profile-picture" src="resources/images/blank.jpg" width="200px" height="200px" class="rounded-circle">
-                        <input type="file" class="custom-file-input d-none" name="customFile" id="customFile">
+                        <input type="file" class="custom-file-input d-none" name="customFile" id="customFile" accept="image/*">
                     </div>
                     <div class="progress mb-2 d-none">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>

@@ -4,6 +4,7 @@ const regex_numbers = /^[0-9]+$/;
 const regex_names = /^([a-zA-z]+[,.]?[ ]?|[a-z]+['-]?)+$/;
 const regex_x_ray_no = /^([0-9][0-9][-][0-9]+)$/;
 const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
+const regex_file_name = /^[-0-9A-Za-z_\.]+$/;
 
 var temp;
 var date = new Date();
@@ -12,12 +13,11 @@ date.setDate(date.getDate()-1);
 var yesterday = date.toISOString().substr(0, 10);
 date.setDate(date.getDate()+2);
 var tom = date.toISOString().substr(0, 10);
+
 //--------------- Run the scipt below when the document is ready or has loaded ---------------------------------------//
 $(document).ready(function () {
     $('section .alert').hide();
-    $("#welcome-message").fadeTo(15000, 500).slideUp(500, function(){
-        $("#welcome-message").slideUp(500);
-    });
+    $("#welcome-message").fadeTo(15000, 500).slideUp(500);
     //--- switch content when navigation links is clicked --------------------------//
     $.each($('.navlinks'), function (indexInArray) { 
         $(this).on('click', function(e) {
@@ -70,18 +70,18 @@ $(document).ready(function () {
             }
         });
     })
-
+    
     //--- send registraion email form submit -------------------------------------//
     $('#send-registration-email-form').on('submit', function(e) {
         e.preventDefault();
         //assign
-        var alert_tag = $('#send-registration-email-alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
+        let alert_tag = $('#send-registration-email-alert');
+        let loading_tag_container = $(this).find('.progress');
+        let loading_tag = $(this).find('.progress-bar');
 
-        var inputs = $(this).find('input');
-        var all_valid = true;
-        var button = $(this);
+        let inputs = $(this).find('input');
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -100,8 +100,6 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            alert_tag.removeClass('alert-success');
-            alert_tag.removeClass('alert-danger');
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
@@ -133,7 +131,8 @@ $(document).ready(function () {
                         'opacity': 1
                     }, 500);
                     alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                        alert_tag.slideUp(500);
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
                     });
                 },
                 //--- if ajax request is complete, set request running to false---//
@@ -147,7 +146,7 @@ $(document).ready(function () {
     //--- get user list when "view" is clicked -------------------------------------------//
     $(this).on('click', '#user-list-view', function (e) {
         e.preventDefault();
-        var u_id = $(this).parent().parent().index()+1;
+        let u_id = $(this).parent().parent().index()+1;
         $('#user-info-container .badge').removeClass('badge-success');
         $('#user-info-container .badge').removeClass('badge-secondary');
 
@@ -158,14 +157,14 @@ $(document).ready(function () {
             dataType: "json",
             //--- if ajax request is success, place the user info inside modal's inner HTML ---//
             success: function (response) {
-                var row = $('#user-info-container .modal-body').children();
+                let row = $('#user-info-container .modal-body').children();
                 row.eq(0).children().attr('src', response['img_url']);
                 row.eq(1).html(response['fname'] + " " + response['lname']);
                 row.eq(2).html(response['role']);
                 row.eq(3).html(response['email']);
                 row.eq(4).html("(+63) " + response['cnumber']);
                 row.eq(5).html(response['gender']);
-                var color = 'badge-success';
+                let color = 'badge-success';
                 if (response['status'] == 'DISABLED')
                     color = 'badge-secondary';
                 row.eq(6).html(response['status']).addClass(color);
@@ -179,8 +178,8 @@ $(document).ready(function () {
     //--- Toggle status of the user (disable or enable account) -------------------------------------------//
     $(this).on('click', '#user-list-change-user-status', function (e) {
         e.preventDefault();
-        var status = $(this).html();
-        var u_id = $(this).parent().parent().index()+1;
+        let status = $(this).html();
+        let u_id = $(this).parent().parent().index()+1;
         
         if (status == "ACTIVATE" || status == "DISABLE") {
             status = (status == "DISABLE" ? "DISABLED" : "ACTIVE");
@@ -201,9 +200,9 @@ $(document).ready(function () {
 
     //--- validate user input (email) ---------------------------------------------------------//
     $('.input-type-email').on('keyup', function () {
-        var input = $(this).val();
-        var input_tag =  $(this);
-        var small_tag = $(this).next();
+        let input = $(this).val();
+        let input_tag =  $(this);
+        let small_tag = $(this).next();
 
         if (input) {
             //--- check input length ---//
@@ -242,9 +241,9 @@ $(document).ready(function () {
     })
     //--- validate user input (letters and numbers) --------------------------------------------------------------//
     $('.input-type-letters-numbers').on('keyup', function () {
-        var input = $(this).val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
 
         if (input) {
             //--- check input length ---//
@@ -279,9 +278,9 @@ $(document).ready(function () {
     })
     //--- validate user input (names) ---------------------------------------------------------//
     $('.input-type-names').on('keyup', function () {
-        var input = $(this).val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
         
         if (input) {
             //--- check input length ---//
@@ -299,9 +298,9 @@ $(document).ready(function () {
     })
     //--- validate user input (sentence/word/phrase) ---------------------------------------------------------//
     $('.input-type-sentence').on('keyup', function () {
-        var input = $(this).val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
         
         if (input) {
             //--- check input length ---//
@@ -319,9 +318,9 @@ $(document).ready(function () {
     })
     //--- validate user input (select) ---------------------------------------------------------//
     $('.input-type-select').on('change', function () {
-        var input = $(this).val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
 
         if (input)
             input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
@@ -340,10 +339,10 @@ $(document).ready(function () {
     })
     //--- change img src of profile picture when an image is choosen by the user ---//
     $('#customFile').change(function(e) {
-        var input = e.target;
-        if (input.files && input.files[0]) {
-            var file = input.files[0];
-            var reader = new FileReader();
+        let input = e.target;
+        if (input.files && input.files[0] && ["image/gif", "image/jpeg", "image/png"].includes(input.files[0]['type'])) {
+            let file = input.files[0];
+            let reader = new FileReader();
 
             reader.readAsDataURL(file);
             reader.onload = function(e) {
@@ -356,14 +355,14 @@ $(document).ready(function () {
 //--- edit profile on submit -----------------------------------------------------------------//
     $('#edit-profile-form').on('submit', function(e) {
         e.preventDefault();
-        var alert_tag = $(this).find('.alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar')
+        let alert_tag = $(this).find('.alert');
+        let loading_tag_container = $(this).find('.progress');
+        let loading_tag = $(this).find('.progress-bar')
 
-        var inputs = $(this).find('input');
-        var all_empty = true;
-        var all_valid = true;
-        var button = $(this);
+        let inputs = $(this).find('input');
+        let all_empty = true;
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -383,8 +382,6 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            alert_tag.removeClass('alert-success');
-            alert_tag.removeClass('alert-danger');
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
@@ -422,7 +419,8 @@ $(document).ready(function () {
                         'opacity': 1
                     }, 500);
                     alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                        alert_tag.slideUp(500);
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
                     });
                 },
                 //--- if ajax request is complete, set request running to false---//
@@ -443,7 +441,7 @@ $(document).ready(function () {
             data: {"profile_info":"ok"},
             dataType: "json",
             success: function (response) {
-                var inputs = $('#edit-profile-form input');
+                let inputs = $('#edit-profile-form input');
                 inputs.eq(0).siblings().attr('src', response['img_url']);
                 $('#settings-container img').attr('src', response['img_url']);
                 inputs.eq(1).attr('placeholder', response['fname']);
@@ -459,10 +457,10 @@ $(document).ready(function () {
 
     //--- verify if password is the same (change pass) ---------------------------------------------//
     $('#new_u_pass2').on('keyup', function () {
-        var input = $(this).val();
-        var upass = $('#new_u_pass').val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let upass = $('#new_u_pass').val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
         
         if (input) {
             //--- check of password is same ---//
@@ -478,13 +476,13 @@ $(document).ready(function () {
 //--- Change password form on submit ---------------------------------------------------------------------------//
     $('#change-password-form').on('submit', function(e) {
         e.preventDefault();
-        var alert_tag = $(this).find('.alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
+        let alert_tag = $(this).find('.alert');
+        let loading_tag_container = $(this).find('.progress');
+        let loading_tag = $(this).find('.progress-bar');
 
-        var inputs = $(this).find('input');
-        var all_valid = true;
-        var button = $(this);
+        let inputs = $(this).find('input');
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -502,8 +500,6 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            alert_tag.removeClass('alert-success');
-            alert_tag.removeClass('alert-danger');
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
@@ -538,7 +534,8 @@ $(document).ready(function () {
                         'opacity': 1
                     }, 500);
                     alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                        alert_tag.slideUp(500);
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
                     });
                 },
                 //--- if ajax request is complete, set request running to false---//
@@ -549,9 +546,9 @@ $(document).ready(function () {
         }
     })
     $('.input-type-date').on('change', function() {
-        var input = $(this).val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
 
         if (input) {
             let YearNow = today.substring(0, 4)
@@ -666,9 +663,9 @@ $(document).ready(function () {
     })
 
     $(".input-type-x-ray-no").on('keyup', function() {
-        var input = $(this).val();
-        var input_tag = $(this);
-        var small_tag = $(this).next();
+        let input = $(this).val();
+        let input_tag = $(this);
+        let small_tag = $(this).next();
         
         if (input) {
             //--- check input length ---//
@@ -686,9 +683,9 @@ $(document).ready(function () {
     })
 
     $(".input-type-numbers").on('keyup', function() {
-        var input = $(this).val();
-        var input_tag = $(this);
-        var small_tag = $(this).next();
+        let input = $(this).val();
+        let input_tag = $(this);
+        let small_tag = $(this).next();
         
         if (input) {
             //--- check input length ---//
@@ -728,13 +725,13 @@ $(document).ready(function () {
      $('#add-patient-form').on('submit', function(e) {
         e.preventDefault();
         //assign
-        var alert_tag = $('#add-patient-alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
+        let alert_tag = $('#add-patient-alert');
+        let loading_tag_container = $(this).find('.progress');
+        let loading_tag = $(this).find('.progress-bar');
 
-        var inputs = $(this).find('input');
-        var all_valid = true;
-        var button = $(this);
+        let inputs = $(this).find('input');
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -755,8 +752,6 @@ $(document).ready(function () {
             temp.append('film_size',$('#film_size').children().first().html())
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            alert_tag.removeClass('alert-success');
-            alert_tag.removeClass('alert-danger');
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
@@ -801,7 +796,8 @@ $(document).ready(function () {
                         'opacity': 1
                     }, 500);
                     alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                        alert_tag.slideUp(500);
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
                     });
                 },
                 //--- if ajax request is complete, set request running to false---//
@@ -942,17 +938,17 @@ $(document).ready(function () {
         e.preventDefault();
         let inputs = $("#patient-info-form input");
         let selects = $("#patient-info-form select");
-        var alert_tag = $('#patient-info-alert');
-        var loading_tag_container = $("#patient-info .progress");
-        var loading_tag = $("#patient-info .progress-bar");
-        var button = $(this);
+        let alert_tag = $('#patient-info-alert');
+        let loading_tag_container = $("#patient-info .progress");
+        let loading_tag = $("#patient-info .progress-bar");
+        let button = $(this);
         
         //--- check if the form was changed ---//
         //--- if changed proceed to ajax else return and do nothing ---//
         if ( (inputs.hasClass('is-valid') || selects.hasClass('is-valid')) && !button.data('requestRunning')) {
             button.data('requestRunning', true); 
             //--- transfer all the value with is-valid class to a form ---//
-           var form = new FormData();
+            let form = new FormData();
 
             if (inputs.hasClass('is-valid')) {
                 for (elem in inputs) {
@@ -982,8 +978,6 @@ $(document).ready(function () {
             //}
             
             alert_tag.hide();
-            alert_tag.removeClass('alert-success');
-            alert_tag.removeClass('alert-danger');
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
@@ -1018,7 +1012,8 @@ $(document).ready(function () {
                         'opacity': 1
                     }, 500);
                     alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                        alert_tag.slideUp(500);
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
                     });
                 },
                 //--- if ajax request is complete, set request running to false---//
@@ -1038,29 +1033,263 @@ $(document).ready(function () {
     })
     $("#send-x-ray-image-form1").on('submit', function(e) {
         e.preventDefault();
+        let input = $(this).find('input');
+        let alert_tag = $("#send-x-ray-image-form1-alert");
+        alert_tag.hide();
 
-        $(this).addClass('d-none');
-        $("#send-x-ray-image-form2").removeClass('d-none');
-        $("#step2").removeClass('step2');
-        $("#step2").addClass('step2-active');
+        if (input.hasClass('is-invalid')) {
+            input.focus();
+            return;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "components/get_patient.php",
+            data: {"info": input.val()},
+            dataType: "json",
+            success: function (response) {
+                alert_tag.finish();
+                if (response[0]) {
+                    let procedures = (response[0][0]).split(', ');
+                    let x_ray_no = response[0]["x_ray_no"];
+                    $.ajax({
+                        type: "GET",
+                        url: "components/teleradiology.php",
+                        data: {'exist': response[0]["x_ray_no"]},
+                        dataType: "html",
+                        success: function (response) {
+                            if (response.match('does not exist!')) {
+                                $("#send-x-ray-image-form1").addClass('d-none');
+                                $("#send-x-ray-image-form2").removeClass('d-none');
+                                $("#step1").removeClass('step1');
+                                $("#step1").addClass('step1-active');
+                                $("#step2").removeClass('step2');
+                                $("#step2").addClass('step2-active');
+                                $("#send-x-ray-image-form2-send-button").removeClass('d-none');
+                                $("#send-x-ray-image-h5").html("STEP 2");
+                                $("#send-x-ray-image-form2-body").html('');
+                                $("#send-x-ray-image-form2-body").append('<input type="text" class="d-none" name="send-x-ray-image-form2-body-x_ray_no" value="'+x_ray_no+'">');
+                                for (elem in procedures) {
+                                    $("#send-x-ray-image-form2-body").append('\
+                                        <div class="text-center mt-5 mb-4" style="height:18rem">\
+                                            <div class="mt-3">\
+                                                <h5>'+procedures[elem]+'</h5>\
+                                            </div>\
+                                            <div class="mt-3 pb-2">\
+                                                <div>\
+                                                    <button class="btn btn-outline-dark send-x-ray-image-form2-upload-button"> <i class="fas fa-upload"></i> Click here to upload</button>\
+                                                </div>\
+                                                <div class="d-none">\
+                                                </div>\
+                                            </div>\
+                                            <div class="d-flex justify-content-center overflow-auto mt-2 pl-3">\
+                                            </div>\
+                                        </div>\
+                                    ');
+                                }
+
+                                let upload_buttons = $(".send-x-ray-image-form2-upload-button");
+                                upload_buttons.on('click', function(e) {
+                                    e.preventDefault();
+                                    let procedure = $(this).parent().parent().siblings().eq(0).children().eq(0).html();
+                                    procedure = procedure.replace(' ','_');
+                                    $(this).parent().siblings().eq(0).append('<input type="file" class="send-x-ray-image-form2-input" name="image_of_'+procedure+'[]" multiple="multiple" accept="image/*">');
+                                    $(this).parent().siblings().eq(0).children().eq($(this).parent().siblings().eq(0).children().length-1).click();
+                                })
+                            }
+                            else {
+                                alert_tag.finish();
+                                alert_tag.addClass('alert-danger');
+                                alert_tag.html(response).css({
+                                    'opacity': 0
+                                });
+                                alert_tag.show();
+                                alert_tag.animate({
+                                    'opacity': 1
+                                }, 500);
+                                alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                                    alert_tag.removeClass('alert-danger');
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        }).fail(function(){ 
+            alert_tag.finish();
+            alert_tag.addClass('alert-danger');
+            alert_tag.html('X-ray no. doesn\'t exist!').css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-success');
+                alert_tag.removeClass('alert-danger');
+            });
+        })
+    })
+    $(this).on('click', '.send-x-ray-image-form2-input', function (e) {
+        let temp = $(this);
+        let alert_tag = $("#send-x-ray-image-form2 .alert");
+        let siblings = temp.siblings();
+        let procedure_container = temp.parent().parent().parent().siblings();
+
+        $(this).change(function (e) {
+            let input = e.target;
+            if (input.files && input.files[0]) {
+                let file = input.files[0];
+                function show_error(error) {
+                    alert_tag.finish();
+                    alert_tag.addClass('alert-danger');
+                    alert_tag.html(error).css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
+                    });
+                    
+                    temp.remove();
+                    window.scrollTo(0, 0);
+                    return;
+                }
+                if (!["image/gif", "image/jpeg", "image/png"].includes(input.files[0]['type']))
+                    show_error("Please select a valid image file!");
+                else if (file.size > 10097152)
+                    show_error("Image file size must be less than 10mb!");
+                else if (!regex_file_name.test(file.name))
+                    show_error("Image file name must not contain whitespaces or symbols!");
+                else {
+                    $.each(procedure_container, function () { 
+                        if ($(this).index() != 0) {
+                            $.each($(this).children().eq(1).children().eq(1).children(), function () { 
+                                if ($(this).val().substring(12).match(file.name)) {
+                                    show_error("Image was already selected!");
+                                }
+                            });
+                        }
+                   });
+                   $.each(siblings, function () { 
+                        if ($(this).val().substring(12).match(file.name)) {
+                            show_error("Image was already selected!");
+                        }
+                    });
+                }
+                
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function(e) {
+                    temp.parent().parent().parent().children().eq(2).append('\
+                        <div class="mr-3 d-flex justify-content-center">\
+                            <img src="'+reader.result+'" class="rounded mt-3 mb-3 float-left" width="150px" height="150px">\
+                            <a href="" style="margin-top:-.3rem;margin-left:-.35rem;font-size:1.25rem;color:var(--danger)" class="send-x-ray-image-form2-delete-button"><i class="fas fa-times-circle"></i></a>\
+                        </div>\
+                    ')
+                }
+            }
+        })
+    })
+    $(this).on('click', '.send-x-ray-image-form2-delete-button', function (e) {
+        e.preventDefault();
+        let index = $(this).parent().index();
+        let inputs = $(".send-x-ray-image-form2-input");
+        inputs.eq(index).remove();
+        $(this).parent().remove();
     })
     $("#send-x-ray-image-form2-back").on('click', function(e) {
         e.preventDefault();
+        $("#step1").removeClass('step1-active');
+        $("#step1").addClass('step1');
         $("#step2").removeClass('step2-active');
         $("#step2").addClass('step2');
         $("#send-x-ray-image-form1").removeClass('d-none');
         $("#send-x-ray-image-form2").addClass('d-none');
+        $("#send-x-ray-image-h5").html("STEP 1")
     })
     $("#send-x-ray-image-form2").on('submit', function(e) {
         e.preventDefault();
+        let inputs = $(".send-x-ray-image-form2-input");
+        let h5s = $(this).find('h5');
+        let alert_tag = $("#send-x-ray-image-form2 .alert");
+        let button = $(this);
+        let temp = Array();
+        alert_tag.hide();
 
-        alert('submitted')
+        $.each(inputs, function () { 
+            if ($(this).val() == '')
+                $(this).remove();
+            else {
+                if (!temp.includes($(this).attr('name')))
+                    temp.push($(this).attr('name'));
+            }
+        });
+        
+        if (temp.length != h5s.length) {
+            alert_tag.finish();
+            alert_tag.addClass('alert-danger');
+            alert_tag.html('Please upload an image for all the procedures below..').css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-success');
+                alert_tag.removeClass('alert-danger');
+            });
+            window.scrollTo(0, 0);
+            return;
+        }
+        
+        if (!button.data('requestRunning')) {
+            button.data('requestRunning', true); 
+            $.ajax({
+                type: "POST",
+                url: "components/teleradiology.php",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                dataType: "html",
+                success: function (response) {
+                    alert_tag.finish();
+                    if (response.match('Success!'))  {
+                        alert_tag.addClass('alert-success');
+                        $("#send-x-ray-image-form2-send-button").addClass('d-none');
+                    }
+                    else
+                        alert_tag.addClass('alert-danger');
+                    alert_tag.html(response).css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
+                    });
+                    window.scrollTo(0, 0);
+                },
+                complete: function () {
+                    button.data('requestRunning', false);
+                }
+            });
+        }
     })
 });
 
 function set_pretable(date) {
     return '\
-    <div class="table-responsive mt-5">\
+    <div class="table-responsive mt-4">\
         <h5 class="text-center mb-4">'+date+'</h5>\
         <table class="table table-hover border-bottom">\
             <thead class="text-secondary">\
@@ -1079,7 +1308,7 @@ function populate_patient_list() {
     $("#patient-list-card-body-table").html('').addClass('d-none');
     $("#patient-list-see-more").click();
     $("#patient-list-see-more").removeClass("d-none");
-    $("#patient-list-see-more").html('See more');
+    $("#patient-list-see-more").html('<i class="fas fa-long-arrow-alt-down"></i> See more');
     $("#patient-list-go-back").addClass('d-none');
     $("#patient-list-see-more").removeClass("text-secondary");
     
