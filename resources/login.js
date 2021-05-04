@@ -92,7 +92,7 @@ $(document).ready(function () {
                 if (regex_email.test(input)) {
                     input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
                     $('#email2').keyup();
-                    throw "";
+                    return;
                 }
             }
             input_feedback(input_tag, small_tag, 'Must be a valid email address containing 3-32 characters long.', 'invalid');
