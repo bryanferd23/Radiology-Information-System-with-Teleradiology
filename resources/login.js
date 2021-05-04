@@ -151,7 +151,7 @@ $(document).ready(function () {
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
-            }, 2000);
+            }, 250);
             
             $.ajax({
                 type: "POST",

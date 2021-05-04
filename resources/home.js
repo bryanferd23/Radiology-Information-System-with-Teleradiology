@@ -103,7 +103,7 @@ $(document).ready(function () {
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
-            }, 2000);
+            }, 250);
 
             //--- run ajax request ---//
             $.ajax({
@@ -385,7 +385,7 @@ $(document).ready(function () {
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
-            }, 2000);
+            }, 250);
 
             //--- run ajax request ---//
             $.ajax({
@@ -503,7 +503,7 @@ $(document).ready(function () {
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
-            }, 2000);
+            }, 250);
 
             //--- run ajax request ---//
             $.ajax({
@@ -755,7 +755,7 @@ $(document).ready(function () {
             loading_tag_container.removeClass('d-none');
             loading_tag.animate({
                 width: "100%"
-            }, 2000);
+            }, 250);
 
             //--- run ajax request ---//
             $.ajax({
@@ -1000,6 +1000,14 @@ $(document).ready(function () {
                     });
                     if (response.match('Success!'))  {
                         alert_tag.addClass('alert-success');
+                        let h5s = $("#patient-list-card-body-table").find('h5');
+                        let len = h5s.length - 1;
+                        let date = h5s.eq(len).html();
+                        
+                        if (date.match("Search"))
+                            $("#patient-list-search-form").submit();
+                        else
+                            populate_patient_list();
                     }
                     else
                         alert_tag.addClass('alert-danger');
@@ -1019,14 +1027,6 @@ $(document).ready(function () {
                 //--- if ajax request is complete, set request running to false---//
                 complete: function() {
                     button.data('requestRunning', false);
-                    let h5s = $("#patient-list-card-body-table").find('h5');
-                    let len = h5s.length - 1;
-                    let date = h5s.eq(len).html();
-                    
-                    if (date.match("Search"))
-                        $("#patient-list-search-form").submit();
-                    else
-                        populate_patient_list();
                 }
             });
         }
