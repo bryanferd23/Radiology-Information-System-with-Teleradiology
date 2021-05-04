@@ -43,7 +43,7 @@ $(document).ready(function () {
                             }
                         }
                     });
-                    throw "";
+                    return;
                 }
             }
             input_feedback(input_tag, small_tag, 'Must be 5-20 characters long, containing letters and numbers only.', 'invalid');
@@ -105,7 +105,7 @@ $(document).ready(function () {
                 //--- check regular expression ---//
                 if (regex_names.test(input)) {
                     input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
-                    throw ""
+                    return;
                 }
             }
             input_feedback(input_tag, small_tag, 'Must be a valid name, containing 2-32 characters long.', 'invalid');
@@ -121,7 +121,6 @@ $(document).ready(function () {
 
         if (input) {
             input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
-            throw "";
         }
         else 
             input_feedback(input_tag, small_tag, '', 'default');
@@ -139,7 +138,7 @@ $(document).ready(function () {
                 //--- check regular expression ---//
                 if (regex_numbers.test(input)) {
                     input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
-                    throw ""
+                    return;
                 }
             }
             input_feedback(input_tag, small_tag, 'Invalid mobile number!', 'invalid');
