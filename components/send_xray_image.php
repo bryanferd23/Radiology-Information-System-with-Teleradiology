@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (!isset($_POST['send-x-ray-image-form2-body-x_ray_no']) && !isset($_GET['exist'])) {
+    if (!isset($_POST['send-x-ray-image-form2-body-x_ray_no']) && !isset($_GET['exist']) && $_SESSION['role'] != 'Radiologic technologist') {
         header('location: ../home.php');
         exit;
     }
@@ -40,15 +40,15 @@
             $temp = 'image_of_'.$row['type'].'_'.$row['views'];
             if ($_FILES[$temp]) {
                 $file_ary = reArrayFiles($_FILES[$temp]);
+                $index = 1;
                 
-                //each image in input type=file
                 foreach ($file_ary as $file) {
                     $uploadto = '../resources/images/for_reading/';
                     $uploaded_filename = $file['name'];
                     $uploaded_file = $file['tmp_name'];
                     $uploaded_filesize = $file['size'];
                     $extension = (pathinfo($uploaded_filename))['extension'];
-                    $new_filename = $_POST['send-x-ray-image-form2-body-x_ray_no'].'_'.$row['type'].'_'.$row['views'].'.'.$extension;
+                    $new_filename = $_POST['send-x-ray-image-form2-body-x_ray_no'].'_'.$row['type'].'_'.$row['views'].'_'.$index++.'.'.$extension;
                     
                     if (!check_file_uploaded_name($uploaded_filename)) {
                         $con->close();

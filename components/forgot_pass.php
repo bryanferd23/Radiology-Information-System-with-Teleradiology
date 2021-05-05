@@ -72,6 +72,7 @@
         if ($stmt=$con->prepare('UPDATE users SET u_pass = ? WHERE u_id = ?')) {
             $stmt->bind_param('si', $hash, $u_id);
             if ($stmt->execute()) {
+                $stmt->store_result();
                 if ($stmt->affected_rows > 0 )
                     return true;
             }

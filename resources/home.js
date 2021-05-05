@@ -6,6 +6,7 @@ const regex_x_ray_no = /^([0-9][0-9][-][0-9]+)$/;
 const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
 const regex_file_name = /^[-0-9A-Za-z_\.]+$/;
 
+var json;
 var temp;
 var date = new Date();
 var today = date.toISOString().substr(0, 10)
@@ -30,6 +31,10 @@ $(document).ready(function () {
             }
             if ($(this).html().match("Patients") || $(this).html().match("Show list")) {
                 populate_patient_list();
+            }
+            if ($(this).html().match("Pending interpretation")) {
+
+                populate_pending_interpretation();
             }
             $(".nav_link_content").addClass('d-none');
             $(".nav_link_content").eq(indexInArray).css({
@@ -1035,6 +1040,7 @@ $(document).ready(function () {
         e.preventDefault();
         let input = $(this).find('input');
         let alert_tag = $("#send-x-ray-image-form1-alert");
+        $("#send-x-ray-image-form2 .alert").finish();
         alert_tag.hide();
 
         if (input.hasClass('is-invalid')) {
@@ -1054,7 +1060,7 @@ $(document).ready(function () {
                     let x_ray_no = response[0]["x_ray_no"];
                     $.ajax({
                         type: "GET",
-                        url: "components/teleradiology.php",
+                        url: "components/send_xray_image.php",
                         data: {'exist': response[0]["x_ray_no"]},
                         dataType: "html",
                         success: function (response) {
@@ -1199,8 +1205,7 @@ $(document).ready(function () {
     $(this).on('click', '.send-x-ray-image-form2-delete-button', function (e) {
         e.preventDefault();
         let index = $(this).parent().index();
-        let inputs = $(".send-x-ray-image-form2-input");
-        inputs.eq(index).remove();
+        $(this).parent().parent().siblings().eq(1).children().eq(1).children().eq(index).remove();
         $(this).parent().remove();
     })
     $("#send-x-ray-image-form2-back").on('click', function(e) {
@@ -1253,7 +1258,7 @@ $(document).ready(function () {
             button.data('requestRunning', true); 
             $.ajax({
                 type: "POST",
-                url: "components/teleradiology.php",
+                url: "components/send_xray_image.php",
                 data: new FormData(this),
                 processData: false,
                 contentType: false,
@@ -1285,7 +1290,104 @@ $(document).ready(function () {
             });
         }
     })
+    $(this).on('click', ".pending-interpretation-delete", function(e) {
+        e.preventDefault();
+        index = $(this).parent().parent().index();
+        let alert_tag = $("#pending-interpretation-alert");
+        $.ajax({
+            type: "POST",
+            url: "components/pending_interpretation.php",
+            data: {"delete":json[index]['x_ray_no']},
+            dataType: "html",
+            success: function (response) {
+                populate_pending_interpretation()
+                if (response.match('Success!'))  {
+                    alert_tag.addClass('alert-success');
+                }
+                else
+                    alert_tag.addClass('alert-danger');
+                
+                alert_tag.html(response).css({
+                    'opacity': 0
+                });
+                alert_tag.show();
+                alert_tag.animate({
+                    'opacity': 1
+                }, 500);
+                alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                });
+            }
+        });
+    })
 });
+
+function populate_pending_interpretation() {
+    $("#pending-interpretation-body").html('');
+    $.ajax({
+        type: "GET",
+        url: "components/pending_interpretation.php",
+        data: {"pending_interpretation":"ok"},
+        dataType: "json",
+        success: function (response) {
+            if (!response[0]) {
+                $("#pending-interpretation-body").html('\
+                    <div class="d-flex justify-content-center mt-3">\
+                        <h6><b>Nothing added yet!</b></h6>\
+                    </div>\
+                    <div class="d-flex justify-content-center">\
+                        <p class="mt-3 mr-1">Click</p>\
+                        <button id="go-to-send-xray-image" type="button" class="btn btn-outline-primary" style="height:2rem;margin-top:.6rem;padding:0 .5rem">here</button>\
+                        <p class="mt-3 ml-1">to send a record.</p>\
+                    </div>\
+                ');
+                $("#go-to-send-xray-image").on('click', function() {
+                    $('.navlinks').eq(3).click();
+                })
+            }
+            else {
+                $("#pending-interpretation-body").html('\
+                        <div class="table-responsive d-flex justify-content-center mt-3">\
+                            <table class="table table-hover text-center">\
+                                <thead class="text-secondary">\
+                                    <tr>\
+                                        <th>XRAY NO</th>\
+                                        <th>FIRST NAME</th>\
+                                        <th>LAST NAME</th>\
+                                        <th>AGE</th>\
+                                        <th>GENDER</th>\
+                                        <th>HISTORY/PURPOSE</th>\
+                                        <th>ACTION/S</th>\
+                                    </tr>\
+                                </thead>\
+                                <tbody id="pending-interpretation-table-body">\
+                                </tbody>\
+                            </table>\
+                        </div>\
+                ');
+                json = response;
+                $.each(response, function () { 
+                    let index = 0;
+                    temp = '<tr>';
+                    $.each(this, function () { 
+                        if (index == 6) {
+                            temp += '<td>';/*
+                                $.each(this, function () { 
+                                    temp += this;
+                                });*/
+                            temp+= '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
+                            temp += '</td>';
+                        }
+                        if (index < 6)
+                            temp += '<td>'+this+'</td>';
+                        index++;
+                    });
+                    temp += '</tr>';
+                    $("#pending-interpretation-table-body").append(temp);
+                });
+            }
+        }
+    });
+}
 
 function set_pretable(date) {
     return '\

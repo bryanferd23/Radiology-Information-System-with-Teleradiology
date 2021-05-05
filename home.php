@@ -654,17 +654,23 @@
             }
             echo'
             <!-- Pending interpretation - nav_link_content #5 -->
-            <section class="nav_link_content d-none">
+            <section id="pending-interpretation" class="nav_link_content d-none">
                     <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
                         '.$header1.'
                     </div>
-                    <div class="card-body d-flex justify-content-center">
-                        No info
+                    <div class="card-body">
+                        <div id="pending-interpretation-alert" class="alert w-100 text-center" role="alert">
+                            
+                        </div>
+                        <div id="pending-interpretation-body">
+
+                        </div>
                     </div>
                 </div>
             </section>
+            
             <!-- Results - nav_link_content #6 -->
             <section class="nav_link_content d-none">
                     <h3 class="heading">Teleradiology</h3>
@@ -749,7 +755,7 @@
                                         <th>NAME</th>
                                         <th>EMAIL</th>
                                         <th>ROLE</th>
-                                        <th>ACTION</th>
+                                        <th>ACTION/S</th>
                                     </tr>
                                 </thead>
                                 <tbody id="user-list-body">
