@@ -1,5 +1,5 @@
 # RISystem
-Web-based Radiological Information System (Progress: 60%)
+Web-based Radiological Information System (Progress: 65%)
 
 --------------------------------------------------
 **Component folder**
@@ -45,6 +45,8 @@ Web-based Radiological Information System (Progress: 60%)
 -edit patient (radtech role only)
 
 -sending/uploading of X-ray image(radtech role only)
+
+-pending interpretation(display and delete items)(history of sending/uploading of X-ray image)
 
 
 --------------------------------------------------
