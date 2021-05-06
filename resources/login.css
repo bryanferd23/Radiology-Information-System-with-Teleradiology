@@ -74,7 +74,7 @@ section {
 }
 #login-form, #forgot-pass-form {
     width: 100%;
-    margin: 0 .5rem .5rem .5rem;
+    padding: 0 .5rem .5rem .5rem;
 }
 #forgot-pass-header {
     font-size: 1.2rem;
@@ -115,6 +115,36 @@ section {
     border-style: unset !important;
     border: unset !important;
     border-radius: 7px !important;
+}
+
+.ajax-loader::before {
+    position: absolute;
+    content: "";
+    height: 1.2rem;
+    width: 1.2rem;
+    background-image: url('images/ajax-loader.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.2rem;
+    top: 49%;
+    left: 48%;
+    z-index: 999;
+}
+
+.close-modal {
+    background: transparent;
+    border: none;
+    position: absolute;
+    top: -4rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.close-modal > * {
+    font-family: 'Roboto', sans-serif;
+    opacity: 50%;
+    color: white;
+    font-size: 1.2rem !important;
 }
 
 @media (max-width:992px){

@@ -81,10 +81,11 @@ $(document).ready(function () {
         e.preventDefault();
         //assign
         let alert_tag = $('#send-registration-email-alert');
-        let loading_tag_container = $(this).find('.progress');
-        let loading_tag = $(this).find('.progress-bar');
+        let ajax_loader = $(this).find('.ajax-loader');
 
         let inputs = $(this).find('input');
+        let small_tags = $(this).find('small');
+        let selects = $(this).find('select');
         let all_valid = true;
         let button = $(this);
 
@@ -105,10 +106,7 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
+            ajax_loader.removeClass('d-none');
 
             //--- run ajax request ---//
             $.ajax({
@@ -117,12 +115,8 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
+                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
                     
                     if (response.match('Success!')) 
                         alert_tag.addClass('alert-success');
@@ -143,6 +137,9 @@ $(document).ready(function () {
                 //--- if ajax request is complete, set request running to false---//
                 complete: function() {
                     button.data('requestRunning', false);
+                    inputs.removeClass('is-valid').val('');
+                    small_tags.html('').removeClass('is-valid');
+                    selects.removeClass('is-valid');
                 }
             });
         }
@@ -154,6 +151,9 @@ $(document).ready(function () {
         let u_id = $(this).parent().parent().index()+1;
         $('#user-info-container .badge').removeClass('badge-success');
         $('#user-info-container .badge').removeClass('badge-secondary');
+        
+        $("#user-list-container .card-body").css('opacity', .2);
+        $("#user-list-container").addClass('ajax-loader');
 
         $.ajax({
             type: "GET",
@@ -162,6 +162,8 @@ $(document).ready(function () {
             dataType: "json",
             //--- if ajax request is success, place the user info inside modal's inner HTML ---//
             success: function (response) {
+                $("#user-list-container .card-body").css('opacity', 1);
+                $("#user-list-container").removeClass('ajax-loader');
                 let row = $('#user-info-container .modal-body').children();
                 row.eq(0).children().attr('src', response['img_url']);
                 row.eq(1).html(response['fname'] + " " + response['lname']);
@@ -361,8 +363,7 @@ $(document).ready(function () {
     $('#edit-profile-form').on('submit', function(e) {
         e.preventDefault();
         let alert_tag = $(this).find('.alert');
-        let loading_tag_container = $(this).find('.progress');
-        let loading_tag = $(this).find('.progress-bar')
+        let ajax_loader = $(this).find('.ajax-loader');
 
         let inputs = $(this).find('input');
         let all_empty = true;
@@ -387,11 +388,7 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
-
+            ajax_loader.removeClass('d-none');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -401,12 +398,9 @@ $(document).ready(function () {
                 contentType: false,
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
+                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
+
                     if (response.match('Success!')) {
                         $('#edit-profile-form').find("input, select").val("");
                         $('#edit-profile-form').find("input, select").removeClass("is-valid");
@@ -482,8 +476,7 @@ $(document).ready(function () {
     $('#change-password-form').on('submit', function(e) {
         e.preventDefault();
         let alert_tag = $(this).find('.alert');
-        let loading_tag_container = $(this).find('.progress');
-        let loading_tag = $(this).find('.progress-bar');
+        let ajax_loader = $(this).find('.ajax-loader');
 
         let inputs = $(this).find('input');
         let all_valid = true;
@@ -505,10 +498,7 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
+            ajax_loader.removeClass('d-none');
 
             //--- run ajax request ---//
             $.ajax({
@@ -517,12 +507,9 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
+                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
+
                     if (response.match('Success!')) {
                         inputs.val("");
                         inputs.removeClass("is-valid");
@@ -731,8 +718,7 @@ $(document).ready(function () {
         e.preventDefault();
         //assign
         let alert_tag = $('#add-patient-alert');
-        let loading_tag_container = $(this).find('.progress');
-        let loading_tag = $(this).find('.progress-bar');
+        let ajax_loader = $(this).find('.ajax-loader');
 
         let inputs = $(this).find('input');
         let all_valid = true;
@@ -747,21 +733,18 @@ $(document).ready(function () {
                 return;
             }
         })
-        
+
         //--- prevent from running another process if this specific request is not completed ---//
         //--- prevent from running if an input is invalid ---//
         if (all_valid && !button.data('requestRunning')) {
+            window.scrollTo(0, 0);
             button.data('requestRunning', true);    
             temp = new FormData(this)
             temp.append('procedure',$('#procedure').children().first().html())
             temp.append('film_size',$('#film_size').children().first().html())
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
-
+            ajax_loader.removeClass('d-none');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -771,12 +754,8 @@ $(document).ready(function () {
                 data: temp,
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
+                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
                     if (response.match('Success!'))  {
                         let x_ray_no = ($('#x_ray_no').val()).split('-');
                         inputs.val('');
@@ -813,43 +792,51 @@ $(document).ready(function () {
         }
     })
 
-    //--- append userlist of another date when see more is clicked ---//
-    $("#patient-list-see-more").on('click', function(e) {
+    //--- append userlist of another date when see more or back is clicked ---//
+    $("#patient-list-footer").on('click', function(e) {
         e.preventDefault();
-        let h5s = $("#patient-list-card-body-table").find('h5');
-        let len = h5s.length - 1;
-        let posttable = '</tbody></table></div>';
-        let date = h5s.eq(len).html();
         
-        if (date == undefined)
-            date = tom;
-        if (date == "Today")
-            date = today;
-        if (date == "Yesterday")
-            date = yesterday;
+        if ($(this).html().match('Back')) {
+            populate_patient_list();
+            return
+        }
+        if ($(this).html().match('See more')){
+            $("#patient-list-card-body-table").css('opacity', .2);
+            $("#patient-list-search-form").css('opacity', .2);
+            $("#patient-list .card-body").addClass('ajax-loader')
+            $("#patient-list-footer").addClass("d-none");
         
-        $.ajax({
-            type: "GET",
-            url: "components/get_patient.php",
-            data: {"unknown_date": date},
-            dataType: "html",
-            success: function (response) {
-                if (response.match("END")){
-                    $("#patient-list-see-more").html(response);
-                    $("#patient-list-see-more").addClass("text-secondary");
+            let h5s = $("#patient-list-card-body-table").find('h5');
+            let len = h5s.length - 1;
+            let posttable = '</tbody></table></div>';
+            let date = h5s.eq(len).html();
+            
+            if (date == undefined)
+                date = tom;
+            if (date == "Today")
+                date = today;
+            if (date == "Yesterday")
+                date = yesterday;
+            
+            $.ajax({
+                type: "GET",
+                url: "components/get_patient.php",
+                data: {"unknown_date": date},
+                dataType: "html",
+                success: function (response) {
+                    if (response.match("END")){
+                        $("#patient-list-footer").html(response).addClass("text-secondary").removeClass("d-none");
+                        $("#patient-list-card-body-table").css('opacity', 1);
+                        $("#patient-list-search-form").css('opacity', 1);
+                        $("#patient-list .card-body").removeClass('ajax-loader');
+                    }
+                    else{
+                        pretable = set_pretable(response);
+                        get_patient_list(response, pretable, posttable, "date");
+                    }
                 }
-                else{
-                    pretable = set_pretable(response);
-                    get_patient_list(response, pretable, posttable, "date");
-                }
-            },
-            complete: function() {
-                $("#patient-list .progress").addClass('d-none');
-                $("#patient-list .progress-bar").css({
-                    width: "0%"
-                });
-            }
-        });
+            });
+        }
     }) 
 
     $("#patient-list-search-form .dropdown-item").on('click', function (e) {  
@@ -865,17 +852,20 @@ $(document).ready(function () {
 
     $("#patient-list-search-form").on('submit', function(e) {
         e.preventDefault();
+        $("#patient-list .ajax-loader").removeClass('d-none');
+        $("#patient-list-footer").html('<i class="fas fa-long-arrow-alt-left"></i> Back').addClass("d-none").removeClass('text-secondary');
+
         let posttable = '</tbody></table></div>';
         $("#patient-list-card-body-table").html('');
         get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html());
-        $("#patient-list-see-more").addClass("d-none");
-        $("#patient-list-go-back").removeClass('d-none');
-    })
-    $("#patient-list-go-back").on('click', function () {
-        populate_patient_list();
     })
 
     $(this).on('click', '#patient-list-card-body-table .fa-chevron-circle-right', function() {
+        $("#patient-list-card-body-table").css('opacity', .2);
+        $("#patient-list-search-form").css('opacity', .2);
+        $('#patient-list-footer').css('opacity',.2);
+        $("#patient-list .card-body").addClass('ajax-loader');
+
         let x_ray_no = $(this).parent().siblings().eq(0).html();
         let inputs = $("#patient-info-form input");
         let selects = $("#patient-info-form select");
@@ -924,6 +914,10 @@ $(document).ready(function () {
                 selects.removeClass('is-invalid');
                 $("#patient-info-edit").removeClass('d-none');
                 $("#patient-info-update").addClass('d-none');
+                $("#patient-list-card-body-table").css('opacity', 1);
+                $("#patient-list-search-form").css('opacity', 1);
+                $('#patient-list-footer').css('opacity', 1);
+                $("#patient-list .card-body").removeClass('ajax-loader');
                 $("#patient-info .modal").modal("show");
             }
         });
@@ -944,8 +938,7 @@ $(document).ready(function () {
         let inputs = $("#patient-info-form input");
         let selects = $("#patient-info-form select");
         let alert_tag = $('#patient-info-alert');
-        let loading_tag_container = $("#patient-info .progress");
-        let loading_tag = $("#patient-info .progress-bar");
+        let ajax_loader = $("#patient-info .ajax-loader");
         let button = $(this);
         
         //--- check if the form was changed ---//
@@ -983,10 +976,7 @@ $(document).ready(function () {
             //}
             
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
+            ajax_loader.removeClass('d-none');
 
             //proceed to ajax
             $.ajax({
@@ -997,12 +987,9 @@ $(document).ready(function () {
                 contentType: false,
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
+                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
+                    
                     if (response.match('Success!'))  {
                         alert_tag.addClass('alert-success');
                         let h5s = $("#patient-list-card-body-table").find('h5');
@@ -1040,9 +1027,27 @@ $(document).ready(function () {
         e.preventDefault();
         let input = $(this).find('input');
         let alert_tag = $("#send-x-ray-image-form1-alert");
+        let ajax_loader = $("#send-x-ray-image-form1 .ajax-loader").removeClass('d-none');
         $("#send-x-ray-image-form2 .alert").finish();
-        alert_tag.hide();
 
+        function fail(message) {
+            alert_tag.finish();
+            ajax_loader.addClass('d-none');
+            alert_tag.addClass('alert-danger');
+            alert_tag.html(message).css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-success');
+                alert_tag.removeClass('alert-danger');
+            });
+        }
+
+        alert_tag.hide();
         if (input.hasClass('is-invalid')) {
             input.focus();
             return;
@@ -1065,6 +1070,8 @@ $(document).ready(function () {
                         dataType: "html",
                         success: function (response) {
                             if (response.match('does not exist!')) {
+                                alert_tag.finish();
+                                ajax_loader.addClass('d-none');
                                 $("#send-x-ray-image-form1").addClass('d-none');
                                 $("#send-x-ray-image-form2").removeClass('d-none');
                                 $("#step1").removeClass('step1');
@@ -1103,38 +1110,14 @@ $(document).ready(function () {
                                     $(this).parent().siblings().eq(0).children().eq($(this).parent().siblings().eq(0).children().length-1).click();
                                 })
                             }
-                            else {
-                                alert_tag.finish();
-                                alert_tag.addClass('alert-danger');
-                                alert_tag.html(response).css({
-                                    'opacity': 0
-                                });
-                                alert_tag.show();
-                                alert_tag.animate({
-                                    'opacity': 1
-                                }, 500);
-                                alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                                    alert_tag.removeClass('alert-danger');
-                                });
-                            }
+                            else 
+                                fail(response);
                         }
                     });
                 }
             }
-        }).fail(function(){ 
-            alert_tag.finish();
-            alert_tag.addClass('alert-danger');
-            alert_tag.html('X-ray no. doesn\'t exist!').css({
-                'opacity': 0
-            });
-            alert_tag.show();
-            alert_tag.animate({
-                'opacity': 1
-            }, 500);
-            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                alert_tag.removeClass('alert-success');
-                alert_tag.removeClass('alert-danger');
-            });
+        }).fail(function() {
+            fail('X-ray no. doesn\'t exist!');
         })
     })
     $(this).on('click', '.send-x-ray-image-form2-input', function (e) {
@@ -1223,6 +1206,8 @@ $(document).ready(function () {
         let inputs = $(".send-x-ray-image-form2-input");
         let h5s = $(this).find('h5');
         let alert_tag = $("#send-x-ray-image-form2 .alert");
+        let loading_tag_container = $("#send-x-ray-image-form2 .progress");
+        let loading_tag = $("#send-x-ray-image-form2 .progress-bar");
         let button = $(this);
         let temp = Array();
         alert_tag.hide();
@@ -1256,7 +1241,21 @@ $(document).ready(function () {
         
         if (!button.data('requestRunning')) {
             button.data('requestRunning', true); 
+            loading_tag_container.removeClass('d-none');
             $.ajax({
+                xhr: function() {
+                    var xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total)*100;
+                            //Do something with upload progress here
+                            loading_tag.css({
+                                'width': percentComplete+'%'
+                            });
+                        }
+                   }, false);
+                   return xhr;
+                },
                 type: "POST",
                 url: "components/send_xray_image.php",
                 data: new FormData(this),
@@ -1265,6 +1264,12 @@ $(document).ready(function () {
                 dataType: "html",
                 success: function (response) {
                     alert_tag.finish();
+                    loading_tag.finish();
+                    loading_tag_container.addClass('d-none');
+                    loading_tag.css({
+                        'width':'0%'
+                    })
+
                     if (response.match('Success!'))  {
                         alert_tag.addClass('alert-success');
                         $("#send-x-ray-image-form2-send-button").addClass('d-none');
@@ -1294,6 +1299,8 @@ $(document).ready(function () {
         e.preventDefault();
         index = $(this).parent().parent().index();
         let alert_tag = $("#pending-interpretation-alert");
+        $("#pending-interpretation .ajax-loader").removeClass('d-none');
+
         $.ajax({
             type: "POST",
             url: "components/pending_interpretation.php",
@@ -1323,12 +1330,14 @@ $(document).ready(function () {
 
 function populate_pending_interpretation() {
     $("#pending-interpretation-body").html('');
+    $("#pending-interpretation .ajax-loader").removeClass('d-none');
     $.ajax({
         type: "GET",
         url: "components/pending_interpretation.php",
         data: {"pending_interpretation":"ok"},
         dataType: "json",
         success: function (response) {
+            $("#pending-interpretation .ajax-loader").addClass('d-none');
             if (!response[0]) {
                 $("#pending-interpretation-body").html('\
                     <div class="d-flex justify-content-center mt-3">\
@@ -1346,7 +1355,7 @@ function populate_pending_interpretation() {
             }
             else {
                 $("#pending-interpretation-body").html('\
-                        <div class="table-responsive d-flex justify-content-center mt-3">\
+                        <div class="table-responsive mt-3">\
                             <table class="table table-hover text-center">\
                                 <thead class="text-secondary">\
                                     <tr>\
@@ -1407,28 +1416,15 @@ function set_pretable(date) {
 }
 
 function populate_patient_list() {
-    $("#patient-list-card-body-table").html('').addClass('d-none');
-    $("#patient-list-see-more").click();
-    $("#patient-list-see-more").removeClass("d-none");
-    $("#patient-list-see-more").html('<i class="fas fa-long-arrow-alt-down"></i> See more');
-    $("#patient-list-go-back").addClass('d-none');
-    $("#patient-list-see-more").removeClass("text-secondary");
-    
-    
-    $("#patient-list .progress").removeClass('d-none');
-    $("#patient-list .progress-bar").animate({
-        width: "100%"
-    }, 200, function() {
-        $("#patient-list-card-body-table").removeClass('d-none')
-        $("#patient-list .progress-bar").finish();
-    });
+    $("#patient-list-card-body-table").html('');
+    $("#patient-list-footer").html('<i class="fas fa-long-arrow-alt-down"></i> See more').addClass('d-none').removeClass("text-secondary").click();
 }
-
 
 
 //functions
 function get_patient_list(data, pretable, posttable, temp1) {
     let form = '';
+    
     if (temp1 == "x-ray no.")
         form = {"x_ray_no": data}
     else  if (temp1 == "last name")
@@ -1460,9 +1456,13 @@ function get_patient_list(data, pretable, posttable, temp1) {
                 if (temp1 != "gdate")
                     $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">Search result/s</h5><p>No info</p>');
             }
+            $("#patient-list-card-body-table").css('opacity', 1);
+            $("#patient-list-search-form").css('opacity', 1);
+            $("#patient-list .card-body").removeClass('ajax-loader');
+            $("#patient-list-footer").removeClass("d-none");
         }, complete: function() {
             let h5s = $('#patient-list-card-body-table').find('h5');
-            
+
             for (let i = 0; i < 2; i++) {
                 if (h5s.eq(i).html() == today)
                     h5s.eq(i).html("Today");

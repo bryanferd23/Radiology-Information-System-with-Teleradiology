@@ -27,14 +27,17 @@ $(document).ready(function () {
     })
 
     $('#search-form').on('submit', function(e) {
+        $("#search-container .modal-body").addClass('ajax-loader');
         e.preventDefault();
 
+        $('#search-response').html('');
         $.ajax({
             type: "GET",
             url: "components/xray_status.php",
             data: $(this).serialize(),
             dataType: "html",
             success: function (response) {
+                $("#search-container .modal-body").removeClass('ajax-loader');
                 $('#search-response').html(response);
             }
         });
@@ -42,10 +45,16 @@ $(document).ready(function () {
 
     $('#login-form').on('submit', function(e) {
         e.preventDefault();
-        var alert_tag = $('#login-alert');
+        let alert_tag = $('#login-alert');
+        
         alert_tag.hide();
         input_feedback($('#u_pass'), $('#u_pass').next(), '', 'default');
         input_feedback($('#u_name'), $('#u_name').next(), '', 'default');
+
+        $('#login-form').css('opacity', .2);
+        $("#login-container .modal-body").addClass('ajax-loader');
+        $("#login-submit").attr('disabled');
+        $("#forgot-pass-trigger").off('click');
 
         $.ajax({
             type: "POST",
@@ -75,15 +84,25 @@ $(document).ready(function () {
                 else {
                     window.location.replace(response);
                 }
+            }, 
+            complete: function() {
+                $('#login-form').css('opacity', 1);
+                $("#login-container .modal-body").removeClass('ajax-loader');
+                $("#login-submit").removeAttr('disabled');
+                $('#forgot-pass-trigger').on('click', function() {
+                    $('#login-container .modal').removeClass('fade');
+                    $('#login-container .modal').modal('hide');
+                    $('#forgot-pass-container .modal').modal('show');
+                })
             }
         });
     })
 
     //--- validate user input (email) ---------------------------------------------------------//
     $('#email').on('keyup', function () {
-        var input = $(this).val();
-        var input_tag =  $(this);
-        var small_tag = $(this).next();
+        let input = $(this).val();
+        let input_tag =  $(this);
+        let small_tag = $(this).next();
 
         if (input) {
             //--- check input length ---//
@@ -104,10 +123,10 @@ $(document).ready(function () {
     
      //--- verify if two email are same ---------------------------------------------------------//
      $('#email2').on('keyup', function () {
-        var input = $(this).val();
-        var email = $('#email').val();
-        var small_tag = $(this).next();
-        var input_tag = $(this);
+        let input = $(this).val();
+        let email = $('#email').val();
+        let small_tag = $(this).next();
+        let input_tag = $(this);
         
         if (input) {
             //--- check of password is same ---//
@@ -123,13 +142,10 @@ $(document).ready(function () {
     //--- forgot pass on submit ---------------------------------------------------------//
     $('#forgot-pass-form').on('submit', function (e) {
         e.preventDefault();
-        var alert_tag = $('#forgot-pass-alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
-
-        var inputs = $(this).find('input');
-        var all_valid = true;
-        var button = $(this);
+        let alert_tag = $('#forgot-pass-alert');
+        let inputs = $(this).find('input');
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -148,10 +164,8 @@ $(document).ready(function () {
             alert_tag.hide();
             alert_tag.removeClass('alert-success');
             alert_tag.removeClass('alert-danger');
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
+            $('#forgot-pass-form .form-row').css('opacity', .2);
+            $('#forgot-pass-form').addClass('ajax-loader');
             
             $.ajax({
                 type: "POST",
@@ -159,12 +173,7 @@ $(document).ready(function () {
                 data: {'email' : $('#email').val()},
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
                     if (response.match('Success!'))
                         alert_tag.addClass('alert-success');
                     else
@@ -183,6 +192,8 @@ $(document).ready(function () {
                 //--- if ajax request is complete, set request running to false---//
                 complete: function() {
                     button.data('requestRunning', false);
+                    $('#forgot-pass-form .form-row').css('opacity', 1);
+                    $('#forgot-pass-form').removeClass('ajax-loader');
                 }
             });
         }

@@ -90,6 +90,11 @@
       <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
+                    <span>Click here to close</span>
+                </button>
+            </div>
             <div class="modal-body">
               <div class="modal-header d-flex justify-content-center">
                 Check the status of your x-ray result
@@ -120,6 +125,11 @@
       <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
+                    <span>Click here to close</span>
+                </button>
+            </div>
             <div class="modal-body">
               <div class="d-flex justify-content-center">
                 <form id="login-form">
@@ -175,47 +185,47 @@
       <div class="modal" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
+            <div class="d-flex justify-content-center">
+                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
+                    <span>Click here to close</span>
+                </button>
+            </div>
             <div class="modal-body">
-              <div class="d-flex justify-content-center">
-                <form id="forgot-pass-form">
-                  <div class="form-row" id="forgot-pass-header">
-                    <a id="login-trigger" href="#"><i class="fas fa-angle-left align-middle"></i> Login</a>
-                  </div>
-                  <hr>
-                  <div class="alert alert-secondary mb-2 d-flex" role="alert">
-                      <strong>Note: </strong>
-                      <i class="ml-1">A new password will be sent to the email address associated with your account. Use the new password to login and change your password in settings.</i>
-                  </div>
-                  <div class="progress mb-2 d-none">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                  </div>
-                  <div class="form-row">
-                      <div id="forgot-pass-alert" class="alert w-100 text-center" role="alert">
-                          <!-- response goes here -->
-                      </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                      <label for="email">Email address</label>
-                      <input type="email" class="form-control" name="email" id="email" required>
-                      <small class="form-text text-muted">
-                          Must be a valid e-mail address containing 3-32 characters long.
-                      </small>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                      <label for="email2">Confirm email address</label>
-                      <input type="text" class="form-control" name="email2" id="email2" required>
-                      <small class="form-text text-muted">
-                      </small>
-                    </div>
-                  </div>
-                  <div class="form-row">
-                    <button type="submit" class="btn btn-primary ml-auto">Submit</button>
-                  </div>
-                </form>
+              <div id="forgot-pass-header">
+                <a id="login-trigger" href="#"><i class="fas fa-angle-left align-middle"></i> Login</a>
               </div>
+              <hr>
+              <div class="alert alert-secondary d-flex justify-content-center mb-2" role="alert">
+                  <strong>Note: </strong>
+                  <i class="ml-1">A new password will be sent to the email address associated with your account. Use the new password to login and change your password in settings.</i>
+              </div>
+              <form id="forgot-pass-form">
+                <div class="form-row">
+                    <div id="forgot-pass-alert" class="alert w-100 text-center" role="alert">
+                        <!-- response goes here -->
+                    </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-12 mb-3">
+                    <label for="email">Email address</label>
+                    <input type="email" class="form-control" name="email" id="email" required>
+                    <small class="form-text text-muted">
+                        Must be a valid e-mail address containing 3-32 characters long.
+                    </small>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-12 mb-3">
+                    <label for="email2">Confirm email address</label>
+                    <input type="text" class="form-control" name="email2" id="email2" required>
+                    <small class="form-text text-muted">
+                    </small>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <button type="submit" class="btn btn-primary ml-auto">Submit</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

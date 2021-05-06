@@ -246,6 +246,36 @@ section input, section button, section select{
     background-color: var(--primary);
 }
 
+.ajax-loader::before {
+    position: absolute;
+    content: "";
+    height: 1.2rem;
+    width: 1.2rem;
+    background-image: url('images/ajax-loader.gif');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.2rem;
+    top: 49%;
+    left: 48%;
+    z-index: 999;
+}
+
+.close-modal {
+    background: transparent;
+    border: none;
+    position: absolute;
+    top: -4rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.close-modal > * {
+    font-family: 'Roboto', sans-serif;
+    opacity: 50%;
+    color: white;
+    font-size: 1.2rem !important;
+}
+
 @media (max-width:1024px){
     .heading {
         width: 100%;
