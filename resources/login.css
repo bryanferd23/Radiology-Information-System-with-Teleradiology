@@ -180,11 +180,6 @@ section {
     input, button {
         font-size: .85rem !important;
     }
-    #login-container .modal-body{
-        width: 96%;
-        margin-left: 2%;
-        margin-right: 2%;
-    }
     .navbar .nav-link {
         font-size: .8rem;
     }

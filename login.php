@@ -131,49 +131,47 @@
                 </button>
             </div>
             <div class="modal-body">
-              <div class="d-flex justify-content-center">
-                <form id="login-form">
-                  <div id="login-header">
-                    <i class="fas fa-user-circle"></i>
+              <form id="login-form">
+                <div id="login-header">
+                  <i class="fas fa-user-circle"></i>
+                </div>
+                <hr>
+                <div class="form-row">
+                  <div id="login-alert" class="alert alert-danger w-100 text-center" role="alert">
+                      <!-- response goes here -->
                   </div>
-                  <hr>
-                  <div class="form-row">
-                    <div id="login-alert" class="alert alert-danger w-100 text-center" role="alert">
-                        <!-- response goes here -->
-                    </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-12 mb-3">
+                      <label for="u_name">Username</label>
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span style="font-size:.9rem" class="input-group-text rounded-left"><i class="fas fa-user"></i></span>
+                          </div>
+                          <input type="text" class="form-control rounded-right" name="u_name" id="u_name" required>
+                          <small class="form-text text-muted">
+                          </small>
+                      </div>
                   </div>
-                  <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                        <label for="u_name">Username</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span style="font-size:.9rem" class="input-group-text rounded-left"><i class="fas fa-user"></i></span>
-                            </div>
-                            <input type="text" class="form-control rounded-right" name="u_name" id="u_name" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
+                </div>
+                <div class="form-row">
+                  <div class="col-md-12 mb-3">
+                      <label for="u_pass">Password</label>
+                      <div class="input-group">
+                          <div class="input-group-prepend">
+                              <span style="font-size:.9rem" class="input-group-text rounded-left"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                          </div>
+                          <input type="password" class="form-control rounded-right" name="u_pass" id="u_pass" required>
+                          <small class="form-text text-muted">
+                          </small>
+                      </div>
                   </div>
-                  <div class="form-row">
-                    <div class="col-md-12 mb-3">
-                        <label for="u_pass">Password</label>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span style="font-size:.9rem" class="input-group-text rounded-left"><i class="fa fa-lock" aria-hidden="true"></i></span>
-                            </div>
-                            <input type="password" class="form-control rounded-right" name="u_pass" id="u_pass" required>
-                            <small class="form-text text-muted">
-                            </small>
-                        </div>
-                    </div>
-                  </div>
-                  <div class="form-row mt-3">
-                    <a id="forgot-pass-trigger" class="ml-auto mr-4 mt-1 text-dark" href="#"><u>Forgot your password?</u></a>
-                    <button type="submit" id="login-submit" class="btn btn-primary">Login</button>
-                  </div>
-                </form>
-              </div>
+                </div>
+                <div class="form-row mt-3">
+                  <a id="forgot-pass-trigger" class="ml-auto mr-4 mt-1 text-dark" href="#"><u>Forgot your password?</u></a>
+                  <button type="submit" id="login-submit" class="btn btn-primary">Login</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
