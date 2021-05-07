@@ -65,30 +65,27 @@
             echo '<section id="modal-container">
                     <!-- Modal -->
                     <div class="modal fade" id="unlock-modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-                        <form id="unlock-modal-form" class="modal-dialog">
+                        <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="unlock-modalLabel">Registration is locked!</h5>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="progress mb-2 d-none">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                    </div>
-                                    <div class="form-row">
-                                            <div id="alert" class="alert alert-danger w-100 text-center" role="alert">
-                                            </div>
-                                    </div>
-                                    <div class="form-row">
-                                        <div class="col-md-12 mb-3">
-                                            <input type="text" class="form-control" name="reg_code" id="reg_code" value="" placeholder="Enter code here" required>
+                                    <form id="unlock-modal-form">
+                                        <div class="form-row">
+                                                <div id="alert" class="alert alert-danger w-100 text-center" role="alert">
+                                                </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Unlock</button>
+                                        <div class="form-row">
+                                            <div class="col-md-12 mb-3">
+                                                <input type="text" class="form-control" name="reg_code" id="reg_code" value="" placeholder="Enter code here" required>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary float-right">Unlock</button>
+                                    </form>
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </section>';
         }
@@ -103,9 +100,6 @@
                 <form id="register-form">
                     <div class="alert alert-secondary mb-4 d-flex justify-content-center" role="alert">
                         <i>Please fill out the the necessary information</i>
-                    </div>
-                    <div class="progress mb-2 d-none">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
                     </div>
                     <div class="form-row">
                         <div id="form-alert" class="alert alert-danger w-100 text-center" role="alert">

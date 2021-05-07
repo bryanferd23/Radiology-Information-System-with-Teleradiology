@@ -151,21 +151,15 @@ $(document).ready(function () {
 //--- unlock register form submit ---------------------------------------------------------------------------------//
     $('#unlock-modal-form').on('submit', function(e) {
         e.preventDefault();
-        var alert_tag = $(this).find('.alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
-
-        var button = $(this);
+        let alert_tag = $(this).find('.alert');
+        let button = $(this);
 
         //--- prevent from running another process if this specific request is not completed ---//
         if (!button.data('requestRunning')) {
             button.data('requestRunning', true);    
 
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
+            $('#unlock-modal-form').css('opacity', .2).parent().addClass('ajax-loader');
 
             $.ajax({
                 type: "POST",
@@ -173,12 +167,9 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
+                    $('#unlock-modal-form').css('opacity', 1);
+                    $('#unlock-modal-form').parent().removeClass('ajax-loader');
                     if (response.match('Success!')){
                         location.reload();
                     }
@@ -191,7 +182,6 @@ $(document).ready(function () {
                             'opacity': 1
                         }, 500);
                         alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                            alert_tag.slideUp(500);
                         });
                     }
                 },
@@ -206,13 +196,10 @@ $(document).ready(function () {
 //--- register form submit ---------------------------------------------------------------------------------//
     $('#register-form').on('submit', function(e) {
         e.preventDefault();
-        var alert_tag = $(this).find('.alert');
-        var loading_tag_container = $(this).find('.progress');
-        var loading_tag = $(this).find('.progress-bar');
-
-        var inputs = $(this).find('input');
-        var all_valid = true;
-        var button = $(this);
+        let alert_tag = $(this).find('.alert');
+        let inputs = $(this).find('input');
+        let all_valid = true;
+        let button = $(this);
 
         //--- check if all inputs inside the form is valid ---//
         //--- focus on input that is not valid --//
@@ -232,23 +219,15 @@ $(document).ready(function () {
             $('#email').prop('disabled', false);
             $('#role').prop('disabled', false);
             alert_tag.hide();
-            loading_tag_container.removeClass('d-none');
-            loading_tag.animate({
-                width: "100%"
-            }, 250);
-
+            $('#register-form').css('opacity', .2).parent().addClass('ajax-loader');
             $.ajax({
                 type: "POST",
                 url: "components/add_user.php",
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    loading_tag.finish();
                     alert_tag.finish();
-                    loading_tag_container.addClass('d-none');
-                    loading_tag.css({
-                        width: "0%"
-                    });
+                    $('#register-form').css('opacity', 1).parent().removeClass('ajax-loader');
                     if (response.match('<div')){
                         $('#redirect-message-container-modal-content').html(response);
                         $('#redirect-message-container-modal').modal('show', setTimeout(function () {
@@ -264,7 +243,6 @@ $(document).ready(function () {
                             'opacity': 1
                         }, 500);
                         alert_tag.fadeTo(5000, 500).slideUp(500, function(){
-                            alert_tag.slideUp(500);
                         });
                     }
                 },

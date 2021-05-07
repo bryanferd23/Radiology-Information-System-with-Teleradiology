@@ -156,9 +156,6 @@
                     </div>
                     <div class="card-body">
                         <form id="add-patient-form">
-                            <div class="text-center">
-                                <img class="d-none ajax-loader mt-2 mb-4" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                            </div>
                             <div id="add-patient-alert" class="alert alert-danger w-100 text-center" role="alert">
                                 <!-- response goes here -->
                             </div>
@@ -366,9 +363,6 @@
                                             </div>';
                                 }
                             ?>
-                            <div class="text-center">
-                                <img class="d-none ajax-loader mb-2" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                            </div>
                             <div id="patient-info-alert" class="alert w-100 text-center" role="alert">
                                 <!-- response goes here -->
                             </div>
@@ -618,9 +612,6 @@
                                 </div>  
                             </div>
                             <form id="send-x-ray-image-form1" class="mt-5">
-                                <div class="text-center mt-2">
-                                    <img class="d-none ajax-loader" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                                </div>
                                 <div class="mb-2">
                                     <div id="send-x-ray-image-form1-alert" class="alert w-100 text-center" role="alert">
                                         <!-- response goes here -->
@@ -641,7 +632,7 @@
                                     </div>
                                 </div>
                                 <div class="progress d-none ml-auto mr-auto" style="width:13rem">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%">Uploading..</div>
                                 </div>
                                 <div id="send-x-ray-image-form2-body" class="justify-content-center">
                                     
@@ -663,13 +654,10 @@
                     <div class="card-header">
                         '.$header1.'
                     </div>
-                    <div class="card-body">
-                        <div id="pending-interpretation-alert" class="alert w-100 text-center" role="alert">
+                    <div id="pending-interpretation-alert" class="alert alert-success text-center ml-3 mr-3" role="alert">
                             
-                        </div>
-                        <div class="text-center mt-2">
-                            <img class="d-none ajax-loader" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                        </div>
+                    </div>
+                    <div class="card-body">
                         <div id="pending-interpretation-body">
 
                         </div>
@@ -706,9 +694,6 @@
                             <div class="alert alert-secondary mb-2 d-flex" role="alert">
                                 <strong>Note: </strong>
                                 <i class="ml-2">A link to the registration page will be sent to the user and will use the code to unlock the page.</i>
-                            </div>
-                            <div class="text-center mt-2">
-                                <img class="d-none ajax-loader mt-2" style="width:1.2rem" src="resources/images/ajax-loader.gif">
                             </div>
                             <div class="form-row mb-2">
                                 <div id="send-registration-email-alert" class="alert w-100 text-center" role="alert">
@@ -828,9 +813,6 @@
                         <img id="profile-picture" src="resources/images/blank.jpg" width="200px" height="200px" class="rounded-circle">
                         <input type="file" class="custom-file-input d-none" name="customFile" id="customFile" accept="image/*">
                     </div>
-                    <div class="text-center mt-2">
-                        <img class="d-none ajax-loader mt-2" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                    </div>
                     <div class="form-row mb-2">
                         <div id="edit-profile-alert" class="alert w-100 text-center" role="alert">
                             <!-- response goes here -->
@@ -892,9 +874,6 @@
             </div>
             <div class="card-body">
                 <form id="change-password-form">
-                    <div class="text-center mt-2">
-                        <img class="d-none ajax-loader mt-2" style="width:1.2rem" src="resources/images/ajax-loader.gif">
-                    </div>
                     <div class="form-row mb-2">
                         <div id="change-password-alert" class="alert w-100 text-center" role="alert">
                             <!-- response goes here -->

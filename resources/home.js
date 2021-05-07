@@ -81,8 +81,6 @@ $(document).ready(function () {
         e.preventDefault();
         //assign
         let alert_tag = $('#send-registration-email-alert');
-        let ajax_loader = $(this).find('.ajax-loader');
-
         let inputs = $(this).find('input');
         let small_tags = $(this).find('small');
         let selects = $(this).find('select');
@@ -106,8 +104,8 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            ajax_loader.removeClass('d-none');
-
+            $('#send-registration-email-form').css('opacity', .2);
+            $('#send-registration-email-form').parent().addClass('ajax-loader');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -115,9 +113,9 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-                    
+                    $('#send-registration-email-form').css('opacity', 1);
+                    $('#send-registration-email-form').parent().removeClass('ajax-loader');
                     if (response.match('Success!')) 
                         alert_tag.addClass('alert-success');
                     else
@@ -190,6 +188,8 @@ $(document).ready(function () {
         
         if (status == "ACTIVATE" || status == "DISABLE") {
             status = (status == "DISABLE" ? "DISABLED" : "ACTIVE");
+            $("#user-list-container .card-body").css('opacity', .2);
+            $("#user-list-container").addClass('ajax-loader');
             $.ajax({
                 type: "POST",
                 url: "components/update_user.php",
@@ -363,8 +363,6 @@ $(document).ready(function () {
     $('#edit-profile-form').on('submit', function(e) {
         e.preventDefault();
         let alert_tag = $(this).find('.alert');
-        let ajax_loader = $(this).find('.ajax-loader');
-
         let inputs = $(this).find('input');
         let all_empty = true;
         let all_valid = true;
@@ -388,7 +386,8 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            ajax_loader.removeClass('d-none');
+            $('#edit-profile-form').css('opacity', .2);
+            $('#edit-profile-form').parent().addClass('ajax-loader');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -398,8 +397,9 @@ $(document).ready(function () {
                 contentType: false,
                 dataType: "html",
                 success: function (response) {
-                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
+                    $('#edit-profile-form').css('opacity', 1);
+                    $('#edit-profile-form').parent().removeClass('ajax-loader');
 
                     if (response.match('Success!')) {
                         $('#edit-profile-form').find("input, select").val("");
@@ -476,8 +476,6 @@ $(document).ready(function () {
     $('#change-password-form').on('submit', function(e) {
         e.preventDefault();
         let alert_tag = $(this).find('.alert');
-        let ajax_loader = $(this).find('.ajax-loader');
-
         let inputs = $(this).find('input');
         let all_valid = true;
         let button = $(this);
@@ -498,8 +496,7 @@ $(document).ready(function () {
 
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            ajax_loader.removeClass('d-none');
-
+            $('#change-password-form').css('opacity', .2).parent().addClass('ajax-loader');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -507,9 +504,8 @@ $(document).ready(function () {
                 data: $(this).serialize(),
                 dataType: "html",
                 success: function (response) {
-                    ajax_loader.addClass('d-none');
                     alert_tag.finish();
-
+                    $('#change-password-form').css('opacity', 1).parent().removeClass('ajax-loader');
                     if (response.match('Success!')) {
                         inputs.val("");
                         inputs.removeClass("is-valid");
@@ -718,8 +714,6 @@ $(document).ready(function () {
         e.preventDefault();
         //assign
         let alert_tag = $('#add-patient-alert');
-        let ajax_loader = $(this).find('.ajax-loader');
-
         let inputs = $(this).find('input');
         let all_valid = true;
         let button = $(this);
@@ -744,7 +738,8 @@ $(document).ready(function () {
             temp.append('film_size',$('#film_size').children().first().html())
             //--- show loading animation while request is running ---//
             alert_tag.hide();
-            ajax_loader.removeClass('d-none');
+            $('#add-patient-form').css('opacity', .2);
+            $('#add-patient .card-body').addClass('ajax-loader');
             //--- run ajax request ---//
             $.ajax({
                 type: "POST",
@@ -754,7 +749,8 @@ $(document).ready(function () {
                 data: temp,
                 dataType: "html",
                 success: function (response) {
-                    ajax_loader.addClass('d-none');
+                    $('#add-patient-form').css('opacity', 1);
+                    $('#add-patient .card-body').removeClass('ajax-loader');
                     alert_tag.finish();
                     if (response.match('Success!'))  {
                         let x_ray_no = ($('#x_ray_no').val()).split('-');
@@ -852,7 +848,9 @@ $(document).ready(function () {
 
     $("#patient-list-search-form").on('submit', function(e) {
         e.preventDefault();
-        $("#patient-list .ajax-loader").removeClass('d-none');
+        $("#patient-list-card-body-table").css('opacity', .2);
+        $("#patient-list-search-form").css('opacity', .2);
+        $("#patient-list .card-body").addClass('ajax-loader')
         $("#patient-list-footer").html('<i class="fas fa-long-arrow-alt-left"></i> Back').addClass("d-none").removeClass('text-secondary');
 
         let posttable = '</tbody></table></div>';
@@ -924,21 +922,16 @@ $(document).ready(function () {
     })
     $("#patient-info-edit").on('click', function(e) {
         e.preventDefault();
-
         $(this).addClass('d-none');
         $("#patient-info-update").removeClass('d-none');
-        let inputs = $("#patient-info-form input");
-        let selects = $("#patient-info-form select");
-        
-        inputs.attr('disabled', false);
-        selects.attr('disabled', false);
+        $("#patient-info-form input").attr('disabled', false);
+        $("#patient-info-form select").attr('disabled', false);
     })
     $("#patient-info-form").on('submit', function(e) {
         e.preventDefault();
         let inputs = $("#patient-info-form input");
         let selects = $("#patient-info-form select");
         let alert_tag = $('#patient-info-alert');
-        let ajax_loader = $("#patient-info .ajax-loader");
         let button = $(this);
         
         //--- check if the form was changed ---//
@@ -976,7 +969,8 @@ $(document).ready(function () {
             //}
             
             alert_tag.hide();
-            ajax_loader.removeClass('d-none');
+            $("#patient-info-form").css('opacity', .2);
+            $("#patient-info-form").parent().addClass('ajax-loader');
 
             //proceed to ajax
             $.ajax({
@@ -987,7 +981,8 @@ $(document).ready(function () {
                 contentType: false,
                 dataType: "html",
                 success: function (response) {
-                    ajax_loader.addClass('d-none');
+                    $("#patient-info-form").css('opacity', 1);
+                    $("#patient-info-form").parent().removeClass('ajax-loader');
                     alert_tag.finish();
                     
                     if (response.match('Success!'))  {
@@ -1027,12 +1022,13 @@ $(document).ready(function () {
         e.preventDefault();
         let input = $(this).find('input');
         let alert_tag = $("#send-x-ray-image-form1-alert");
-        let ajax_loader = $("#send-x-ray-image-form1 .ajax-loader").removeClass('d-none');
+        let button = $(this)
         $("#send-x-ray-image-form2 .alert").finish();
 
         function fail(message) {
             alert_tag.finish();
-            ajax_loader.addClass('d-none');
+            $("#send-x-ray-image-form1").css('opacity', 1);
+            $("#send-x-ray-image-form1").parent().removeClass('ajax-loader');
             alert_tag.addClass('alert-danger');
             alert_tag.html(message).css({
                 'opacity': 0
@@ -1053,72 +1049,78 @@ $(document).ready(function () {
             return;
         }
 
-        $.ajax({
-            type: "GET",
-            url: "components/get_patient.php",
-            data: {"info": input.val()},
-            dataType: "json",
-            success: function (response) {
-                alert_tag.finish();
-                if (response[0]) {
-                    let procedures = (response[0][0]).split(', ');
-                    let x_ray_no = response[0]["x_ray_no"];
-                    $.ajax({
-                        type: "GET",
-                        url: "components/send_xray_image.php",
-                        data: {'exist': response[0]["x_ray_no"]},
-                        dataType: "html",
-                        success: function (response) {
-                            if (response.match('does not exist!')) {
-                                alert_tag.finish();
-                                ajax_loader.addClass('d-none');
-                                $("#send-x-ray-image-form1").addClass('d-none');
-                                $("#send-x-ray-image-form2").removeClass('d-none');
-                                $("#step1").removeClass('step1');
-                                $("#step1").addClass('step1-active');
-                                $("#step2").removeClass('step2');
-                                $("#step2").addClass('step2-active');
-                                $("#send-x-ray-image-form2-send-button").removeClass('d-none');
-                                $("#send-x-ray-image-h5").html("STEP 2");
-                                $("#send-x-ray-image-form2-body").html('');
-                                $("#send-x-ray-image-form2-body").append('<input type="text" class="d-none" name="send-x-ray-image-form2-body-x_ray_no" value="'+x_ray_no+'">');
-                                for (elem in procedures) {
-                                    $("#send-x-ray-image-form2-body").append('\
-                                        <div class="text-center mt-5 mb-4" style="height:18rem">\
-                                            <div class="mt-3">\
-                                                <h5>'+procedures[elem]+'</h5>\
-                                            </div>\
-                                            <div class="mt-3 pb-2">\
-                                                <div>\
-                                                    <button class="btn btn-outline-dark send-x-ray-image-form2-upload-button"> <i class="fas fa-upload"></i> Click here to upload</button>\
-                                                </div>\
-                                                <div class="d-none">\
-                                                </div>\
-                                            </div>\
-                                            <div class="d-flex justify-content-center overflow-auto mt-2 pl-3">\
-                                            </div>\
-                                        </div>\
-                                    ');
-                                }
+        if (!button.data('requestRunning')) {
+            button.data('requestRunning', true); 
 
-                                let upload_buttons = $(".send-x-ray-image-form2-upload-button");
-                                upload_buttons.on('click', function(e) {
-                                    e.preventDefault();
-                                    let procedure = $(this).parent().parent().siblings().eq(0).children().eq(0).html();
-                                    procedure = procedure.replace(' ','_');
-                                    $(this).parent().siblings().eq(0).append('<input type="file" class="send-x-ray-image-form2-input" name="image_of_'+procedure+'[]" multiple="multiple" accept="image/*">');
-                                    $(this).parent().siblings().eq(0).children().eq($(this).parent().siblings().eq(0).children().length-1).click();
-                                })
+            $("#send-x-ray-image-form1").css('opacity', .2).parent().addClass('ajax-loader');
+            $.ajax({
+                type: "GET",
+                url: "components/get_patient.php",
+                data: {"info": input.val()},
+                dataType: "json",
+                success: function (response) {
+                    alert_tag.finish();
+                    if (response[0]) {
+                        let procedures = (response[0][0]).split(', ');
+                        let x_ray_no = response[0]["x_ray_no"];
+                        $.ajax({
+                            type: "GET",
+                            url: "components/send_xray_image.php",
+                            data: {'exist': response[0]["x_ray_no"]},
+                            dataType: "html",
+                            success: function (response) {
+                                if (response.match('does not exist!')) {
+                                    alert_tag.finish();
+                                    $("#send-x-ray-image-form1").addClass('d-none').css('opacity', 1).parent().removeClass('ajax-loader');
+                                    $("#send-x-ray-image-form2").removeClass('d-none');
+                                    $("#step1").removeClass('step1').addClass('step1-active');
+                                    $("#step2").removeClass('step2').addClass('step2-active');
+                                    $("#send-x-ray-image-form2-send-button").removeClass('d-none');
+                                    $("#send-x-ray-image-h5").html("STEP 2");
+                                    $("#send-x-ray-image-form2-body").html('<input type="text" class="d-none" name="send-x-ray-image-form2-body-x_ray_no" value="'+x_ray_no+'">');
+                                    for (elem in procedures) {
+                                        $("#send-x-ray-image-form2-body").append('\
+                                            <div class="text-center mt-5 mb-4" style="height:18rem">\
+                                                <div class="mt-3">\
+                                                    <h5>'+procedures[elem]+'</h5>\
+                                                </div>\
+                                                <div class="mt-3 pb-2">\
+                                                    <div>\
+                                                        <button class="btn btn-outline-dark send-x-ray-image-form2-upload-button"> <i class="fas fa-upload"></i> Click here to upload</button>\
+                                                    </div>\
+                                                    <div class="d-none">\
+                                                    </div>\
+                                                </div>\
+                                                <div class="d-flex justify-content-center overflow-auto mt-2 pl-3">\
+                                                </div>\
+                                            </div>\
+                                        ');
+                                    }
+
+                                    let upload_buttons = $(".send-x-ray-image-form2-upload-button");
+                                    upload_buttons.on('click', function(e) {
+                                        e.preventDefault();
+                                        let procedure = $(this).parent().parent().siblings().eq(0).children().eq(0).html();
+                                        procedure = procedure.replace(' ','_');
+                                        $(this).parent().siblings().eq(0).append('<input type="file" class="send-x-ray-image-form2-input" name="image_of_'+procedure+'[]" multiple="multiple" accept="image/*">');
+                                        $(this).parent().siblings().eq(0).children().eq($(this).parent().siblings().eq(0).children().length-1).click();
+                                    })
+                                }
+                                else 
+                                    fail(response);
+                            },
+                            complete: function() {
+                                button.data('requestRunning', false);
+                                $("#send-x-ray-image-form2-send-button").removeClass('d-none');
                             }
-                            else 
-                                fail(response);
-                        }
-                    });
+                        });
+                    }
                 }
-            }
-        }).fail(function() {
-            fail('X-ray no. doesn\'t exist!');
-        })
+            }).fail(function() {
+                fail('X-ray no. doesn\'t exist!');
+                button.data('requestRunning', false);
+            })
+        }
     })
     $(this).on('click', '.send-x-ray-image-form2-input', function (e) {
         let temp = $(this);
@@ -1193,13 +1195,12 @@ $(document).ready(function () {
     })
     $("#send-x-ray-image-form2-back").on('click', function(e) {
         e.preventDefault();
-        $("#step1").removeClass('step1-active');
-        $("#step1").addClass('step1');
-        $("#step2").removeClass('step2-active');
-        $("#step2").addClass('step2');
+        $("#step1").removeClass('step1-active').addClass('step1');
+        $("#step2").removeClass('step2-active').addClass('step2');
         $("#send-x-ray-image-form1").removeClass('d-none');
         $("#send-x-ray-image-form2").addClass('d-none');
-        $("#send-x-ray-image-h5").html("STEP 1")
+        $("#send-x-ray-image-h5").html("STEP 1");
+        $("#send-x-ray-image-form2-send-button").removeClass('d-none');
     })
     $("#send-x-ray-image-form2").on('submit', function(e) {
         e.preventDefault();
@@ -1242,6 +1243,7 @@ $(document).ready(function () {
         if (!button.data('requestRunning')) {
             button.data('requestRunning', true); 
             loading_tag_container.removeClass('d-none');
+            $("#send-x-ray-image-form2-send-button").addClass('d-none');
             $.ajax({
                 xhr: function() {
                     var xhr = new window.XMLHttpRequest();
@@ -1272,10 +1274,11 @@ $(document).ready(function () {
 
                     if (response.match('Success!'))  {
                         alert_tag.addClass('alert-success');
-                        $("#send-x-ray-image-form2-send-button").addClass('d-none');
                     }
-                    else
+                    else {
+                        $("#send-x-ray-image-form2-send-button").removeClass('d-none');
                         alert_tag.addClass('alert-danger');
+                    }
                     alert_tag.html(response).css({
                         'opacity': 0
                     });
@@ -1299,15 +1302,18 @@ $(document).ready(function () {
         e.preventDefault();
         index = $(this).parent().parent().index();
         let alert_tag = $("#pending-interpretation-alert");
-        $("#pending-interpretation .ajax-loader").removeClass('d-none');
+        let other_delete_button = $(document).find(".pending-interpretation-delete");
+        $("#pending-interpretation-body").css('opacity', .2);
+        $("#pending-interpretation .card-body").addClass('ajax-loader');
 
+        other_delete_button.addClass('d-none');
         $.ajax({
             type: "POST",
             url: "components/pending_interpretation.php",
             data: {"delete":json[index]['x_ray_no']},
             dataType: "html",
             success: function (response) {
-                populate_pending_interpretation()
+                populate_pending_interpretation();
                 if (response.match('Success!'))  {
                     alert_tag.addClass('alert-success');
                 }
@@ -1323,6 +1329,10 @@ $(document).ready(function () {
                 }, 500);
                 alert_tag.fadeTo(5000, 500).slideUp(500, function(){
                 });
+
+            },
+            complete: function() {
+                other_delete_button.removeClass('d-none'); 
             }
         });
     })
@@ -1330,14 +1340,15 @@ $(document).ready(function () {
 
 function populate_pending_interpretation() {
     $("#pending-interpretation-body").html('');
-    $("#pending-interpretation .ajax-loader").removeClass('d-none');
+    $("#pending-interpretation .card-body").addClass('ajax-loader');
     $.ajax({
         type: "GET",
         url: "components/pending_interpretation.php",
         data: {"pending_interpretation":"ok"},
         dataType: "json",
         success: function (response) {
-            $("#pending-interpretation .ajax-loader").addClass('d-none');
+            $("#pending-interpretation-body").css('opacity', 1);
+            $("#pending-interpretation .card-body").removeClass('ajax-loader');
             if (!response[0]) {
                 $("#pending-interpretation-body").html('\
                     <div class="d-flex justify-content-center mt-3">\
@@ -1505,6 +1516,10 @@ function get_user_list() {
                 table += '</tr>';
             }
             $('#user-list-body').html(table);
+        },
+        complete: function() {
+            $("#user-list-container .card-body").css('opacity', 1);
+            $("#user-list-container").removeClass('ajax-loader');
         }
     });
 }
