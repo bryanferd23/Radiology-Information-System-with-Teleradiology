@@ -38,7 +38,7 @@
                 $stmt->bind_param('s', $_GET['info']);
     }
     else {
-        $stmt='SELECT x_ray_no, fname as p_fname, lname as p_lname FROM examination INNER JOIN patients WHERE ';
+        $stmt='SELECT x_ray_no, fname as p_fname, lname as p_lname, date FROM examination INNER JOIN patients WHERE ';
         if (isset($_GET['x_ray_no'])) {
             $stmt .= 'patient_id = id && x_ray_no = ?';
             $stmt=$con->prepare($stmt);

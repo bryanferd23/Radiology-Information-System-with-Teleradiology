@@ -6,7 +6,6 @@ const regex_x_ray_no = /^([0-9][0-9][-][0-9]+)$/;
 const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
 const regex_file_name = /^[-0-9A-Za-z_\.]+$/;
 
-var json;
 var temp;
 var date = new Date();
 var today = date.toISOString().substr(0, 10)
@@ -33,8 +32,10 @@ $(document).ready(function () {
                 populate_patient_list();
             }
             if ($(this).html().match("Pending interpretation")) {
-
                 populate_pending_interpretation();
+            }
+            if ($(this).html().match("For reading")) {
+                populate_for_reading();
             }
             $(".nav_link_content").addClass('d-none');
             $(".nav_link_content").eq(indexInArray).css({
@@ -804,7 +805,6 @@ $(document).ready(function () {
         
             let h5s = $("#patient-list-card-body-table").find('h5');
             let len = h5s.length - 1;
-            let posttable = '</tbody></table></div>';
             let date = h5s.eq(len).html();
             
             if (date == undefined)
@@ -827,8 +827,7 @@ $(document).ready(function () {
                         $("#patient-list .card-body").removeClass('ajax-loader');
                     }
                     else{
-                        pretable = set_pretable(response);
-                        get_patient_list(response, pretable, posttable, "date");
+                        get_patient_list(response, "date");
                     }
                 }
             });
@@ -852,10 +851,8 @@ $(document).ready(function () {
         $("#patient-list-search-form").css('opacity', .2);
         $("#patient-list .card-body").addClass('ajax-loader')
         $("#patient-list-footer").html('<i class="fas fa-long-arrow-alt-left"></i> Back').addClass("d-none").removeClass('text-secondary');
-
-        let posttable = '</tbody></table></div>';
         $("#patient-list-card-body-table").html('');
-        get_patient_list($("#patient-list-search-input").val(), set_pretable("Search result/s"), posttable, $("#patient-list-search-by").html());
+        get_patient_list($("#patient-list-search-input").val(), $("#patient-list-search-by").html());
     })
 
     $(this).on('click', '#patient-list-card-body-table .fa-chevron-circle-right', function() {
@@ -1300,17 +1297,17 @@ $(document).ready(function () {
     })
     $(this).on('click', ".pending-interpretation-delete", function(e) {
         e.preventDefault();
-        index = $(this).parent().parent().index();
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
         let alert_tag = $("#pending-interpretation-alert");
-        let other_delete_button = $(document).find(".pending-interpretation-delete");
+        let delete_button = $("#pending-interpretation-body .pending-interpretation-delete");
         $("#pending-interpretation-body").css('opacity', .2);
         $("#pending-interpretation .card-body").addClass('ajax-loader');
 
-        other_delete_button.addClass('d-none');
+        delete_button.addClass('d-none');
         $.ajax({
             type: "POST",
             url: "components/pending_interpretation.php",
-            data: {"delete":json[index]['x_ray_no']},
+            data: {"delete":x_ray_no},
             dataType: "html",
             success: function (response) {
                 populate_pending_interpretation();
@@ -1332,11 +1329,15 @@ $(document).ready(function () {
 
             },
             complete: function() {
-                other_delete_button.removeClass('d-none'); 
+                delete_button.removeClass('d-none'); 
             }
         });
     })
 });
+
+function populate_for_reading() {
+    alert(1)
+}
 
 function populate_pending_interpretation() {
     $("#pending-interpretation-body").html('');
@@ -1365,29 +1366,36 @@ function populate_pending_interpretation() {
                 })
             }
             else {
-                $("#pending-interpretation-body").html('\
-                        <div class="table-responsive mt-3">\
-                            <table class="table table-hover text-center">\
-                                <thead class="text-secondary">\
-                                    <tr>\
-                                        <th>XRAY NO</th>\
-                                        <th>FIRST NAME</th>\
-                                        <th>LAST NAME</th>\
-                                        <th>AGE</th>\
-                                        <th>GENDER</th>\
-                                        <th>HISTORY/PURPOSE</th>\
-                                        <th>ACTION/S</th>\
-                                    </tr>\
-                                </thead>\
-                                <tbody id="pending-interpretation-table-body">\
-                                </tbody>\
-                            </table>\
-                        </div>\
-                ');
-                json = response;
                 $.each(response, function () { 
+                    let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                    let temp = '';
                     let index = 0;
-                    temp = '<tr>';
+                    
+                    if (h5 == undefined || !h5.match(this.date)) {
+                        $("#pending-interpretation-body").append('\
+                            <div class="table-responsive mt-3">\
+                                <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                <table class="table table-hover text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th>XRAY NO</th>\
+                                            <th>FIRST NAME</th>\
+                                            <th>LAST NAME</th>\
+                                            <th>AGE</th>\
+                                            <th>GENDER</th>\
+                                            <th>HISTORY/PURPOSE</th>\
+                                            <th>ACTION/S</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>\
+                                    </tbody>\
+                                </table>\
+                            </div>\
+                        ');
+                    }
+                    
+                    let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                    temp += '<tr>';
                     $.each(this, function () { 
                         if (index == 6) {
                             temp += '<td>';/*
@@ -1402,46 +1410,33 @@ function populate_pending_interpretation() {
                         index++;
                     });
                     temp += '</tr>';
-                    $("#pending-interpretation-table-body").append(temp);
+                    tbody.append(temp);
                 });
             }
         }
     });
 }
 
-function set_pretable(date) {
-    return '\
-    <div class="table-responsive mt-4">\
-        <h5 class="text-center mb-4">'+date+'</h5>\
-        <table class="table table-hover border-bottom">\
-            <thead class="text-secondary">\
-                <tr>\
-                    <th>XRAY NO</th>\
-                    <th>FIRST NAME</th>\
-                    <th>LAST NAME</th>\
-                    <th></th>\
-                </tr>\
-            </thead>\
-            <tbody id="patient-list-body">\
-            ';
-}
 
 function populate_patient_list() {
     $("#patient-list-card-body-table").html('');
     $("#patient-list-footer").html('<i class="fas fa-long-arrow-alt-down"></i> See more').addClass('d-none').removeClass("text-secondary").click();
 }
 
-
-//functions
-function get_patient_list(data, pretable, posttable, temp1) {
+function get_patient_list(data, temp1) {
     let form = '';
-    
+    let th4 = 'DATE</th><th>';
+    let header = 'Search result/s';
+
     if (temp1 == "x-ray no.")
         form = {"x_ray_no": data}
     else  if (temp1 == "last name")
         form = {"lname": data}
-    else
+    else {
         form = {"date": data};
+        th4 = '';
+        header = data;
+    }
     
     $.ajax({
         type: "GET",
@@ -1450,22 +1445,42 @@ function get_patient_list(data, pretable, posttable, temp1) {
         dataType: "JSON",
         success: function (response) {
             if (response[0]) {
-                let table = '';
+                $('#patient-list-card-body-table').append('\
+                    <div class="table-responsive mt-4">\
+                        <h5 class="text-center mb-4">'+header+'</h5>\
+                        <table class="table table-hover border-bottom">\
+                            <thead class="text-secondary">\
+                                <tr>\
+                                    <th>XRAY NO</th>\
+                                    <th>FIRST NAME</th>\
+                                    <th>LAST NAME</th>\
+                                    <th>'+th4+'</th>\
+                                </tr>\
+                            </thead>\
+                            <tbody>\
+                            </tbody>\
+                        </table>\
+                    </div>\
+                ');
+                let h5 = $('#patient-list-card-body-table').find('h5').eq($('#patient-list-card-body-table').find('h5').length-1);
+                let temp = '';
                 for (row in response) {
-                    table += '<tr>';
+                    temp += '<tr>';
                     for(data in response[row]) {
-                        if (data == 'x_ray_no' || data == 'p_fname' || data == 'p_lname') {
-                            table += '<td class="align-middle">' + response[row][data] + '</td>';
+                        if (temp1 == "date") {
+                            if (data != 'date')
+                                temp += '<td>' + response[row][data] + '</td>';
                         }
+                        else
+                            temp += '<td>' + response[row][data] + '</td>';
                     }
-                    table += '<td class="align-middle"><a href="javascript:void(0)" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
-                    table += '</tr>';
+                    temp += '<td><a href="javascript:void(0)" class="fas fa-chevron-circle-right text-primary" style="font-size:18px;text-decoration:unset"></a></td>';
+                    temp += '</tr>';
                 }
-                $('#patient-list-card-body-table').append(pretable+table+posttable);
+                h5.siblings().eq(0).find('tbody').append(temp);
             }
             else {
-                if (temp1 != "gdate")
-                    $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">Search result/s</h5><p>No info</p>');
+                $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">'+header+'</h5><p>No record/s found!</p>');
             }
             $("#patient-list-card-body-table").css('opacity', 1);
             $("#patient-list-search-form").css('opacity', 1);

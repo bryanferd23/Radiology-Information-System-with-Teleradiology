@@ -34,9 +34,9 @@
     }
     
     if (isset($_GET['pending_interpretation'])) {
-        if ($stmt=$con->prepare('SELECT FR.x_ray_no, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose 
+        if ($stmt=$con->prepare('SELECT FR.x_ray_no, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose, EX.date
                                 FROM for_reading FR INNER JOIN examination EX, patients PT 
-                                WHERE FR.x_ray_no=EX.x_ray_no && EX.patient_id=PT.id')) {
+                                WHERE FR.x_ray_no=EX.x_ray_no && EX.patient_id=PT.id ORDER BY date ASC')) {
             if ($stmt->execute()) {
                 $result1=$stmt->get_result();
                 $array = array();

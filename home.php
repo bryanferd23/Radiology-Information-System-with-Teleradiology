@@ -156,7 +156,7 @@
                     </div>
                     <div class="card-body">
                         <form id="add-patient-form">
-                            <div id="add-patient-alert" class="alert alert-danger w-100 text-center" role="alert">
+                            <div id="add-patient-alert" class="alert w-100 text-center" role="alert">
                                 <!-- response goes here -->
                             </div>
                             <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
