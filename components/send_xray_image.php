@@ -10,24 +10,23 @@
             exit(mysqli_connect_error());
     
     if (isset($_GET['exist'])) {
-        $stmt=$con->prepare('SELECT * FROM for_reading WHERE x_ray_no = ?');
+        $stmt=$con->prepare('SELECT procedure_id FROM x_ray_results XR INNER JOIN procedures P ON (XR.procedure_id=P.id) WHERE P.x_ray_no = ?');
         $stmt->bind_param('s', $_GET['exist']);
         $stmt->execute();
         $stmt->store_result();
         if ($stmt->num_rows() > 0)
-            echo 'X-ray no. is already in pending interpretation!';
+            echo 'This record was already interpreted and has an X-ray result!<br>Please proceed to "Results" for printing.';
         else {
-            $stmt=$con->prepare('SELECT id FROM procedures INNER JOIN x_ray_results WHERE x_ray_no = ? && id=procedure_id');
+            $stmt=$con->prepare('SELECT id FROM teleradiology WHERE x_ray_no = ?');
             $stmt->bind_param('s', $_GET['exist']);
             $stmt->execute();
             $stmt->store_result();
             if ($stmt->num_rows() > 0)
-                echo 'X-ray no. already has an X-ray result!';
+                echo 'This record was already sent for interpretation!<br>Check "Pending interpretation" for more details.';
             else
                 echo 'does not exist!';
         }
-        $con->close();
-        exit;
+        echo mysqli_error($con);
     }
 
     if (isset($_POST['send-x-ray-image-form2-body-x_ray_no'])) {
@@ -60,7 +59,7 @@
                     }
                     else if (!check_file_uploaded_size($uploaded_filesize)) {
                         $con->close();
-                        exit('Image size too large! Please select an image 2mb and below..');
+                        exit('Image size too large! Please select an image 10mb and below..');
                     }
                     else {
                         if (!move_uploaded_file($uploaded_file, $uploadto.$new_filename)) {
@@ -75,7 +74,7 @@
                 }
             }
         }
-        $stmt=$con->prepare('INSERT INTO for_reading (x_ray_no) values (?)');
+        $stmt=$con->prepare('INSERT INTO teleradiology (x_ray_no, stage) values (?, "for_reading")');
         $stmt->bind_param('s', $_POST['send-x-ray-image-form2-body-x_ray_no']);
         $stmt->execute();
         echo 'Success!';

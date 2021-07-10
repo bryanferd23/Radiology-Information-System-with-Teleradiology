@@ -140,7 +140,7 @@ nav .dropdown-item i{
     top: 2.8rem;
 }
 
-section input, section button, section select{
+section input, section button, section select, #pending-interpretation-view-container button, #pending-interpretation-view-container input, #pending-interpretation-view-container select, #pending-interpretation-view-container textarea{
     font-size: .9rem !important;
 }
 
@@ -276,6 +276,76 @@ section input, section button, section select{
     font-size: 1.2rem !important;
 }
 
+.pending-interpretation-view-container-item img{
+    height: 100%;
+}
+
+
+#pending-interpretation-view-container{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    z-index: 9999;
+    background-color: black;
+}
+
+.pending-interpretation-view-container-item{
+    position: fixed;
+    display: block;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+
+.pending-interpretation-image{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.pending-interpretation-comment {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9999;
+    background-color: white;
+    color: black;
+    overflow: auto;
+    padding-top: .25rem;
+}
+
+#pending-interpretation-view-close {
+    font-size: 1.75rem;
+    z-index: 99999;
+    top: 0;
+    left: .45rem;
+    position:fixed;
+}
+
+.pending-interpretation-comment .table{
+    margin-bottom:-1rem
+}
+
+.pending-interpretation-comment tr{
+    margin: 0 -.75rem 0 -.75rem;
+}
+
+@media (max-width:1200px){
+    .pending-interpretation-view-container-item img{
+        height: auto;
+        width: 100%;
+    }
+}
+
 @media (max-width:1024px){
     .heading {
         width: 100%;
@@ -288,6 +358,25 @@ section input, section button, section select{
     }
     section {
         width: 100%;   
+    }
+}
+
+@media (max-width:992px){
+    #pending-interpretation-view-close {
+        font-size: 1.5rem;
+    }
+    .pending-interpretation-view-container-item{
+        overflow: auto;
+    }
+    .pending-interpretation-image{
+        height: auto;
+        width: auto;
+        position: relative;
+    }
+    .pending-interpretation-comment {
+        position: relative;
+        height: auto;
+        width: 100%;
     }
 }
 
@@ -340,5 +429,94 @@ section input, section button, section select{
     }
     #settings i {
         margin: .375rem 0rem .3rem .3rem;
+    }
+}
+
+.montserrat-10 {
+    font-family: 'Montserrat';
+    font-size: 10.5pt;
+    font-weight: bold;
+}
+.roboto-8 {
+    font-family: "Roboto";
+    font-size: 9.5pt;
+}
+.roboto-7 {
+    font-family: "Roboto";
+    font-size: 9.5pt;
+}
+.roboto-6 {
+    font-family: "Roboto";
+    font-size: 7.5pt;
+}
+.calibri-6 {
+    font-family: "Calibri";
+    font-size: 7.5pt;
+    background-color: rgba(128, 128, 128, 0.65) !important;
+}
+.page-header{
+    padding-left: .5cm;
+}
+.page-header::after {
+    content: "\a0";
+    display: block;
+    padding: 2px 0;
+    margin-top: 1.8rem;
+    margin-left: 4%;
+    width: 97.5%;
+    line-height: 1px;
+    border-top: 1px solid green; 
+}
+.footer-table{
+    border-top: 1px solid green;
+}
+.page-body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13pt;
+    padding: 1.5rem 5rem 0 5rem;
+    height: 274mm;
+}
+.page-sig {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12.5pt;
+    width: 100%;
+    padding: 1rem 3.5rem .55rem 5rem;
+}
+.page-footer{
+    width: 100%;
+    padding-bottom: 5mm;
+}
+.page-body-title {
+    font-size: 14.5pt;
+    font-weight: bold;
+    text-align: center;
+}
+.page {
+    width: 210mm;
+    height: 297mm;
+    margin: 10mm auto;
+    background: white;
+}
+.sub-page {
+    height: 297mm;
+}
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    html, body {
+        width: 210mm;
+        height: 297mm;        
+    }
+    .page {
+        margin: 0;
+        border: initial;
+        border-radius: initial;
+        width: initial;
+        min-height: initial;
+        box-shadow: initial;
+        background: initial;
+        page-break-after: always;
     }
 }

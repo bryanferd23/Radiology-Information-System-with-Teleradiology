@@ -3,7 +3,7 @@ const regex_letters_numbers = /^[a-zA-Z0-9]+$/;
 const regex_numbers = /^[0-9]+$/;
 const regex_names = /^([a-zA-z]+[,.]?[ ]?|[a-z]+['-]?)+$/;
 const regex_x_ray_no = /^([0-9][0-9][-][0-9]+)$/;
-const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-]+$/;
+const regex_sentence = /^[a-zA-Z][a-zA-Z0-9 .,'-(.+)((\r?\n.+)*]+$/;
 const regex_file_name = /^[-0-9A-Za-z_\.]+$/;
 
 var temp;
@@ -32,10 +32,16 @@ $(document).ready(function () {
                 populate_patient_list();
             }
             if ($(this).html().match("Pending interpretation")) {
-                populate_pending_interpretation();
+                populate_for_reading("radtech");
             }
             if ($(this).html().match("For reading")) {
-                populate_for_reading();
+                populate_for_reading("radiologist");
+            }
+            if ($(this).html().match("Results")) {
+                populate_for_printing("radtech");
+            }
+            if ($(this).html().match("Recent diagnoses")) {
+                populate_for_printing("radiologist");
             }
             $(".nav_link_content").addClass('d-none');
             $(".nav_link_content").eq(indexInArray).css({
@@ -305,21 +311,21 @@ $(document).ready(function () {
             input_feedback(input_tag, small_tag, '', 'default');
     })
     //--- validate user input (sentence/word/phrase) ---------------------------------------------------------//
-    $('.input-type-sentence').on('keyup', function () {
-        let input = $(this).val();
+    $(this).on('keyup', ".input-type-sentence", function () {
+        let input = $(this).val().toString();
         let small_tag = $(this).next();
         let input_tag = $(this);
         
         if (input) {
             //--- check input length ---//
-            if (input.length >= 2 && input.length <= 20) {
+            if (input.length >= 2 && input.length <= 300) {
                 //--- check regular expression ---//
                 if (regex_sentence.test(input)) {
                     input_feedback(input_tag, small_tag, 'Looks good!', 'valid');
                     return;
                 }
             }
-            input_feedback(input_tag, small_tag, 'Must be 2-20 characters long!', 'invalid');
+            input_feedback(input_tag, small_tag, 'Must be 2-999 characters long!', 'invalid');
         }
         else
             input_feedback(input_tag, small_tag, '', 'default');
@@ -1218,7 +1224,7 @@ $(document).ready(function () {
                     temp.push($(this).attr('name'));
             }
         });
-        
+        window.scrollTo(0, 0);
         if (temp.length != h5s.length) {
             alert_tag.finish();
             alert_tag.addClass('alert-danger');
@@ -1233,7 +1239,6 @@ $(document).ready(function () {
                 alert_tag.removeClass('alert-success');
                 alert_tag.removeClass('alert-danger');
             });
-            window.scrollTo(0, 0);
             return;
         }
         
@@ -1241,6 +1246,8 @@ $(document).ready(function () {
             button.data('requestRunning', true); 
             loading_tag_container.removeClass('d-none');
             $("#send-x-ray-image-form2-send-button").addClass('d-none');
+            $("#send-x-ray-image-form2-body").css('opacity', .2);
+            $("#send-x-ray-image-form2-body").addClass('ajax-loader');
             $.ajax({
                 xhr: function() {
                     var xhr = new window.XMLHttpRequest();
@@ -1268,7 +1275,8 @@ $(document).ready(function () {
                     loading_tag.css({
                         'width':'0%'
                     })
-
+                    $("#send-x-ray-image-form2-body").css('opacity', 1);
+                    $("#send-x-ray-image-form2-body").removeClass('ajax-loader');
                     if (response.match('Success!'))  {
                         alert_tag.addClass('alert-success');
                     }
@@ -1287,7 +1295,6 @@ $(document).ready(function () {
                         alert_tag.removeClass('alert-success');
                         alert_tag.removeClass('alert-danger');
                     });
-                    window.scrollTo(0, 0);
                 },
                 complete: function () {
                     button.data('requestRunning', false);
@@ -1295,6 +1302,7 @@ $(document).ready(function () {
             });
         }
     })
+
     $(this).on('click', ".pending-interpretation-delete", function(e) {
         e.preventDefault();
         let x_ray_no = $(this).parent().siblings().eq(0).html();
@@ -1306,11 +1314,11 @@ $(document).ready(function () {
         delete_button.addClass('d-none');
         $.ajax({
             type: "POST",
-            url: "components/pending_interpretation.php",
+            url: "components/teleradiology.php",
             data: {"delete":x_ray_no},
             dataType: "html",
             success: function (response) {
-                populate_pending_interpretation();
+                populate_for_reading("radtech");
                 if (response.match('Success!'))  {
                     alert_tag.addClass('alert-success');
                 }
@@ -1333,90 +1341,1148 @@ $(document).ready(function () {
             }
         });
     })
-});
 
-function populate_for_reading() {
-    alert(1)
-}
 
-function populate_pending_interpretation() {
-    $("#pending-interpretation-body").html('');
-    $("#pending-interpretation .card-body").addClass('ajax-loader');
-    $.ajax({
-        type: "GET",
-        url: "components/pending_interpretation.php",
-        data: {"pending_interpretation":"ok"},
-        dataType: "json",
-        success: function (response) {
-            $("#pending-interpretation-body").css('opacity', 1);
-            $("#pending-interpretation .card-body").removeClass('ajax-loader');
-            if (!response[0]) {
-                $("#pending-interpretation-body").html('\
-                    <div class="d-flex justify-content-center mt-3">\
-                        <h6><b>Nothing added yet!</b></h6>\
-                    </div>\
-                    <div class="d-flex justify-content-center">\
-                        <p class="mt-3 mr-1">Click</p>\
-                        <button id="go-to-send-xray-image" type="button" class="btn btn-outline-primary" style="height:2rem;margin-top:.6rem;padding:0 .5rem">here</button>\
-                        <p class="mt-3 ml-1">to send a record.</p>\
-                    </div>\
-                ');
-                $("#go-to-send-xray-image").on('click', function() {
-                    $('.navlinks').eq(3).click();
-                })
+    //------------------------------------------ teleradiology ----------------------------------------//
+    
+
+    $(this).on('click', ".pending-interpretation-comment-form-save",function() {
+        let alert_tag = $(this).parent().parent().parent().parent().parent().find('.alert')
+        let all_valid = true;
+        let button = $(this);
+        let preset = $(this).parent().parent().next();
+        let inputs = $(this).parent().parent().parent().parent().find('.form-control');
+        let form = $(this).parent().parent().parent().parent();
+        
+        $(inputs).each(function () {
+            if (!$(this).hasClass('is-valid')) {
+                $(this).addClass('is-invalid')
+                $(this).focus();
+                all_valid = false;
+                return;
+            }
+        });
+        
+        if (all_valid && !button.data('requestRunning')) {
+            button.data('requestRunning', true);
+            alert_tag.hide();
+            form.css('opacity', .2);
+            form.parent().addClass('ajax-loader');
+
+            //check if to overwrite existing preset or not
+            $.ajax({
+                type: "GET",
+                url: "components/presets.php",
+                data: {"exist":inputs.eq(0).val()},
+                dataType: "html",
+                success: function (response) {
+                    alert_tag.finish();
+                    form.css('opacity', 1);
+                    form.parent().removeClass('ajax-loader');
+                    if (response.match('True')) {
+                        alert_tag.addClass('alert-warning');
+                        alert_tag.html('<div style="font-size:.8rem" class="pb-2">Preset name already exist!<br>Overwrite existing preset?</div>\
+                                        <div style="font-size:.9rem" class="pb-3">\
+                                            <a href="javascript:void(0)" class="badge badge-danger overwrite-prompt float-left">NO</a>\
+                                            <a href="javascript:void(0)" class="badge badge-success overwrite-prompt float-right">YES</a>\
+                                        </div>').css({
+                            'opacity': 0
+                        });
+                        alert_tag.show();
+                        alert_tag.animate({
+                            'opacity': 1
+                        }, 500);
+                        $('.overwrite-prompt').on('click',function () {
+                            if ($(this).html().match("YES")) {
+                                form.css('opacity', .2);
+                                form.parent().addClass('ajax-loader');
+                                add_update_presets(preset.val(), true, alert_tag, inputs, form);
+                            }
+                            else {
+                                alert_tag.fadeTo(0, 500).slideUp(500, function(){
+                                    alert_tag.removeClass('alert-warning');
+                                });
+                            }
+                        })
+                    }
+                    else
+                        add_update_presets(preset.val(), false, alert_tag, inputs, form)
+                },
+                complete: function() {
+                    button.data('requestRunning', false);
+                }
+            });
+        }
+    })
+
+    $(this).on('click', ".pending-interpretation-comment-form-delete", function() {
+        let alert_tag = $(this).parent().parent().parent().parent().parent().find('.alert');
+        let form = $(this).parent().parent().parent().parent();
+        let preset = $(this).parent().parent().next();
+
+        if (preset.val() != 'custom') {
+            alert_tag.hide();
+            form.css('opacity', .2);
+            form.parent().addClass('ajax-loader');
+            $.ajax({
+                type: "POST",
+                url: "components/presets.php",
+                data: {'delete':preset.val()},
+                dataType: "html",
+                success: function (response) {
+                    alert_tag.finish();
+                    form.css('opacity', 1);
+                    form.parent().removeClass('ajax-loader');
+                    if (response.match('Success')) 
+                        alert_tag.addClass('alert-success');
+                    else
+                        alert_tag.addClass('alert-warning');
+                    alert_tag.html(response).css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.removeClass('alert-warning');
+                        alert_tag.removeClass('alert-success');
+                    });
+                    populate_for_reading_view_comment_form_preset();
+                }
+            });
+        }
+        else {
+            alert_tag.addClass('alert-warning');
+            alert_tag.html('<div style="font-size:.8rem">Please select a preset first!</div>').css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-warning');
+                alert_tag.removeClass('alert-success');
+            });
+        }
+    })
+    $(this).on('click', ".pending-interpretation-clear-form", function(e) {
+        e.preventDefault();
+        $(this).parent().parent().find('.form-control').val('').removeClass('is-valid is-invalid');
+    })
+    $(this).on('submit', ".pending-interpretation-comment-form", function(e) {
+        e.preventDefault();
+        let alert_tag = $(this).parent().find('.alert');
+        let button = $(this), form = $(this);
+        let x_ray_no = $(this).parent().find(".pending-interpretation-view-x-ray-no").html();
+        let procedure = $(this).parent().find(".pending-interpretation-view-procedure").html().split('_')[0];
+        let inputs = $(this).find('.form-control');
+        let form_index = $(this).parent().parent().index()-1;
+        alert_tag.hide();
+        if (inputs.eq(1).hasClass('is-invalid') || inputs.eq(1).val() == '' || inputs.eq(2).hasClass('is-invalid') || inputs.eq(2).val() == ''){
+            temp = false;
+            for (let i = 1; i < 3; i++) {
+                if (!inputs.eq(i).hasClass('is-invalid') && !inputs.eq(i).hasClass('is-valid'))
+                    inputs.eq(i).addClass('is-invalid');
+            }
+            $(".pending-interpretation-view-container-item").addClass('d-none');
+            $(".pending-interpretation-view-container-item").eq(form_index).removeClass('d-none');
+            $(this).focus();
+            alert_tag.finish();
+            alert_tag.addClass('alert-danger');
+            alert_tag.html('Please fill-in the form below and try again..').css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-danger');
+            });
+            return;
+        }
+        
+        if (temp && !button.data('requestRunning')) {
+            button.data('requestRunning', true);
+            form.css('opacity', .2);
+            form.parent().addClass('ajax-loader');
+            let formdata = new FormData();
+            let php_url = "components/teleradiology.php";
+            if ($("#pending-interpretation-submit-form").html() == 'Submit') {
+                formdata.append('change_stage_to', 'for_printing');
+                formdata.append('x_ray_no', x_ray_no);
             }
             else {
-                $.each(response, function () { 
-                    let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
-                    let temp = '';
-                    let index = 0;
-                    
-                    if (h5 == undefined || !h5.match(this.date)) {
-                        $("#pending-interpretation-body").append('\
-                            <div class="table-responsive mt-3">\
-                                <h5 class="text-center mb-4">'+this.date+'</h5>\
-                                <table class="table table-hover text-center">\
-                                    <thead class="text-secondary">\
-                                        <tr>\
-                                            <th>XRAY NO</th>\
-                                            <th>FIRST NAME</th>\
-                                            <th>LAST NAME</th>\
-                                            <th>AGE</th>\
-                                            <th>GENDER</th>\
-                                            <th>HISTORY/PURPOSE</th>\
-                                            <th>ACTION/S</th>\
-                                        </tr>\
-                                    </thead>\
+                formdata.append('update', x_ray_no);
+                php_url = "components/x_ray_results.php";
+            }
+            formdata.append('procedure_type', procedure);
+            formdata.append('findings', inputs.eq(1).val())
+            formdata.append('diagnosis', inputs.eq(2).val())
+            //for (var pair of formdata.entries()) {
+            //    console.log(pair[0]+ ', ' + pair[1]); 
+            //}
+            
+            $.ajax({
+                type: "POST",
+                url: php_url,
+                data: formdata,
+                dataType: "html",
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert_tag.finish();
+                    form.css('opacity', 1);
+                    form.parent().removeClass('ajax-loader');
+                    if (response.match('Success')) 
+                        alert_tag.addClass('alert-success');
+                    else
+                        alert_tag.addClass('alert-danger');
+                    alert_tag.html(response).css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
+                    });
+                },
+                complete:function() {
+                    button.data('requestRunning', false);
+                }
+            });
+        }
+    })
+    $(this).on('click', '#pending-interpretation-view-close', function(e) {
+        e.preventDefault();
+        $("#pending-interpretation-view-container").addClass('d-none');
+    })
+    $(this).on('click', ".pending-interpretation-prev-procedure", function(e) {
+        e.preventDefault();
+        $("#pending-interpretation-view-container").children().eq($(this).parent().parent().parent().index()).addClass('d-none');
+        $("#pending-interpretation-view-container").children().eq($(this).parent().parent().parent().index()-1).removeClass('d-none');
+    })
+    $(this).on('click', ".pending-interpretation-next-procedure", function(e) {
+        e.preventDefault();
+        $("#pending-interpretation-view-container").children().eq($(this).parent().parent().parent().parent().index()).addClass('d-none');
+        $("#pending-interpretation-view-container").children().eq($(this).parent().parent().parent().parent().index()+1).removeClass('d-none');
+    })
+    $(this).on('click', "#pending-interpretation-submit-form", function(e) {
+        e.preventDefault();
+        temp = true;
+        $('.pending-interpretation-comment-form').submit();
+        if ($("#pending-interpretation-submit-form").html() == 'Submit')
+            populate_for_reading('radiologist');
+        if ($("#pending-interpretation-submit-form").html() == 'Update')
+            populate_for_printing('radiologist');
+    })
+    
+    $(this).on('change', ".pending-interpretation-comment-form-preset", function() {
+        let form = $(this).parent().parent();
+        let preset = $(this);
+
+        form.find('.form-control').removeClass('is-valid is-invalid');
+        if (preset.val() != 'custom') {
+            form.css('opacity', .2);
+            form.parent().addClass('ajax-loader');
+            $.ajax({
+                type: "GET",
+                url: "components/presets.php",
+                data: {"preset":preset.val()},
+                dataType: "json",
+                success: function (response) {
+                    form.css('opacity', 1);
+                    form.parent().removeClass('ajax-loader');
+                    if (response) {
+                        let inputs = preset.parent().parent().find('.form-control');
+                        inputs.eq(0).addClass('is-valid').val(response['preset_name']);
+                        inputs.eq(1).addClass('is-valid').val(response['findings']);
+                        inputs.eq(2).addClass('is-valid').val(response['diagnosis']);
+                    }
+                }
+            });
+        }
+        else {
+            preset.removeClass('is-valid');
+            preset.parent().parent().find('.form-control').val('');
+        }
+    })
+    $(this).on('click', ".interpretation-results-delete", function() {
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+        let alert_tag = $("#interpretation-results-alert");
+        let delete_button = $("#interpretation-results-body .interpretation-results-delete");
+        $("#interpretation-results-body").css('opacity', .2);
+        $("#interpretation-results-body .card-body").addClass('ajax-loader');
+        
+        delete_button.addClass('d-none');
+        $.ajax({
+            type: "POST",
+            url: "components/teleradiology.php",
+            data: {"x_ray_no":x_ray_no, "change_stage_to":"for_reading"},
+            dataType: "html",
+            success: function (response) {
+                populate_for_printing("radiologist");
+                if (response.match('Success!'))  {
+                    alert_tag.addClass('alert-success');
+                }
+                else
+                    alert_tag.addClass('alert-danger');
+                
+                alert_tag.html(response).css({
+                    'opacity': 0
+                });
+                alert_tag.show();
+                alert_tag.animate({
+                    'opacity': 1
+                }, 500);
+                alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                });
+
+            },
+            complete: function() {
+                delete_button.removeClass('d-none'); 
+            }
+        });
+    })
+    $(this).on('click', ".interpretation-results-view", function() {
+        $("body").css('overflow','hidden');
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+        index = 0;
+        $.ajax({
+            type: "GET",
+            url: "components/teleradiology.php",
+            data: {"for_printing_by_x_ray_no":x_ray_no},
+            dataType: "json",
+            success: function (response) {
+                if (response[0]) {
+                    $("#pending-interpretation-view-container").html('<div id="pending-interpretation-view-close">\
+                                                                        <a href="javascript:void(0)"><i class="far fa-times-circle"></i></a>\
+                                                                    </div>');
+                    temp = '';
+                    let procedure_index = 0;
+                    $.each(response[0]['procedures'], function () {
+                        let procedure = this;
+                        let img_file_index = 0;
+                        temp+='\
+                        <div class="pending-interpretation-view-container-item';
+                        if (procedure_index == 0)
+                            temp+= '">';
+                        else 
+                            temp+= ' d-none">';
+                        temp+='\
+                            <div class="pending-interpretation-image col-lg-9">\
+                                <div id="carouselExampleIndicators'+procedure_index+'" class="carousel slide carousel-fade w-100" data-interval="false">\
+                                    <div class="carousel-inner">';
+                        $.each(response[0]['img_file'], function () {
+                            if (this.match(procedure)) {
+                                temp+='<div class="carousel-item';
+                                if (img_file_index == 0)
+                                    temp+= ' active">';
+                                else 
+                                    temp+= '">';
+                                temp+='\
+                                            <img src="resources/images/for_reading/'+this+'" class="d-block w-100">\
+                                        </div>';
+                                img_file_index++;
+                            }
+                        })
+                        temp+=      '</div>';
+                        if (img_file_index > 1) {
+                            temp+='\
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators'+procedure_index+'" role="button" data-slide="prev">\
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>\
+                                        <span class="sr-only">Previous</span>\
+                                    </a>\
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators'+procedure_index+'" role="button" data-slide="next">\
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>\
+                                        <span class="sr-only">Next</span>\
+                                    </a>';
+                        }
+                        temp+='\
+                                </div>\
+                            </div>\
+                            <div class="pending-interpretation-comment col-lg-3">\
+                                <table class="table table-borderless border-top">\
                                     <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">X-RAY NO: </b><b class="pending-interpretation-view-x-ray-no text-secondary">'+response[0]['x_ray_no']+'</b</td>\
+                                            <td><b class="text-primary">DATE: </b><b class="text-secondary">'+response[0]['date']+'</b</td>\
+                                        </tr>\
                                     </tbody>\
                                 </table>\
+                                <table class="table table-borderless">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">NAME: </b><b class="text-secondary">'+response[0]['fname'].toUpperCase()+' '+response[0]['lname'].toUpperCase()+'</b></td>\
+                                            <td><b class="text-primary">AGE: </b><b class="text-secondary">'+response[0]['age']+'</b</td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <table class="table table-borderless">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">PROCEDURE: </b><b class="pending-interpretation-view-procedure text-secondary">'+procedure.toUpperCase()+'</b></td>\
+                                            <td><b class="text-primary">GENDER: </b><b class="text-secondary">'+response[0]['gender'].toUpperCase()+'</b></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <table class="table table-borderless border-bottom mb-3">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">HISTORY/PURPOSE: </b><b class="text-secondary">'+response[0]['history_or_purpose'].toUpperCase()+'</b></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <div class="pending-interpretation-comment-alert alert w-100 text-center" role="alert">\
+                                </div>\
+                                <form class="pending-interpretation-comment-form w-100">\
+                                    <div class="form-group mb-3">\
+                                        <div>\
+                                            <label>Preset</label>\
+                                            <div class="float-right mr-1">\
+                                                <a class="pending-interpretation-comment-form-save text-success mr-2" style="font-size:1.2rem" href="javascript:void(0)"><i class="far fa-save"></i></a>\
+                                                <a class="pending-interpretation-comment-form-delete text-danger" style="font-size:1.2rem" href="javascript:void(0)"><i class="far fa-trash-alt"></i></i></a>\
+                                            </div>\
+                                        </div>\
+                                        <select class="pending-interpretation-comment-form-preset custom-select input-type-select">\
+                                            <option selected value="custom">Custom</option>\
+                                        </select>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Preset name</label>\
+                                        <input type="text" class="form-control input-type-sentence">\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Findings</label>\
+                                        <textarea class="form-control input-type-sentence" rows="5"></textarea>\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Diagnosis</label>\
+                                        <textarea class="form-control input-type-sentence" rows="2"></textarea>\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>'
+                                    if (procedure_index > 0)
+                            temp+='<button class="pending-interpretation-prev-procedure btn btn-primary mt-2 float-left">Prev</button>';
+                            temp+='<div class="float-right mt-2 pb-2">\
+                                        <button class="pending-interpretation-clear-form btn btn-secondary mr-2">Clear</button>';
+                                    if (procedure_index == response[0]['procedures'].length-1)
+                                temp+= '<button id="pending-interpretation-submit-form" class="btn btn-primary">Update</button>';
+                                    else
+                                temp+='<button class="pending-interpretation-next-procedure btn btn-primary">Next</button>';
+                            temp+='</div>\
+                                </form>\
                             </div>\
-                        ');
-                    }
-                    
-                    let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
-                    temp += '<tr>';
-                    $.each(this, function () { 
-                        if (index == 6) {
-                            temp += '<td>';/*
-                                $.each(this, function () { 
-                                    temp += this;
-                                });*/
-                            temp+= '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
-                            temp += '</td>';
+                        </div>';
+                        procedure_index++;
+                    })
+                    $("#pending-interpretation-view-container").append(temp);
+                }
+            },
+            complete: function () {
+                $("#pending-interpretation-view-container .pending-interpretation-comment-alert").hide();
+                $('#pending-interpretation-view-container').removeClass('d-none');
+                //populate #pending-interpretation-comment-form-preset (presets)
+                populate_for_reading_view_comment_form_preset();
+
+                //fetch findings and diagnosis
+                $.ajax({
+                    type: "GET",
+                    url: "components/x_ray_results.php",
+                    data: {'results_by_x_ray_no': x_ray_no},
+                    dataType: "json",
+                    success: function (response) {
+                        if (response[0]) {
+                            let form = $(".pending-interpretation-comment-form");
+                            let index = 0;
+                            $.each(response, function () {
+                                temp = form.eq(index++).find('.form-control');
+                                temp.eq(1).val(this['findings']);
+                                temp.eq(2).val(this['diagnosis']);
+                            });
                         }
-                        if (index < 6)
-                            temp += '<td>'+this+'</td>';
-                        index++;
-                    });
-                    temp += '</tr>';
-                    tbody.append(temp);
+                    }
                 });
+            }
+        });
+    })
+    $(this).on('click', ".pending-interpretation-interpret", function() {
+        $("body").css('overflow','hidden');
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+        index = 0;
+        
+        $.ajax({
+            type: "GET",
+            url: "components/teleradiology.php",
+            data: {"for_reading_by_x_ray_no":x_ray_no},
+            dataType: "json",
+            success: function (response) {
+                if (response[0]) {
+                    $("#pending-interpretation-view-container").html('<div id="pending-interpretation-view-close">\
+                                                                        <a href="javascript:void(0)"><i class="far fa-times-circle"></i></a>\
+                                                                    </div>');
+                    temp = '';
+                    let procedure_index = 0;
+                    $.each(response[0]['procedures'], function () {
+                        let procedure = this;
+                        let img_file_index = 0;
+                        temp+='\
+                        <div class="pending-interpretation-view-container-item';
+                        if (procedure_index == 0)
+                            temp+= '">';
+                        else 
+                            temp+= ' d-none">';
+                        temp+='\
+                            <div class="pending-interpretation-image col-lg-9">\
+                                <div id="carouselExampleIndicators'+procedure_index+'" class="carousel slide carousel-fade w-100" data-interval="false">\
+                                    <div class="carousel-inner">';
+                        $.each(response[0]['img_file'], function () {
+                            if (this.match(procedure)) {
+                                temp+='<div class="carousel-item';
+                                if (img_file_index == 0)
+                                    temp+= ' active">';
+                                else 
+                                    temp+= '">';
+                                temp+='\
+                                            <img src="resources/images/for_reading/'+this+'" class="d-block w-100">\
+                                        </div>';
+                                img_file_index++;
+                            }
+                        })
+                        temp+=      '</div>';
+                        if (img_file_index > 1) {
+                            temp+='\
+                                    <a class="carousel-control-prev" href="#carouselExampleIndicators'+procedure_index+'" role="button" data-slide="prev">\
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>\
+                                        <span class="sr-only">Previous</span>\
+                                    </a>\
+                                    <a class="carousel-control-next" href="#carouselExampleIndicators'+procedure_index+'" role="button" data-slide="next">\
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>\
+                                        <span class="sr-only">Next</span>\
+                                    </a>';
+                        }
+                        temp+='\
+                                </div>\
+                            </div>\
+                            <div class="pending-interpretation-comment col-lg-3">\
+                                <table class="table table-borderless border-top">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">X-RAY NO: </b><b class="pending-interpretation-view-x-ray-no text-secondary">'+response[0]['x_ray_no']+'</b</td>\
+                                            <td><b class="text-primary">DATE: </b><b class="text-secondary">'+response[0]['date']+'</b</td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <table class="table table-borderless">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">NAME: </b><b class="text-secondary">'+response[0]['fname'].toUpperCase()+' '+response[0]['lname'].toUpperCase()+'</b></td>\
+                                            <td><b class="text-primary">AGE: </b><b class="text-secondary">'+response[0]['age']+'</b</td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <table class="table table-borderless">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">PROCEDURE: </b><b class="pending-interpretation-view-procedure text-secondary">'+procedure.toUpperCase()+'</b></td>\
+                                            <td><b class="text-primary">GENDER: </b><b class="text-secondary">'+response[0]['gender'].toUpperCase()+'</b></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <table class="table table-borderless border-bottom mb-3">\
+                                    <tbody>\
+                                        <tr class="d-flex justify-content-between">\
+                                            <td><b class="text-primary">HISTORY/PURPOSE: </b><b class="text-secondary">'+response[0]['history_or_purpose'].toUpperCase()+'</b></td>\
+                                        </tr>\
+                                    </tbody>\
+                                </table>\
+                                <div class="pending-interpretation-comment-alert alert w-100 text-center" role="alert">\
+                                </div>\
+                                <form class="pending-interpretation-comment-form w-100">\
+                                    <div class="form-group mb-3">\
+                                        <div>\
+                                            <label>Preset</label>\
+                                            <div class="float-right mr-1">\
+                                                <a class="pending-interpretation-comment-form-save text-success mr-2" style="font-size:1.2rem" href="javascript:void(0)"><i class="far fa-save"></i></a>\
+                                                <a class="pending-interpretation-comment-form-delete text-danger" style="font-size:1.2rem" href="javascript:void(0)"><i class="far fa-trash-alt"></i></i></a>\
+                                            </div>\
+                                        </div>\
+                                        <select class="pending-interpretation-comment-form-preset custom-select input-type-select">\
+                                            <option selected value="custom">Custom</option>\
+                                        </select>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Preset name</label>\
+                                        <input type="text" class="form-control input-type-sentence">\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Findings</label>\
+                                        <textarea class="form-control input-type-sentence" rows="5"></textarea>\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>\
+                                    <div class="form-group mb-3">\
+                                        <label>Diagnosis</label>\
+                                        <textarea class="form-control input-type-sentence" rows="2"></textarea>\
+                                        <small class="form-text text-muted">\
+                                        </small>\
+                                    </div>'
+                                    if (procedure_index > 0)
+                            temp+='<button class="pending-interpretation-prev-procedure btn btn-primary mt-2 float-left">Prev</button>';
+                            temp+='<div class="float-right mt-2 pb-2">\
+                                        <button class="pending-interpretation-clear-form btn btn-secondary mr-2">Clear</button>';
+                                    if (procedure_index == response[0]['procedures'].length-1)
+                                temp+= '<button id="pending-interpretation-submit-form" class="btn btn-primary">Submit</button>';
+                                    else
+                                temp+='<button class="pending-interpretation-next-procedure btn btn-primary">Next</button>';
+                            temp+='</div>\
+                                </form>\
+                            </div>\
+                        </div>';
+                        procedure_index++;
+                    })
+                    $("#pending-interpretation-view-container").append(temp).css({"height":"100%", "background-color":"black"});
+                }
+            },
+            complete: function () {
+                $("#pending-interpretation-view-container .pending-interpretation-comment-alert").hide();
+                $('#pending-interpretation-view-container').removeClass('d-none');
+                //populate #pending-interpretation-comment-form-preset (select)
+                populate_for_reading_view_comment_form_preset();
+            }
+        });
+    })
+    $(this).on('click', ".pending-interpretation-results-print-preview", function() {
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+        let alert_tag = $("#interpretation-results-alert");
+
+        $.ajax({
+            type: "GET",
+            url: "components/x_ray_results.php",
+            data: {'results_by_x_ray_no': x_ray_no},
+            dataType: "json",
+            success: function (response) {
+                temp = '';
+                if (response[0]) {
+                    temp += '<div class="page>';
+                    $.each(response, function () { 
+                            temp+= '<div class="sub-page">\
+                                        <div class="page-header pt-4">\
+                                            <table class="w-100">\
+                                                <tr>\
+                                                    <td class="text-center">\
+                                                        <img style="width:3.6in" src="resources/images/x_ray_results_template/VSU_LOGO.png">\
+                                                    </td>\
+                                                    <td class="text-left pt-3">\
+                                                        <div class="montserrat-10">OFFICE OF THE CHIEF OF UNIVERSITY SERVICES</div>\
+                                                        <div class="montserrat-10">FOR HEALTH, EMERGENCY AND RESCUE (USHER)</div>\
+                                                        <div style="margin-bottom:-3px" class="roboto-7">Visca, Baybay City, Leyte, 6521-A PHILIPPINES</div>\
+                                                        <div style="margin-bottom:-3px" class="roboto-7">Telefax: (053) 563-9196/563-7510; Local 1047</div>\
+                                                        <div style="margin-bottom:-3px" class="roboto-7">Email: <u>vsuhospital@vsu.edu.ph</u></div>\
+                                                        <div class="roboto-7">Website: www.vsu.edu.ph</div>\
+                                                    </td>\
+                                                </tr>\
+                                            </table>\
+                                        </div>\
+                                        <div class="page-body">\
+                                            <table class="w-100">\
+                                                <tr>\
+                                                    <td colspan="3" class="page-body-title pb-5">\
+                                                        X-RAY RESULT FORM\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td class="pb-3">\
+                                                        RECORD: '+this['inf_no'].toString().toUpperCase()+'\
+                                                    </td>\
+                                                    <td>\
+                                                    </td>\
+                                                    <td>\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td class="pb-3">\
+                                                        X-RAY NO.: '+this['x_ray_no']+'\
+                                                    </td>\
+                                                    <td class="pb-3">\
+                                                        DATE: '+this['date']+'\
+                                                    </td>\
+                                                    <td>\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td class="pb-3">\
+                                                        NAME: '+this['p_lname'].toString().toUpperCase()+', '+this['p_fname'].toString().toUpperCase()+'\
+                                                    </td>\
+                                                    <td class="pb-3">\
+                                                        AGE: '+this['age']+'\
+                                                    </td>\
+                                                    <td class="pb-3">\
+                                                        SEX: '+this['gender'].toString().toUpperCase()+'\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td class="pb-5">\
+                                                    REQUESTING PHYSICIAN:\
+                                                    </td>\
+                                                    <td colspan="2" class="pb-5">\
+                                                        <div style="margin-left:-7rem">DR. '+this['d_fname'].toString().toUpperCase()+' '+this['d_lname'].toString().toUpperCase()+'</div\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td class="pt-4 pb-5">\
+                                                        PROCEDURE:\
+                                                    </td>\
+                                                    <td colspan="2" class="pt-4 pb-5">\
+                                                        <div style="margin-left:-9rem">'+this['type'].toString().toUpperCase()+' '+this['views'].toString().toUpperCase()+'</div\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td colspan="3" class="pb-3">\
+                                                        RADIOGRAPHIC FINDINGS:\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td colspan="3" class="pl-5 pb-5">\
+                                                        '+this['findings'].toString().toUpperCase().replace(/\r\n|\r|\n/g,"<br />")+'\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td colspan="3" class="pt-5 pb-3">\
+                                                        IMPRESSION:\
+                                                    </td>\
+                                                </tr>\
+                                                <tr>\
+                                                    <td colspan="3" class="pl-5 pb-5">\
+                                                        '+this['diagnosis'].toString().toUpperCase()+'\
+                                                    </td>\
+                                                </tr>\
+                                            </table>\
+                                        </div>\
+                                        <div class="page-sig pt-5">\
+                                            <table class="w-100">\
+                                                <tr>\
+                                                    <td colspan="3" class="pl-2">\
+                                                        <div class="float-left text-center">\
+                                                            <div style="margin-bottom:-4px">\
+                                                                <b><u>'+this['radtech_fname'].toString().toUpperCase()+' '+this['radtech_lname'].toString().toUpperCase()+'</u></b>\
+                                                            </div>\
+                                                            <div style="font-size:10.5pt">RADIOLOGIC TECHNOLOGIST</div>\
+                                                        </div>\
+                                                        <div class="float-right text-center mr-5">\
+                                                            <div style="margin-bottom:-4px">\
+                                                                <b><u>'+this['radiologist_fname'].toString().toUpperCase()+' '+this['radiologist_lname'].toString().toUpperCase()+', M.D., DPBR'+'</u></b>\
+                                                            </div>\
+                                                            <div style="font-size:10.5pt">RADIOLOGIST</div>\
+                                                        </div>\
+                                                    </td>\
+                                                </tr>\
+                                            </table>\
+                                        </div>\
+                                        <div class="page-footer">\
+                                            <table class="footer-table" style="margin-left:6%;width:88%;">\
+                                                <tr>\
+                                                    <td class="roboto-8 pl-4 pb-1 text-center">\
+                                                        <div><b>Vission:</b></div>\
+                                                        <div><b>Mission:</b></div>\
+                                                    </td>\
+                                                    <td class="roboto-8 text-left pt-2 pl-5">\
+                                                        <div style="margin-bottom:-3px">A globally competitive university for science, technology, and environmental conservation.</div>\
+                                                        <div style="margin-bottom:-3px">Development of a highly competitive human resource, cutting-edge scientific knowledge</div>\
+                                                        <div style="margin-bottom:-3px">and innovative technologies for sustainable communities and environment.</div>\
+                                                    </td>\
+                                                    <td class="align-top">\
+                                                        <div class="roboto-8 pl-3"><i>Page 1 of 1</i></div>\
+                                                        <div style="margin-bottom:-2px" class="roboto-8 pl-2"><b>FM-UHS-07</b></div>\
+                                                        <div class="roboto-6 pl-3"><i>v3 05-03-2021</i></div>\
+                                                        <div style="margin-left:-.5rem" class="calibri-6 pl-1"><i>No.</i></div>\
+                                                    </td>\
+                                                </tr>\
+                                            </table>\
+                                        </div>\
+                                    </div>';
+                    });
+                    temp+='</div>';
+                    $("#pending-interpretation-view-container").html(temp).removeClass('d-none').css({"height":"auto", "background-color":"var(--dark)"});
+                }
+                else {
+                    alert_tag.finish();
+                    alert_tag.removeClass('alert-warning alert-success');
+                    alert_tag.addClass('alert-danger');
+                    alert_tag.html("Unable to fetch data. Please make sure you have a working internet connection.").css({
+                        'opacity': 0
+                    });
+                    alert_tag.show();
+                    alert_tag.animate({
+                        'opacity': 1
+                    }, 500);
+                    alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                        alert_tag.removeClass('alert-success');
+                        alert_tag.removeClass('alert-danger');
+                    });
+                }
+            },
+            complete: function() {
+                let img = $("#pending-interpretation-view-container").find('img');
+                $(img.eq(0)).on('load', function() { window.print();$("#pending-interpretation-view-container").addClass('d-none') }).on('error', function() { console.log("error loading image"); }).attr("src", $(this).attr("src"))
+            }
+        });
+        
+    })
+});
+
+
+//------------------------------------------------------------------------- functions ----------------------------------------------//
+
+function add_update_presets(preset_val, exist, alert_tag, inputs, form_) {
+    let form = new FormData();
+
+    if (exist)
+        form.append('overwrite', inputs.eq(0).val());
+    else {
+        if (preset_val == 'custom') 
+            form.append('add', inputs.eq(0).val());
+        if (preset_val != 'custom')  {
+            form.append('id', preset_val);
+            form.append('update', inputs.eq(0).val());
+        }
+    }
+    form.append('findings', inputs.eq(1).val());
+    form.append('diagnosis', inputs.eq(2).val());
+    
+    alert_tag.hide();
+    form_.css('opacity', .2);
+    form_.parent().addClass('ajax-loader');
+    $.ajax({
+        type: "POST",
+        url: "components/presets.php",
+        data: form,
+        dataType: "html",
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            alert_tag.finish();
+            alert_tag.removeClass('alert-warning');
+            if (response.match('Success!'))
+                alert_tag.addClass('alert-success');
+            else
+                alert_tag.addClass('alert-danger');
+            alert_tag.html(response).css({
+                'opacity': 0
+            });
+            alert_tag.show();
+            alert_tag.animate({
+                'opacity': 1
+            }, 500);
+            alert_tag.fadeTo(5000, 500).slideUp(500, function(){
+                alert_tag.removeClass('alert-success');
+                alert_tag.removeClass('alert-danger');
+            });
+            populate_for_reading_view_comment_form_preset();
+        }
+    });
+}
+
+function populate_for_reading_view_comment_form_preset() {
+    $(".pending-interpretation-comment-form-preset").html('<option selected value="custom">Custom</option>');
+    $.ajax({
+        type: "GET",
+        url: "components/presets.php",
+        data: {"presets":"ok"},
+        dataType: "json",
+        success: function (response) {
+            $('.pending-interpretation-comment-form').css('opacity', 1);
+            $('.pending-interpretation-comment-form').parent().removeClass('ajax-loader');
+            $(response).each(function () {
+                $(".pending-interpretation-comment-form-preset").append('<option value='+ this['id'] +'>'+ this['preset_name'] +'</option>');
+            });
+        },
+        complete:function () {
+            $(".pending-interpretation-comment-form .form-control").removeClass('is-valid is-invalid').val('');
+            $(".pending-interpretation-comment-form-preset").removeClass('is-valid is-invalid');
+            $('.pending-interpretation-comment-form').css('opacity', 1);
+            $('.pending-interpretation-comment-form').parent().removeClass('ajax-loader');
+        }
+    });
+}
+
+function populate_for_printing(role) {
+    $("#interpretation-results .card-body").html('<div id="interpretation-results-body"></div>')
+    $("#interpretation-results-body").html('');
+    $("#interpretation-results-body").css('opacity', .2);
+    $("#interpretation-results .card-body").addClass('ajax-loader');
+
+    $.ajax({
+        type: "GET",
+        url: "components/teleradiology.php",
+        data: {"for_printing":"ok"},
+        dataType: "json",
+        success: function (response) {
+            $("#interpretation-results-body").css('opacity', 1);
+            $("#interpretation-results .card-body").removeClass('ajax-loader');
+            if (role == 'radiologist') {
+                if (!response[0]) {
+                    $("#interpretation-results-body").html('\
+                        <div class="d-flex justify-content-center mt-3">\
+                            <h6>Nothing added yet!</h6>\
+                        </div>\
+                        <div class="d-flex justify-content-center">\
+                            <p class="mt-3 mr-1">Click</p>\
+                            <button id="go-to-pending-interpretation" type="button" class="btn btn-outline-primary" style="height:2rem;margin-top:.6rem;padding:0 .5rem">here</button>\
+                            <p class="mt-3 ml-1">to interpret a radiograph.</p>\
+                        </div>\
+                    ');
+                    $("#go-to-pending-interpretation").on('click', function() {
+                        $('.navlinks').eq(2).click();
+                    })
+                }
+                else {
+                    $.each(response, function () { 
+                        let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
+                        let temp = '';
+                        let index = 0;
+                        
+                        if (h5 == undefined || !h5.match(this.date)) {
+                            $("#interpretation-results-body").append('\
+                                <div class="table-responsive mt-3">\
+                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                    <table class="table table-hover text-center">\
+                                        <thead class="text-secondary">\
+                                            <tr>\
+                                                <th>XRAY NO</th>\
+                                                <th>FIRST NAME</th>\
+                                                <th>LAST NAME</th>\
+                                                <th>AGE</th>\
+                                                <th>GENDER</th>\
+                                                <th>HISTORY/PURPOSE</th>\
+                                                <th>ACTION/S</th>\
+                                            </tr>\
+                                        </thead>\
+                                        <tbody>\
+                                        </tbody>\
+                                    </table>\
+                                </div>\
+                            ');
+                        }
+                        
+                        let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                        temp += '<tr>';
+                        $.each(this, function () { 
+                            if (index == 6) {
+                                temp += '<td>';
+                                    temp+= '<a href="javascript:void(0)" class="badge badge-primary align-middle interpretation-results-view mr-3">VIEW/EDIT</a>\
+                                            <a href="javascript:void(0)" class="fa fa-trash-alt text-danger align-middle interpretation-results-delete" style="font-size:1rem"></a>';
+                                temp += '</td>';
+                            }
+                            if (index < 6)
+                                temp += '<td>'+this+'</td>';
+                            index++;
+                        });
+                        temp += '</tr>';
+                        tbody.append(temp);
+                    });
+                }
+            }
+            else {
+                if (!response[0]) {
+                    $("#interpretation-results-body").html('\
+                        <div class="d-flex justify-content-center mt-3">\
+                            <h6>Nothing to print for now..</h6>\
+                        </div>\
+                    ');
+                }
+                else {
+                    $.each(response, function () { 
+                        let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
+                        let temp = '';
+                        let index = 0;
+                        
+                        if (h5 == undefined || !h5.match(this.date)) {
+                            $("#interpretation-results-body").append('\
+                                <div class="table-responsive mt-3">\
+                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                    <table class="table table-hover text-center">\
+                                        <thead class="text-secondary">\
+                                            <tr>\
+                                                <th>XRAY NO</th>\
+                                                <th>FIRST NAME</th>\
+                                                <th>LAST NAME</th>\
+                                                <th>AGE</th>\
+                                                <th>GENDER</th>\
+                                                <th>HISTORY/PURPOSE</th>\
+                                                <th>ACTION/S</th>\
+                                            </tr>\
+                                        </thead>\
+                                        <tbody>\
+                                        </tbody>\
+                                    </table>\
+                                </div>\
+                            ');
+                        }
+                        
+                        let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                        temp += '<tr>';
+                        $.each(this, function () { 
+                            if (index == 7) {
+                                temp += '<td>\
+                                            <a href="javascript:void(0)" style="width:80%" class="badge badge-primary align-middle pending-interpretation-results-print-preview mr-2">PRINT</a>\
+                                        </td>';
+                            }
+                            if (index < 6)
+                                temp += '<td>'+this+'</td>';
+                            index++;
+                        });
+                        temp += '</tr>';
+                        tbody.append(temp);
+                    });
+                }
             }
         }
     });
 }
 
+function populate_for_reading(role) {
+    $("#pending-interpretation-body").html('');
+    $("#pending-interpretation-body").css('opacity', .2);
+    $("#pending-interpretation .card-body").addClass('ajax-loader');
+    $.ajax({
+        type: "GET",
+        url: "components/teleradiology.php",
+        data: {"for_reading":"ok"},
+        dataType: "json",
+        success: function (response) {
+            $("#pending-interpretation-body").css('opacity', 1);
+            $("#pending-interpretation .card-body").removeClass('ajax-loader');
+            if (role.match("radtech")) {
+                if (!response[0]) {
+                    $("#pending-interpretation-body").html('\
+                        <div class="d-flex justify-content-center mt-3">\
+                            <h6>Nothing added yet!</h6>\
+                        </div>\
+                        <div class="d-flex justify-content-center">\
+                            <p class="mt-3 mr-1">Click</p>\
+                            <button id="go-to-send-xray-image" type="button" class="btn btn-outline-primary" style="height:2rem;margin-top:.6rem;padding:0 .5rem">here</button>\
+                            <p class="mt-3 ml-1">to send a record.</p>\
+                        </div>\
+                    ');
+                    $("#go-to-send-xray-image").on('click', function() {
+                        $('.navlinks').eq(3).click();
+                    })
+                }
+                else {
+                    $.each(response, function () { 
+                        let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                        let temp = '';
+                        let index = 0;
+                        
+                        if (h5 == undefined || !h5.match(this.date)) {
+                            $("#pending-interpretation-body").append('\
+                                <div class="table-responsive mt-3">\
+                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                    <table class="table table-hover text-center">\
+                                        <thead class="text-secondary">\
+                                            <tr>\
+                                                <th>XRAY NO</th>\
+                                                <th>FIRST NAME</th>\
+                                                <th>LAST NAME</th>\
+                                                <th>AGE</th>\
+                                                <th>GENDER</th>\
+                                                <th>HISTORY/PURPOSE</th>\
+                                                <th>ACTION/S</th>\
+                                            </tr>\
+                                        </thead>\
+                                        <tbody>\
+                                        </tbody>\
+                                    </table>\
+                                </div>\
+                            ');
+                        }
+                        
+                        let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                        temp += '<tr>';
+                        $.each(this, function () { 
+                            if (index == 6) {
+                                temp += '<td>';
+                                temp+= '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
+                                temp += '</td>';
+                            }
+                            if (index < 6)
+                                temp += '<td>'+this+'</td>';
+                            index++;
+                        });
+                        temp += '</tr>';
+                        tbody.append(temp);
+                    });
+                }
+            }
+            if (role.match("radiologist")) {
+                if (!response[0]) {
+                    $("#pending-interpretation-body").html('\
+                        <div class="d-flex justify-content-center mt-3">\
+                            <h6>Nothing to interpret and diagnose for now..</h6>\
+                        </div>\
+                    ');
+                }
+                else {
+                    $.each(response, function () { 
+                        let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                        let temp = '';
+                        let index = 0;
+                        
+                        if (h5 == undefined || !h5.match(this.date)) {
+                            $("#pending-interpretation-body").append('\
+                                <div class="table-responsive mt-3">\
+                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                    <table class="table table-hover text-center">\
+                                        <thead class="text-secondary">\
+                                            <tr>\
+                                                <th>XRAY NO</th>\
+                                                <th>FIRST NAME</th>\
+                                                <th>LAST NAME</th>\
+                                                <th>AGE</th>\
+                                                <th>GENDER</th>\
+                                                <th>HISTORY/PURPOSE</th>\
+                                                <th>ACTION/S</th>\
+                                            </tr>\
+                                        </thead>\
+                                        <tbody>\
+                                        </tbody>\
+                                    </table>\
+                                </div>\
+                            ');
+                        }
+                        
+                        let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                        temp += '<tr>';
+                        $.each(this, function () { 
+                            if (index == 7) {
+                                temp += '<td>';
+                                temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-interpret">INTERPRET</a>';
+                                temp += '</td>';
+                            }
+                            if (index < 6)
+                                temp += '<td>'+this+'</td>';
+                            index++;
+                        });
+                        temp += '</tr>';
+                        tbody.append(temp);
+                    });
+                }
+            }
+        }
+    });
+}
 
 function populate_patient_list() {
     $("#patient-list-card-body-table").html('');

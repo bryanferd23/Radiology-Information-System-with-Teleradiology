@@ -188,8 +188,9 @@
         $stmt->bind_param('s', $x_ray_no);
         $stmt->execute();
         if (mysqli_error($con)) {
-            echo mysqli_error($con);
-            $con->close();
+            echo 'This record was already or is being interpreted by the radiologist.. Please remove this record in pending interpetation if you want to modify this part of the patient\'s record..';
+            //echo mysqli_error($con);
+            //$con->close();
             exit;
         }
         $procedures_used = explode(', ', $_POST['patient-info-procedure']);

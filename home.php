@@ -23,11 +23,10 @@
     <!-- Bootstrap CSS -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href='resources/home.css'>
-    
-    
   </head>
   <body>
 
@@ -664,16 +663,25 @@
                     </div>
                 </div>
             </section>
-            
+
+            <!-- view films for interpration -->
+            <div id="pending-interpretation-view-container" class="container-fluid d-none">
+            </div>
+
             <!-- Results - nav_link_content #6 -->
-            <section class="nav_link_content d-none">
+            <section id="interpretation-results" class="nav_link_content d-none">
                     <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
                         '.$header2.'
                     </div>
-                    <div class="card-body d-flex justify-content-center">
-                        No info
+                    <div id="interpretation-results-alert" class="alert alert-success text-center ml-3 mr-3" role="alert">
+                            
+                    </div>
+                    <div class="card-body">
+                        <div id="interpretation-results-body">
+                            
+                        </div>
                     </div>
                 </div>
             </section>
@@ -912,7 +920,8 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     <script src="resources/home.js"></script>
 </body>
 </html>
