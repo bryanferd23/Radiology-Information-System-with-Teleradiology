@@ -1,5 +1,5 @@
 # RISystem
-Web-based Radiological Information System (Progress: 65%)
+Web-based Radiological Information System (Progress: 95%)
 
 --------------------------------------------------
 **Component folder**
