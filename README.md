@@ -1,5 +1,5 @@
 # RISystem
-Web-based Radiological Information System (Progress: 65%)
+Web-based Radiological Information System (Progress: 95%)
 
 --------------------------------------------------
 **Component folder**
@@ -48,6 +48,11 @@ Web-based Radiological Information System (Progress: 65%)
 
 -pending interpretation(display and delete items)(history of sending/uploading of X-ray image)
 
+-for reading(radiologist can interpret digital films and give their findings and diagnosis)
+
+-recent diagnosis(radiologist can edit previously interpreted films)
+
+-results(x-ray result printing)
 
 --------------------------------------------------
 **Under the hood?**
