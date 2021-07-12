@@ -55,7 +55,7 @@ $(document).ready(function () {
         $("#login-container .modal-body").addClass('ajax-loader');
         $("#login-submit").attr('disabled');
         $("#forgot-pass-trigger").off('click');
-
+        
         $.ajax({
             type: "POST",
             url: "components/auth.php",
@@ -86,9 +86,11 @@ $(document).ready(function () {
                 }
             }, 
             complete: function() {
-                $('#login-form').css('opacity', 1);
-                $("#login-container .modal-body").removeClass('ajax-loader');
-                $("#login-submit").removeAttr('disabled');
+                setTimeout(function(){
+                    $('#login-form').css('opacity', 1);
+                    $("#login-container .modal-body").removeClass('ajax-loader');
+                    $("#login-submit").removeAttr('disabled');
+                },2000);
                 $('#forgot-pass-trigger').on('click', function() {
                     $('#login-container .modal').removeClass('fade');
                     $('#login-container .modal').modal('hide');

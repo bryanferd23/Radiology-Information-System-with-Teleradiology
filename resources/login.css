@@ -120,8 +120,8 @@ section {
 .ajax-loader::before {
     position: absolute;
     content: "";
-    height: 1.2rem;
-    width: 1.2rem;
+    height: 1.5rem;
+    width: 1.5rem;
     background-image: url('images/ajax-loader.gif');
     background-repeat: no-repeat;
     background-position: center;

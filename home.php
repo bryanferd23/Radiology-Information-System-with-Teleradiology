@@ -558,27 +558,26 @@
             <div class="card-header">
                 Patient list
             </div>
-            <div class="card-body text-center">
-                <div class="mt-2 mb-5 d-flex justify-content-center">
-                    <form id="patient-list-search-form">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <button id="patient-list-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">x-ray no.</a>
-                                    <a class="dropdown-item" href="#">last name</a>
-                                    <a class="dropdown-item" href="#">date</a>
-                                </div>
-                            </div>
-                            <input type="text" name="patient-list-search-input" id="patient-list-search-input" class="form-control" required>
-                            <div class="input-group-append">
-                                <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+            <div class="mt-3 mb-4 d-flex justify-content-center">
+                <form id="patient-list-search-form">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button id="patient-list-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">x-ray no.</a>
+                                <a class="dropdown-item" href="#">last name</a>
+                                <a class="dropdown-item" href="#">date</a>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <input type="text" name="patient-list-search-input" id="patient-list-search-input" class="form-control" required>
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
                 <div id="patient-list-card-body-table">
-
                 </div>
             </div>
             <div class="text-center mb-4">
@@ -595,7 +594,7 @@
                 echo'
                 <!-- upload x-ray image - nav_link_content #4 -->
                 <section class="nav_link_content d-none">
-                        <h3 class="heading">Teleradiology</h3>
+                    <h3 class="heading">Teleradiology</h3>
                     <div class="card">
                         <div class="card-header">
                             Send X-Ray image
@@ -648,10 +647,28 @@
             echo'
             <!-- Pending interpretation - nav_link_content #5 -->
             <section id="pending-interpretation" class="nav_link_content d-none">
-                    <h3 class="heading">Teleradiology</h3>
+                <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
                         '.$header1.'
+                    </div>
+                    <div class="mt-3 mb-4 d-flex justify-content-center">
+                        <form id="pending-interpretation-search-form" class="d-none">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button id="pending-interpretation-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">x-ray no.</a>
+                                        <a class="dropdown-item" href="#">last name</a>
+                                        <a class="dropdown-item" href="#">date</a>
+                                    </div>
+                                </div>
+                                <input type="text" id="pending-interpretation-search-input" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div id="pending-interpretation-alert" class="alert alert-success text-center ml-3 mr-3" role="alert">
                             
@@ -660,6 +677,9 @@
                         <div id="pending-interpretation-body">
 
                         </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <h6><a id="pending-interpretation-footer" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-down"></i> See more</a></h6>
                     </div>
                 </div>
             </section>
@@ -670,10 +690,28 @@
 
             <!-- Results - nav_link_content #6 -->
             <section id="interpretation-results" class="nav_link_content d-none">
-                    <h3 class="heading">Teleradiology</h3>
+                <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
                         '.$header2.'
+                    </div>
+                    <div class="mt-3 mb-4 d-flex justify-content-center">
+                        <form id="interpretation-results-search-form" class="d-none">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button id="interpretation-results-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">x-ray no.</a>
+                                        <a class="dropdown-item" href="#">last name</a>
+                                        <a class="dropdown-item" href="#">date</a>
+                                    </div>
+                                </div>
+                                <input type="text" id="interpretation-results-search-input" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div id="interpretation-results-alert" class="alert alert-success text-center ml-3 mr-3" role="alert">
                             
@@ -682,6 +720,9 @@
                         <div id="interpretation-results-body">
                             
                         </div>
+                    </div>
+                    <div class="text-center mb-4">
+                        <h6><a id="interpretation-results-footer" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-down"></i> See more</a></h6>
                     </div>
                 </div>
             </section>

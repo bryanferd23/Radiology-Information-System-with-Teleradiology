@@ -14,7 +14,7 @@
     
     //$today = date("Y-m-d");
     if (isset($_GET['unknown_date'])) {
-        if ($stmt=$con->prepare('SELECT date from examination WHERE date < ? ORDER BY date DESC LIMIT 1')) {
+        if ($stmt=$con->prepare('SELECT date from examination WHERE Date(date) < ? ORDER BY date DESC LIMIT 1')) {
             $stmt->bind_param('s', $_GET['unknown_date']);
             if ($stmt->execute()) {
                 $stmt->store_result();

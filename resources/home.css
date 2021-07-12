@@ -248,9 +248,9 @@ section input, section button, section select, #pending-interpretation-view-cont
 
 .ajax-loader::before {
     position: absolute;
-    content: "";
-    height: 1.2rem;
-    width: 1.2rem;
+    content: " ";
+    height: 1.5rem;
+    width: 1.5rem;
     background-image: url('images/ajax-loader.gif');
     background-repeat: no-repeat;
     background-position: center;
@@ -258,6 +258,7 @@ section input, section button, section select, #pending-interpretation-view-cont
     top: 49%;
     left: 48%;
     z-index: 999;
+    opacity: 100%;
 }
 
 .close-modal {
@@ -308,6 +309,7 @@ section input, section button, section select, #pending-interpretation-view-cont
     top: 0;
     left: 0;
     overflow: auto;
+    background-color: black;
 }
 
 .pending-interpretation-comment {
