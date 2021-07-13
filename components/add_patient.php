@@ -13,6 +13,7 @@
     $patient_id = '';
     $fname = strtolower($_POST['patient_fname']);
     $lname = strtolower($_POST['patient_lname']);
+    $history_or_purpose = strtolower($_POST['history_or_purpose']);
 
 //--- first check if patient already exist else insert patient --------------------------------------------------------------------------------------------------//
     if ($stmt=$con->prepare('SELECT id FROM patients WHERE fname = ? && lname = ?')) {
@@ -36,7 +37,7 @@
 
     //--- second insert examination --------------------------------------------------------------------------------------------------//
     if ($stmt = $con->prepare('INSERT INTO examination(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, no_of_film_spoilage, reason_for_spoilage, radtech_id) values(?,?,?,?,?,?,?,?,?,?)')) {
-        $stmt->bind_param('sssssssss', $_POST['x_ray_no'], $_POST['inf_no'], $_POST['or_no'], $_POST['exam_date'], $patient_id, $_POST['history_or_purpose'], $_POST['physician'], $_POST['no_of_film_spoilage'], $_POST['reason_for_spoilage'], $_SESSION['uid']);
+        $stmt->bind_param('sssssssss', $_POST['x_ray_no'], $_POST['inf_no'], $_POST['or_no'], $_POST['exam_date'], $patient_id, $history_or_purpose, $_POST['physician'], $_POST['no_of_film_spoilage'], $_POST['reason_for_spoilage'], $_SESSION['uid']);
         if ($stmt->execute()) {
             $procedures_used = explode(', ', $_POST['procedure']);
             $film_sizes_used = explode(', ', $_POST['film_size']);

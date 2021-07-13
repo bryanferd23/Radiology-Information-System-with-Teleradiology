@@ -98,7 +98,7 @@ if(!$con->query('create table patients(
 if(!$con->query('create table examination(
             x_ray_no varchar(12) PRIMARY KEY not null,
             inf_no int(12) not null,
-            or_no int(12) not null,
+            or_no int(12) null,
             date date not null,
             patient_id int(12) not null,
             history_or_purpose varchar(32) not null,
@@ -186,7 +186,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1212","12345","23456","2021-04-20",1,"P.E",1,2)');
+    ("12-1212","12345","23456","2021-04-20",1,"p.e",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -201,7 +201,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1213","12346","23457","2021-04-20",2,"Cough",2,2)');
+    ("12-1213","12346","23457","2021-04-20",2,"cough",2,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -210,7 +210,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1214","12347","23458","2021-04-22",1,"Cough",1,2)');
+    ("12-1214","12347","23458","2021-04-22",1,"cough",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -219,7 +219,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1215","12348","23459","2021-04-22",2,"Renew",2,2)');
+    ("12-1215","12348","23459","2021-04-22",2,"renew",2,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -233,7 +233,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1216","12349","23460","2021-04-23",3,"Checkup",1,2)');
+    ("12-1216","12349","23460","2021-04-23",3,"checkup",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -246,7 +246,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1217","12350","23461","2021-04-23",4,"Checkup",2,2)');
+    ("12-1217","12350","23461","2021-04-23",4,"checkup",2,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -298,7 +298,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1221","12354","23465","2021-04-24",8,"Renewal",1,2)');
+    ("12-1221","12354","23465","2021-04-24",8,"renewal",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -311,7 +311,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1222","12355","23466","2021-04-24",9,"Renewal",1,2)');
+    ("12-1222","12355","23466","2021-04-24",9,"renewal",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values
@@ -324,7 +324,7 @@ values
 $con->query('INSERT INTO examination
     (x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, radtech_id) 
 values
-    ("12-1223","12356","23467","2021-04-24",10,"Renewal",1,2)');
+    ("12-1223","12356","23467","2021-04-24",10,"renewal",1,2)');
 $con->query('INSERT INTO procedures
     (x_ray_no, type, views, film_size) 
 values

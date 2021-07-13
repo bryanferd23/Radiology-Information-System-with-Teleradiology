@@ -137,8 +137,25 @@
             <div class="card-header">
                 Patient census
             </div>
-            <div class="card-body d-flex justify-content-center">
-                No info
+            <div class="mt-2 mb-4 d-flex justify-content-center">
+                <form id="patient-census-form" class="w-90">
+                    <div class="form-row row-cols-md-2 ml-2 mr-2">
+                        <div class="col mb-3">
+                            <label>From (Month Year)</label>
+                            <input type="month" class="form-control" id="patient-census-from" required>
+                        </div>
+                        <div class="col mb-3">
+                            <label>Until (Month Year)</label>
+                            <input type="month" class="form-control" id="patient-census-until" required>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center mt-2">
+                        <button class="btn btn-primary" type="submit">Generate</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body d-flex justify-content-center text-center mb-3">
+                <!-- patient census table goes here -->
             </div>
         </div>
     </section>
@@ -173,7 +190,7 @@
                                 </div>
                                 <div class="col mb-3">
                                     <label for="or_no">OR No.</label>
-                                    <input type="number" class="form-control input-type-numbers" name="or_no" id="or_no" required>
+                                    <input type="number" class="form-control input-type-numbers" name="or_no" id="or_no">
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>

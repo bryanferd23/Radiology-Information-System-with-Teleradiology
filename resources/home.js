@@ -2294,7 +2294,99 @@ $(document).ready(function () {
             });
         }
     })
-    
+    $("#patient-census-form").on('submit', function(e) {
+        e.preventDefault();
+        $("#patient-census-from").removeClass('is-invalid');
+        $("#patient-census-until").removeClass('is-invalid');
+
+        //check dates if logical
+        if ($("#patient-census-from").val() > $("#patient-census-until").val()) {
+            $("#patient-census-from").addClass('is-invalid');
+            $("#patient-census-until").addClass('is-invalid');
+            return;
+        }
+
+
+        $("#patient-census-form").css('opacity', .2);
+        $("#dashboard .card-body").css('opacity', .2).parent().addClass('ajax-loader');
+        let form = {'from_year':$("#patient-census-from").val().split('-')[0], 'from_month':$("#patient-census-from").val().split('-')[1], 'until_year':$("#patient-census-until").val().split('-')[0], 'until_month':$("#patient-census-until").val().split('-')[1]};
+        
+        $.ajax({
+            type: "GET",
+            url: "components/patient_census.php",
+            data: form,
+            dataType: "json",
+            success: function (response) {
+                if (response[0]) {
+                    temp = '<div class="table-responsive mt-3">\
+                                <table class="table table-hover table-bordered text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th rowspan="2" colspan"2" class="align-middle">MONTH & YEAR</th>\
+                                            <th colspan="2">STUDENT</th>\
+                                            <th colspan="2">EMPLOYEE</th>\
+                                            <th colspan="2">OUSIDER</th>\
+                                            <th colspan="2">ADULT</th>\
+                                            <th colspan="2">PEDIA</th>\
+                                            <th colspan="2">OPD</th>\
+                                            <th colspan="2">ER</th>\
+                                            <th colspan="2">INP</th>\
+                                            <th colspan="2">MEDICAL</th>\
+                                            <th colspan="2">SURGERY</th>\
+                                            <th colspan="2">TOTAL</th>\
+                                        </tr>\
+                                        <tr>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                            <th>M</th>\
+                                            <th>F</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>';
+                                    
+                    $.each(response, function () { 
+                        temp += '<tr>';
+                        $.each(this, function () { 
+                            temp += '<td class="align-middle">'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
+                        });
+                        temp += '</tr>';
+                    });
+                    temp +=         '</tbody>\
+                                </table>\
+                            </div>';
+                    $("#dashboard .card-body").html(temp);
+                }
+                else {
+                    $("#dashboard .card-body").html('\
+                        <div class="d-flex justify-content-center mt-3">\
+                            <h6>Can\'t connect to server. Please make Sure you have a working internet connection.</h6>\
+                        </div>');
+                }
+            },
+            complete: function() {
+                $("#patient-census-form").css('opacity', 1);
+                $("#dashboard .card-body").css('opacity', 1).parent().removeClass('ajax-loader');
+            }
+        })
+    })
 });
 
 
