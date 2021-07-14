@@ -153,7 +153,6 @@
         $mail->IsHTML(true);
         $mail->Subject = "Account password reset!";
         $mail->Body = $message_html;
-
         try {
             if ($mail->send() == true)
                 return true;

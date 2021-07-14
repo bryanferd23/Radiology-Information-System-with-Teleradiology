@@ -37,7 +37,7 @@
 
     //--- second insert examination --------------------------------------------------------------------------------------------------//
     if ($stmt = $con->prepare('INSERT INTO examination(x_ray_no, inf_no, or_no, date, patient_id, history_or_purpose, physician_id, no_of_film_spoilage, reason_for_spoilage, radtech_id) values(?,?,?,?,?,?,?,?,?,?)')) {
-        $stmt->bind_param('sssssssss', $_POST['x_ray_no'], $_POST['inf_no'], $_POST['or_no'], $_POST['exam_date'], $patient_id, $history_or_purpose, $_POST['physician'], $_POST['no_of_film_spoilage'], $_POST['reason_for_spoilage'], $_SESSION['uid']);
+        $stmt->bind_param('ssssssssss', $_POST['x_ray_no'], $_POST['inf_no'], $_POST['or_no'], $_POST['exam_date'], $patient_id, $history_or_purpose, $_POST['physician'], $_POST['no_of_film_spoilage'], $_POST['reason_for_spoilage'], $_SESSION['uid']);
         if ($stmt->execute()) {
             $procedures_used = explode(', ', $_POST['procedure']);
             $film_sizes_used = explode(', ', $_POST['film_size']);

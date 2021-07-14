@@ -15,13 +15,10 @@
     $until_year = $_GET['until_year'];
     $until_month = $_GET['until_month'];
     $table = array();
-    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "December");
+    $months = array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November","December");
 
     while (intval($from_year) <= intval($until_year)) {
         while (intval($from_month) <= intval($until_month)) {
-            $total_male = 0;
-            $total_female = 0;
-
             if (strlen($from_month) < 2)
                 $from_month = '0'.$from_month;
                 
@@ -35,7 +32,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("male_student" => $stmt->affected_rows ));
-                    $total_male = intval($total_male) + intval($stmt->affected_rows);
                 }
             }
             //female student
@@ -44,7 +40,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("female_student" => $stmt->num_rows));
-                    $total_female = intval($total_female) + intval($stmt->affected_rows);
                 }
             }
             //male employee
@@ -53,7 +48,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("male_employee" => $stmt->num_rows));
-                    $total_male = intval($total_male) + intval($stmt->affected_rows);
                 }
             }
             //female employee
@@ -62,7 +56,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("female_employee" => $stmt->num_rows));
-                    $total_female = intval($total_female) + intval($stmt->affected_rows);
                 }
             }
             //male ousider
@@ -71,7 +64,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("male_outsider" => $stmt->num_rows));
-                    $total_male = intval($total_male) + intval($stmt->affected_rows);
                 }
             }
             //female ousider
@@ -80,7 +72,6 @@
                 if($stmt->execute()) {
                     $stmt->store_result();
                     array_push($row, array("female_outsider" => $stmt->num_rows));
-                    $total_female = intval($total_female) + intval($stmt->affected_rows);
                 }
             }
             //male adult
@@ -195,12 +186,11 @@
                     array_push($row, array("female_total" => $stmt->num_rows));
                 }
             }
-            array_push($row, array("total_male" => $total_male));
-            array_push($row, array("total_female" => $total_female));
             $table[] = $row;
             $from_month = intval($from_month)+1;
         }
         $from_year = intval($from_year)+1;
+        $from_month = 01;
     }
     echo json_encode($table);
     $con->close();

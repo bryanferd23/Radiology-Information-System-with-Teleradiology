@@ -138,14 +138,14 @@
                 Patient census
             </div>
             <div class="mt-2 mb-4 d-flex justify-content-center">
-                <form id="patient-census-form" class="w-90">
-                    <div class="form-row row-cols-md-2 ml-2 mr-2">
-                        <div class="col mb-3">
-                            <label>From (Month Year)</label>
+                <form id="patient-census-form" class="m-auto">
+                    <div class="form-row row-cols-md-2">
+                        <div class="col-md-6 mb-3">
+                            <label>From(Month Year)</label>
                             <input type="month" class="form-control" id="patient-census-from" required>
                         </div>
-                        <div class="col mb-3">
-                            <label>Until (Month Year)</label>
+                        <div class="col-md-6 mb-3">
+                            <label>Until(Month Year)</label>
                             <input type="month" class="form-control" id="patient-census-until" required>
                         </div>
                     </div>
@@ -304,7 +304,7 @@
                                             <option value="Vertebrae LAO">LAO</option>
                                         </optgroup>
                                         <optgroup label="Pelvis">
-                                            <option value="Pelvis LAO">AP</option>
+                                            <option value="Pelvis AP">AP</option>
                                         </optgroup>
                                         <optgroup label="Shoulder">
                                             <option value="Shoulder AP">AP</option>

@@ -1104,7 +1104,7 @@ $(document).ready(function () {
                                         e.preventDefault();
                                         let procedure = $(this).parent().parent().siblings().eq(0).children().eq(0).html();
                                         procedure = procedure.replace(' ','_');
-                                        $(this).parent().siblings().eq(0).append('<input type="file" class="send-x-ray-image-form2-input" name="image_of_'+procedure+'[]" multiple="multiple" accept="image/*">');
+                                        $(this).parent().siblings().eq(0).append('<input type="file" class="send-x-ray-image-form2-input" name="image_of_'+procedure+'[]" multiple="multiple" accept="image/*;capture=camera"/>');
                                         $(this).parent().siblings().eq(0).children().eq($(this).parent().siblings().eq(0).children().length-1).click();
                                     })
                                 }
@@ -2319,45 +2319,42 @@ $(document).ready(function () {
             success: function (response) {
                 if (response[0]) {
                     temp = '<div class="table-responsive mt-3">\
-                                <table class="table table-hover table-bordered text-center">\
-                                    <thead class="text-secondary">\
+                                <table class="table table-bordered table-striped text-center">\
+                                    <thead>\
                                         <tr>\
-                                            <th rowspan="2" colspan"2" class="align-middle">MONTH & YEAR</th>\
-                                            <th colspan="2">STUDENT</th>\
-                                            <th colspan="2">EMPLOYEE</th>\
-                                            <th colspan="2">OUSIDER</th>\
-                                            <th colspan="2">ADULT</th>\
-                                            <th colspan="2">PEDIA</th>\
-                                            <th colspan="2">OPD</th>\
-                                            <th colspan="2">ER</th>\
-                                            <th colspan="2">INP</th>\
-                                            <th colspan="2">MEDICAL</th>\
-                                            <th colspan="2">SURGERY</th>\
-                                            <th colspan="2">TOTAL</th>\
+                                            <th rowspan="2" colspan"2" class="align-middle" style="background-color: #FDE9D9">MONTH & YEAR</th>\
+                                            <th colspan="2" style="background: #00B0F0">STUDENT</th>\
+                                            <th colspan="2" style="background: #00B0F0">EMPLOYEE</th>\
+                                            <th colspan="2" style="background: #00B0F0">OUSIDER</th>\
+                                            <th colspan="2" style="background: #FFC000">ADULT</th>\
+                                            <th colspan="2" style="background: #FFC000">PEDIA</th>\
+                                            <th colspan="2" style="background: #EEECE1">OPD</th>\
+                                            <th colspan="2" style="background: #EEECE1">INP</th>\
+                                            <th colspan="2" style="background: #C0504D">MEDICAL</th>\
+                                            <th colspan="2" style="background: #C0504D">SURGERY</th>\
+                                            <th colspan="2" style="background: yellow">TOTAL</th>\
                                         </tr>\
                                         <tr>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
-                                            <th>M</th>\
-                                            <th>F</th>\
+                                            <th style="background: #92D050">M</th>\
+                                            <th style="background: #92D050">F</th>\
+                                            <th style="background: #92D050">M</th>\
+                                            <th style="background: #92D050">F</th>\
+                                            <th style="background: #92D050">M</th>\
+                                            <th style="background: #92D050">F</th>\
+                                            <th style="background: #C6D9F1">M</th>\
+                                            <th style="background: #C6D9F1">F</th>\
+                                            <th style="background: #C6D9F1">M</th>\
+                                            <th style="background: #C6D9F1">F</th>\
+                                            <th style="background: #FABF8F">M</th>\
+                                            <th style="background: #FABF8F">F</th>\
+                                            <th style="background: #FABF8F">M</th>\
+                                            <th style="background: #FABF8F">F</th>\
+                                            <th style="background: #E5DFEC">M</th>\
+                                            <th style="background: #E5DFEC">F</th>\
+                                            <th style="background: #E5DFEC">M</th>\
+                                            <th style="background: #E5DFEC">F</th>\
+                                            <th style="background: #B6DDE8">M</th>\
+                                            <th style="background: #B6DDE8">F</th>\
                                         </tr>\
                                     </thead>\
                                     <tbody>';
@@ -2365,6 +2362,7 @@ $(document).ready(function () {
                     $.each(response, function () { 
                         temp += '<tr>';
                         $.each(this, function () { 
+                            //console.log(Object.keys(this));
                             temp += '<td class="align-middle">'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
                         });
                         temp += '</tr>';
