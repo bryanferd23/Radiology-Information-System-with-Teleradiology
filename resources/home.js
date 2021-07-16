@@ -2317,9 +2317,10 @@ $(document).ready(function () {
             data: form,
             dataType: "json",
             success: function (response) {
+                let index = 0;
                 if (response[0]) {
                     temp = '<div class="table-responsive mt-3">\
-                                <table class="table table-bordered table-striped text-center">\
+                                <table class="table table-bordered text-center">\
                                     <thead>\
                                         <tr>\
                                             <th rowspan="2" colspan"2" class="align-middle" style="background-color: #FDE9D9">MONTH & YEAR</th>\
@@ -2361,11 +2362,46 @@ $(document).ready(function () {
                                     
                     $.each(response, function () { 
                         temp += '<tr>';
-                        $.each(this, function () { 
-                            //console.log(Object.keys(this));
-                            temp += '<td class="align-middle">'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
-                        });
+                        if (index != response.length -1) {
+                            $.each(this, function (indexInArray) { 
+                                temp += '<td class="align-middle"';
+                                if (indexInArray > 0 && indexInArray <= 6)
+                                    temp += 'style="background: #92D050"';
+                                if (indexInArray > 6 && indexInArray <= 10) 
+                                    temp += 'style="background: #C6D9F1"';
+                                if (indexInArray > 10 && indexInArray <= 14) 
+                                    temp += 'style="background: #FABF8F"';
+                                if (indexInArray > 14 && indexInArray <= 18) 
+                                    temp += 'style="background: #E5DFEC"';
+                                if (indexInArray > 18 && indexInArray <= 20) 
+                                    temp += 'style="background: #B6DDE8"';
+                                //console.log(Object.keys(this));
+                                temp += '>'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
+                            });
+                        }
+                        else {
+                            $.each(this, function (indexInArray) { 
+                                //console.log(Object.keys(this));
+                                if (indexInArray == 0)
+                                    temp += '<td class="align-middle" style="background: yellow">'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
+                                else {
+                                    temp += '<td class="align-middle" colspan="2"';
+                                    if (indexInArray > 0 && indexInArray <= 3)
+                                        temp += 'style="background: #00B0F0"';
+                                    if (indexInArray > 3 && indexInArray <= 5) 
+                                        temp += 'style="background: #FFC000"';
+                                    if (indexInArray > 5 && indexInArray <= 7) 
+                                        temp += 'style="background: #EEECE1"';
+                                    if (indexInArray > 7 && indexInArray <= 9) 
+                                        temp += 'style="background: #C0504D"';
+                                    if (indexInArray > 9) 
+                                        temp += 'style="background: yellow"';
+                                        temp += '>'+ ((Object.values(this) == 0) ? "-":Object.values(this)) +'</td>'
+                                }
+                            });
+                        }
                         temp += '</tr>';
+                        index++;
                     });
                     temp +=         '</tbody>\
                                 </table>\
