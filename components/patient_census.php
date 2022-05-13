@@ -141,7 +141,7 @@
                 }
             }
             //male medical
-            if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Male" && (EX.history_or_purpose != "v.a" || EX.history_or_purpose != "vehicular accident" || EX.history_or_purpose != "accident" || EX.history_or_purpose != "trauma") && EX.date LIKE ?')) {
+            if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Male" && (EX.history_or_purpose != "v.a" && EX.history_or_purpose != "vehicular accident" && EX.history_or_purpose != "accident" && EX.history_or_purpose != "trauma") && EX.date LIKE ?')) {
                 $stmt->bind_param('s', $date);
                 if($stmt->execute()) {
                     $stmt->store_result();
@@ -149,7 +149,7 @@
                 }
             }
             //female medical
-            if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Female" && (EX.history_or_purpose != "v.a" || EX.history_or_purpose != "vehicular accident" || EX.history_or_purpose != "accident" || EX.history_or_purpose != "trauma") && EX.date LIKE ?')) {
+            if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Female" && (EX.history_or_purpose != "v.a" && EX.history_or_purpose != "vehicular accident" && EX.history_or_purpose != "accident" && EX.history_or_purpose != "trauma") && EX.date LIKE ?')) {
                 $stmt->bind_param('s', $date);
                 if($stmt->execute()) {
                     $stmt->store_result();
@@ -311,7 +311,7 @@
         }
     }
     //male medical
-    if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Male" && (EX.history_or_purpose != "v.a" || EX.history_or_purpose != "vehicular accident" || EX.history_or_purpose != "accident" || EX.history_or_purpose != "trauma") && EX.date >= ? && EX.date <= ?')) {
+    if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Male" && (EX.history_or_purpose != "v.a" && EX.history_or_purpose != "vehicular accident" && EX.history_or_purpose != "accident" && EX.history_or_purpose != "trauma") && EX.date >= ? && EX.date <= ?')) {
         $stmt->bind_param('ss', $date_from, $date_until);
         if($stmt->execute()) {
             $stmt->store_result();
@@ -319,7 +319,7 @@
         }
     }
     //female medical
-    if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Female" && (EX.history_or_purpose != "v.a" || EX.history_or_purpose != "vehicular accident" || EX.history_or_purpose != "accident" || EX.history_or_purpose != "trauma") && EX.date >= ? && EX.date <= ?')) {
+    if ($stmt = $con->prepare('SELECT p.gender FROM patients P INNER JOIN examination EX WHERE EX.patient_id = P.id && P.gender = "Female" && (EX.history_or_purpose != "v.a" && EX.history_or_purpose != "vehicular accident" && EX.history_or_purpose != "accident" && EX.history_or_purpose != "trauma") && EX.date >= ? && EX.date <= ?')) {
         $stmt->bind_param('ss', $date_from, $date_until);
         if($stmt->execute()) {
             $stmt->store_result();

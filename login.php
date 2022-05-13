@@ -15,14 +15,16 @@
     <!-- Bootstrap CSS -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href='resources/login.css'>
   </head>
   <body>
     <nav class="navbar sticky-top">
+      <!--
       <a id="x-ray-status" href="#" class="nav-link bg-warning text-dark align-middle ml-auto rounded-pill">Status of X-Ray result</a>
-      <a id="login" href="#" class="nav-link bg-warning text-dark align-middle ml-3 rounded-pill">Login</a>
+      -->
+      <a id="login" href="#" class="nav-link bg-warning text-dark align-middle ml-auto rounded-pill">Login</a>
     </nav>
     <noscript>
       <style>
@@ -84,8 +86,7 @@
         </div>
       </div>
     </section>
-
-    <!-- Modal -->
+    <!--
     <section id="search-container">
       <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -112,14 +113,14 @@
                 </form>
               </div>
               <div id="search-response" class="text-center mt-5"  style="min-height: 100px;">
-                    <!-- x-ray result response goes here -->
+                    
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-
+    -->
     <!-- Modal -->
     <section id="login-container">
       <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">

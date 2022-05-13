@@ -10,12 +10,23 @@
     $con = mysqli_connect("localhost", "root", "", "vsu_i_ris");
     if (!$con)
         exit(mysqli_connect_error());
-
+    
     if (isset($_GET['unknown_date']) && isset($_GET['input_val'])) {
-        if ($_GET['unknown_date'] == 'for_reading')
-            $stmt=$con->prepare('SELECT EX.date FROM examination EX, teleradiology TR WHERE TR.x_ray_no=EX.x_ray_no && TR.stage="for_reading" && DATE(EX.date) < ? ORDER BY date DESC LIMIT 1');
+        if ($_GET['unknown_date'] == 'for_reading') {
+            if ($_SESSION['role'] == 'Radiologist') {
+                $upper_limit = date("Y-m-d", strtotime('tomorrow'));
+                if ($_GET['input_val'] < $upper_limit)
+                    $stmt=$con->prepare('SELECT EX.date FROM examination EX, teleradiology TR WHERE TR.x_ray_no=EX.x_ray_no && TR.stage="for_reading" && DATE(EX.date) > ? ORDER BY date ASC LIMIT 1');
+                else
+                    $stmt=$con->prepare('SELECT EX.date FROM examination EX, teleradiology TR WHERE TR.x_ray_no=EX.x_ray_no && TR.stage="for_reading" && DATE(EX.date) < ? ORDER BY date ASC LIMIT 1');
+            }
+            else
+                $stmt=$con->prepare('SELECT EX.date FROM examination EX, teleradiology TR WHERE TR.x_ray_no=EX.x_ray_no && TR.stage="for_reading" && DATE(EX.date) < ? ORDER BY date DESC LIMIT 1');
+                
+        }
         else
             $stmt=$con->prepare('SELECT EX.date FROM examination EX, teleradiology TR WHERE TR.x_ray_no=EX.x_ray_no && TR.stage="for_printing" && Date(EX.date) < ? ORDER BY date DESC LIMIT 1');
+        
         $stmt->bind_param('s', $_GET['input_val']);
         $stmt->execute();
         $stmt->store_result();

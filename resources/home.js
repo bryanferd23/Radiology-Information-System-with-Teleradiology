@@ -59,7 +59,7 @@ $(document).ready(function () {
             })
          })
     });
-
+    
     $(document).click(function (event) {
         var clickover = $(event.target);
         var _opened = $(".navbar-collapse").hasClass("show");
@@ -742,6 +742,7 @@ $(document).ready(function () {
             temp = new FormData(this)
             temp.append('procedure',$('#procedure').children().first().html())
             temp.append('film_size',$('#film_size').children().first().html())
+            let x_ray_no = ($('#x_ray_no').val());
             //--- show loading animation while request is running ---//
             alert_tag.hide();
             $('#add-patient-form').css('opacity', .2);
@@ -759,14 +760,12 @@ $(document).ready(function () {
                     $('#add-patient .card-body').removeClass('ajax-loader');
                     alert_tag.finish();
                     if (response.match('Success!'))  {
-                        let x_ray_no = ($('#x_ray_no').val()).split('-');
                         inputs.val('');
                         inputs.removeClass('is-valid');
                         $('#add-patient-form small').html('');
                         $('#add-patient-form small').removeClass('valid-feedback');
                         $('#add-patient-form select').removeClass('is-valid');
                         $('#add-patient-form select').prop('selectedIndex', 0);
-                        x_ray_no = x_ray_no[0] + '-' + (parseInt(x_ray_no[1]) + 1)
                         $('#x_ray_no').val(x_ray_no);
                         $('.navlinks').eq(1).click();
                         alert_tag.addClass('alert-success');
@@ -793,7 +792,7 @@ $(document).ready(function () {
             });
         }
     })
-
+    
     //--- append userlist of another date when see more or back is clicked ---//
     $("#patient-list-footer").on('click', function(e) {
         e.preventDefault();
@@ -1082,7 +1081,7 @@ $(document).ready(function () {
                                     $("#send-x-ray-image-form2-body").html('<input type="text" class="d-none" name="send-x-ray-image-form2-body-x_ray_no" value="'+x_ray_no+'">');
                                     for (elem in procedures) {
                                         $("#send-x-ray-image-form2-body").append('\
-                                            <div class="text-center mt-5 mb-4" style="height:18rem">\
+                                            <div class="text-center mt-5">\
                                                 <div class="mt-3">\
                                                     <h5>'+procedures[elem]+'</h5>\
                                                 </div>\
@@ -1179,21 +1178,27 @@ $(document).ready(function () {
                 let reader = new FileReader();
                 reader.readAsDataURL(file);
                 reader.onload = function(e) {
+                    var file_size = file.size/1000000;
                     temp.parent().parent().parent().children().eq(2).append('\
-                        <div class="mr-3 d-flex justify-content-center">\
-                            <img src="'+reader.result+'" class="rounded mt-3 mb-3 float-left" width="150px" height="150px">\
-                            <a href="" style="margin-top:-.3rem;margin-left:-.35rem;font-size:1.25rem;color:var(--danger)" class="send-x-ray-image-form2-delete-button"><i class="fas fa-times-circle"></i></a>\
+                        <div class="mr-3 d-flex flex-column">\
+                            <div>\
+                                <img src="'+reader.result+'" class="img-thumbnail mt-3 float-left" width="150px" height="150px">\
+                                <a href="" style="margin-top:-.3rem;margin-left:-.4rem;font-size:1.25rem;color:var(--danger)" class="send-x-ray-image-form2-delete-button"><i class="fas fa-times-circle"></i></a>\
+                            </div>\
+                            <div style="margin-buttom:1rem" class="ml-auto mr-auto pr-2">'+file_size.toFixed(2)+' MB</div>\
+                            <div class="ml-auto mr-auto mb-1 pr-2" style="width:140px">'+file.name+'</div>\
                         </div>\
                     ')
                 }
+                
             }
         })
     })
     $(this).on('click', '.send-x-ray-image-form2-delete-button', function (e) {
         e.preventDefault();
-        let index = $(this).parent().index();
-        $(this).parent().parent().siblings().eq(1).children().eq(1).children().eq(index).remove();
-        $(this).parent().remove();
+        let index = $(this).parent().parent().index();
+        $(this).parent().parent().parent().siblings().eq(1).children().eq(1).children().eq(index).remove();
+        $(this).parent().parent().remove();
     })
     $("#send-x-ray-image-form2-back").on('click', function(e) {
         e.preventDefault();
@@ -2421,6 +2426,62 @@ $(document).ready(function () {
             }
         })
     })
+    $(this).on('click', ".pending-interpretation-view-patient", function() {
+        $("body").css('overflow','hidden');
+        $("#pending-interpretation-body").css('opacity', .2).parent().addClass('ajax-loader');
+        $("#pending-interpretation-search-form").css('opacity', .2);
+        $("#pending-interpretation-footer").css('opacity', .2);
+        let x_ray_no = $(this).parent().siblings().eq(0).html();
+
+        let inputs = $("#patient-info-form input");
+        let selects = $("#patient-info-form select");
+        inputs.val('').attr('disabled', true);
+        selects.val('').attr('disabled', true);
+        $('#patient-info-alert').hide();
+
+        $.ajax({
+            type: "GET",
+            url: "components/get_patient.php",
+            data: {"info": x_ray_no},
+            dataType: "json",
+            success: function (response) {
+                let input_index = 0; let select_index = 0; let all_index = 0; let multi_select_index = 3;
+                let physican = '';
+                for (row in response) {
+                    for(col in response[row]) {
+                        if (input_index == 7)
+                            input_index++;
+                        if (all_index == 5|| all_index == 8) {
+                            inputs.eq(input_index++).val(response[row][col]).attr("disabled", true);
+                        }
+                        else if (all_index == 9 || all_index == 11) {
+                            selects.eq(select_index++).attr("disabled", true).children().eq(0).html(response[row][col]);
+                        }
+                        else if (all_index == 13 || all_index == 14 || all_index == 15) {
+                            physican+=response[row][col]+" ";
+                        }
+                        else if (all_index == 0 || all_index == 1) {
+                            selects.eq(multi_select_index++).attr("disabled", true).children().eq(0).html(response[row][col]);
+                        }
+                        else {
+                            inputs.eq(input_index++).attr('placeholder', (response[row][col] == "none" || response[row][col] == "0" || response[row][col] == null || response[row][col] == "") ? "":response[row][col]).attr("disabled", true);
+                        }
+
+                        if (all_index == 15)
+                            selects.eq(select_index++).attr("disabled", true).children().eq(0).html(physican);
+                        all_index++;
+                    }
+                }
+            }, 
+            complete: function() {
+                $("#pending-interpretation-search-form").css('opacity', 1);
+                $("#pending-interpretation-footer").css('opacity', 1);
+                $("#pending-interpretation-body").css('opacity', 1).parent().removeClass('ajax-loader');
+                $("#patient-info .modal").modal("show");
+            }
+        });
+    })
+    $('.navlinks').eq(0).click();
 });
 
 
@@ -2473,6 +2534,7 @@ function get_for_reading_list(role) {
         }
     });
 }
+
 function populate_for_reading(role, input_val, search_by) {
     $("#pending-interpretation-body").css('opacity', .2);
     $("#pending-interpretation-search-form").css('opacity', .2);
@@ -2566,6 +2628,7 @@ function populate_for_reading(role, input_val, search_by) {
                         $.each(this, function () { 
                             if (index == 7) {
                                 temp += '<td>';
+                                temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-view-patient mr-1" style="width:auto">VIEW PATIENT</a>';
                                 temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-interpret">INTERPRET</a>';
                                 temp += '</td>';
                             }
@@ -2618,7 +2681,7 @@ function get_for_printing_list(role) {
                         </div>\
                     ');
                     $("#go-to-pending-interpretation").on('click', function() {
-                        $('.navlinks').eq(2).click();
+                        $('.navlinks').eq(0).click();
                     })
                 }
                 else {

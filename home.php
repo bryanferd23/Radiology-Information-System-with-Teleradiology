@@ -24,7 +24,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital@1&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link rel="stylesheet" href='resources/home.css'>
   </head>
@@ -34,15 +34,17 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
             <i class="fas fa-bars"></i>
         </button>
-        <a class="navbar-brand navlinks" data-toggle="collapse" data-target=".navbar-collapse.show" href="#">RISystem</a>
+        <?php
+            echo '<a class="navbar-brand ';
+            if ($_SESSION['role'] == 'Radiologic technologist') {
+                echo 'navlinks';
+            }
+            echo '" data-toggle="collapse" data-target=".navbar-collapse.show" href="#">RISystem</a>';
+        ?>
         <div class="collapse navbar-collapse" data-toggle="collapse" data-target=".navbar-collapse.show" id="collapsibleNavId">
             <div class="navbar-nav">
                 <?php 
                     if ($_SESSION['role'] != 'Radiologic technologist') {
-                        echo '
-                        <div class="nav-item">
-                            <a class="nav-link navlinks" href="#">Patients</a>
-                        </div>';
                         if ($_SESSION['role'] == 'Radiologist') {
                             echo '
                             <div class="nav-item dropdown">
@@ -124,41 +126,47 @@
         $current_time = time();
         if ($current_time < $_SESSION['loggedin'] + 15) {
             echo '<div id="welcome-message" class="alert alert-success alert-dismissible fade show" role="alert">
-                    <h4 class="alert-heading">Welcome <strong>'.$_SESSION['u_name'].'</strong>!</h4>
-                    <p>The system is still in beta test. Some features may not be available and bugs are most evident during beta testing..</p>
-                </div>';
+                    <h4 class="alert-heading">Welcome <strong>'.$_SESSION['u_name'].'</strong>!</h4>';
+                    //<p>The system is still in beta test. Some features may not be available and bugs are most evident during beta testing..</p>
+            echo '</div>';
         }
     ?>
 
     <!-- Dashboard - nav_link_content #1 -->
-    <section id="dashboard" class="nav_link_content">
-            <h3 class="heading">Dashboard</h3>
-        <div class="card">
-            <div class="card-header">
-                Patient census
-            </div>
-            <div class="mt-2 mb-4 d-flex justify-content-center">
-                <form id="patient-census-form" class="m-auto">
-                    <div class="form-row row-cols-md-2">
-                        <div class="col-md-6 mb-3">
-                            <label>From(Month Year)</label>
-                            <input type="month" class="form-control" id="patient-census-from" required>
+    <?php
+        if ($_SESSION['role'] == 'Radiologic technologist') {
+            echo '
+            <section id="dashboard" class="nav_link_content">
+                <h3 class="heading">Dashboard</h3>
+            <div class="card">
+                <div class="card-header">
+                    Patient census
+                </div>
+                <div class="mt-2 mb-4 d-flex justify-content-center">
+                    <form id="patient-census-form" class="m-auto">
+                        <div class="form-row row-cols-md-2">
+                            <div class="col-md-6 mb-3">
+                                <label>From(Month Year)</label>
+                                <input type="month" class="form-control" id="patient-census-from" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Until(Month Year)</label>
+                                <input type="month" class="form-control" id="patient-census-until" required>
+                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label>Until(Month Year)</label>
-                            <input type="month" class="form-control" id="patient-census-until" required>
+                        <div class="d-flex justify-content-center mt-2">
+                            <button class="btn btn-primary" type="submit">Generate</button>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-center mt-2">
-                        <button class="btn btn-primary" type="submit">Generate</button>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="card-body d-flex justify-content-center text-center mb-3">
+                    <!-- patient census table goes here -->
+                </div>
             </div>
-            <div class="card-body d-flex justify-content-center text-center mb-3">
-                <!-- patient census table goes here -->
-            </div>
-        </div>
-    </section>
+        </section>';
+        }
+    ?>
+    
 
     <?php
         if ($_SESSION['role'] == 'Radiologic technologist') {
@@ -177,13 +185,13 @@
                             </div>
                             <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-4">
                                 <div class="col mb-3">
-                                    <label for="x_ray_no">X-ray No.</label>
+                                    <label for="x_ray_no">X-ray No.</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-x-ray-no" name="x_ray_no" id="x_ray_no" required>
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="inf_no">Infirmary No.</label>
+                                    <label for="inf_no">Infirmary No.</label><label class="text-danger">*</label>
                                     <input type="number" class="form-control input-type-numbers" name="inf_no" id="inf_no" required>
                                     <small class="form-text text-muted">
                                     </small>
@@ -195,7 +203,7 @@
                                     </small>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="exam_date">Examination date</label>
+                                    <label for="exam_date">Examination date</label><label class="text-danger">*</label>
                                     <input type="date" class="form-control is-valid input-type-date" name="exam_date" id="exam_date" required>
                                     <small class="form-text text-muted">
                                     </small>
@@ -203,13 +211,13 @@
                             </div>
                             <div class="form-row">
                                 <div class="col-sm-6 mb-3">
-                                    <label for="patient_fname">First name</label>
+                                    <label for="patient_fname">First name</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-names" name="patient_fname" id="patient_fname" required>
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>
                                 <div class="col-sm-6 mb-3">
-                                    <label for="patient_lname">Last name</label>
+                                    <label for="patient_lname">Last name</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-names" name="patient_lname" id="patient_lname" required>
                                     <small class="form-text text-muted">
                                     </small>
@@ -217,7 +225,7 @@
                             </div>
                             <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-3">
                                 <div class="col mb-3">
-                                    <label for="b_date">Birth date</label>
+                                    <label for="b_date">Birth date</label><label class="text-danger">*</label>
                                     <input type="date" class="form-control input-type-date" name="b_date" id="b_date" required>
                                     <small class="form-text text-muted">
                                     </small>
@@ -227,7 +235,7 @@
                                     <input type="number" class="form-control is-valid" name="age" id="age">
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="patient_gender">Gender</label>
+                                    <label for="patient_gender">Gender</label><label class="text-danger">*</label>
                                     <select class="custom-select input-type-select" name="patient_gender" id="patient_gender" required>
                                         <option selected disabled value="">Choose...</option>
                                         <option>Male</option>
@@ -235,7 +243,7 @@
                                     </select>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="patient_cnumber">Mobile no. (optional)</label>
+                                    <label for="patient_cnumber">Mobile no.</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
@@ -246,7 +254,7 @@
                                     </div>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="standing_or_status">Standing/Status</label>
+                                    <label for="standing_or_status">Standing/Status</label><label class="text-danger">*</label>
                                     <select class="custom-select  input-type-select" name="standing_or_status" id="standing_or_status" required>
                                         <option selected disabled value="">Choose...</option>
                                         <option>Dependent</option>
@@ -256,13 +264,13 @@
                                     </select>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="history_or_purpose">History/Purpose</label>
+                                    <label for="history_or_purpose">History/Purpose</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-sentence" name="history_or_purpose" id="history_or_purpose" required>
                                     <small class="form-text text-muted">
                                     </small>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="physician">Physician</label>
+                                    <label for="physician">Physician</label><label class="text-danger">*</label>
                                     <select class="custom-select input-type-select" name="physician" id="physician" required>
                                         <option selected disabled value="">Choose...</option>
                                         <option value="1">Elwin Jay, Yu, Internal Medicine</option>
@@ -272,7 +280,7 @@
                             </div>
                             <div class="form-row row-cols-2 row-cols-sm-2 row-cols-md-2">
                                 <div class="col mb-3">
-                                    <label for="procedure">Procedure</label>
+                                    <label for="procedure">Procedure</label><label class="text-danger">*</label>
                                     <select id="procedure" name="procedure" class="custom-select input-type-multiple-select" required>
                                         <option selected disabled value="">Choose...</option>
                                         <optgroup label="Chest">
@@ -321,7 +329,7 @@
                                     </small>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="film_size">Film size</label>
+                                    <label for="film_size">Film size</label><label class="text-danger">*</label>
                                     <select class="custom-select input-type-multiple-select" name="film_size" id="film_size" required>
                                         <option selected disabled value="">Choose...</option>
                                         <option>8x10</option>
@@ -442,7 +450,7 @@
                                     </select>
                                 </div>
                                 <div class="col mb-3">
-                                    <label for="patient-info-patient_cnumber">Mobile no. (optional)</label>
+                                    <label for="patient-info-patient_cnumber">Mobile no.</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span style="font-size:.9rem" class="input-group-text rounded-left">+63</span>
@@ -564,44 +572,45 @@
     </section>
 
     <!-- patient list - nav_link_content #3 -->
-    <section id="patient-list" class="nav_link_content d-none">
-        <?php
-            $heading = 'Examination';
-            if ($_SESSION['role'] != 'Radiologic technologist')
-                $heading = 'Patients';
-            echo'<h3 class="heading">'.$heading.'</h3>';
-        ?>
-        <div class="card">
-            <div class="card-header">
-                Patient list
-            </div>
-            <div class="mt-3 mb-4 d-flex justify-content-center">
-                <form id="patient-list-search-form">
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <button id="patient-list-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="#">x-ray no.</a>
-                                <a class="dropdown-item" href="#">last name</a>
-                                <a class="dropdown-item" href="#">date</a>
+    <?php
+        if ($_SESSION['role'] == 'Radiologic technologist') {
+            echo '
+            <section id="patient-list" class="nav_link_content d-none">';
+            echo'<h3 class="heading">Examination</h3>';
+                echo '
+                <div class="card">
+                    <div class="card-header">
+                        Patient list
+                    </div>
+                    <div class="mt-3 mb-4 d-flex justify-content-center">
+                        <form id="patient-list-search-form">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button id="patient-list-search-by" class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">x-ray no.</button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="#">x-ray no.</a>
+                                        <a class="dropdown-item" href="#">last name</a>
+                                        <a class="dropdown-item" href="#">date</a>
+                                    </div>
+                                </div>
+                                <input type="text" name="patient-list-search-input" id="patient-list-search-input" class="form-control" required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                                </div>
                             </div>
-                        </div>
-                        <input type="text" name="patient-list-search-input" id="patient-list-search-input" class="form-control" required>
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                    <div class="card-body">
+                        <div id="patient-list-card-body-table">
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="card-body">
-                <div id="patient-list-card-body-table">
+                    <div class="text-center mb-4">
+                        <h6><a id="patient-list-footer" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-down"></i> See more</a></h6>
+                    </div>
                 </div>
-            </div>
-            <div class="text-center mb-4">
-                <h6><a id="patient-list-footer" href="#" style="text-decoration:unset"><i class="fas fa-long-arrow-alt-down"></i> See more</a></h6>
-            </div>
-        </div>
-    </section>
+            </section>';
+        }
+    ?>
                         
     <?php
         if ($_SESSION['role'] != 'admin') {
@@ -633,7 +642,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-5 ml-auto mr-auto mt-4 mb-4">
-                                    <label for="send-x-ray-image-x-ray-no">X-Ray No.</label>
+                                    <label for="send-x-ray-image-x-ray-no">X-Ray No.</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-x-ray-no" name="send-x-ray-image-x-ray-no" id="send-x-ray-image-x-ray-no" required>
                                     <small class="form-text text-muted">
                                     </small>
@@ -663,7 +672,12 @@
             }
             echo'
             <!-- Pending interpretation - nav_link_content #5 -->
-            <section id="pending-interpretation" class="nav_link_content d-none">
+            <section id="pending-interpretation" class="nav_link_content';
+            if ($_SESSION['role'] == 'Radiologic technologist')
+                echo ' d-none">';
+            else
+                echo '">';
+                echo'
                 <h3 class="heading">Teleradiology</h3>
                 <div class="card">
                     <div class="card-header">
@@ -749,7 +763,7 @@
     <?php
         if ($_SESSION['role'] == 'admin') {
             echo'
-            <section id="administration" class="nav_link_content d-none">
+            <section id="administration" class="nav_link_content">
                 <h3 class="heading">Administration</h3>
                 <div id="send-registration-email" class="card">
                     <div class="card-header">
@@ -768,21 +782,21 @@
                             </div>
                             <div class="form-row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="email">Email address</label>
+                                    <label for="email">Email address</label><label class="text-danger">*</label>
                                     <input type="email" class="form-control input-type-email" name="email" id="email" required>
                                     <small class="form-text text-muted">
                                         Must be a valid e-mail address containing 3-32 characters long.
                                     </small>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="reg_code">Code</label>
+                                    <label for="reg_code">Code</label><label class="text-danger">*</label>
                                     <input type="text" class="form-control input-type-letters-numbers" name="reg_code" id="reg_code" required>
                                     <small class="form-text text-muted">
                                         Must be 5-20 characters long, containing letters and numbers only.
                                     </small>
                                 </div>
                                 <div class="col-md-3 mb-3">
-                                    <label for="role">Role</label>
+                                    <label for="role">Role</label><label class="text-danger">*</label>
                                     <select class="custom-select  input-type-select" name="role" id="role" required>
                                         <option selected disabled value="">Choose...</option>
                                         <option>Radiologic technologist</option>
@@ -947,20 +961,20 @@
                     </div>
                     <div class="form-row">
                         <div class="col-md-12 mb-3">
-                            <label for="old_u_pass">Old Password</label>
+                            <label for="old_u_pass">Old Password</label><label class="text-danger">*</label>
                             <input type="password" class="form-control" name="old_u_pass" id="old_u_pass" required>
                             <small class="form-text text-muted">
                             </small>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="new_u_pass">New password</label>
+                            <label for="new_u_pass">New password</label><label class="text-danger">*</label>
                             <input type="password" class="form-control input-type-letters-numbers" name="new_u_pass" id="new_u_pass" required>
                             <small class="form-text">
                                 Must be 8-20 characters long, containing letters and numbers only.
                             </small>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="new_u_pass2">Verify new Password</label>
+                            <label for="new_u_pass2">Verify new Password</label><label class="text-danger">*</label>
                             <input type="password" class="form-control" name="new_u_pass2" id="new_u_pass2" required>
                             <small class="form-text text-muted">
                             </small>
