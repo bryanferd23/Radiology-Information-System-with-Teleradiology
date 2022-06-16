@@ -2550,95 +2550,172 @@ function populate_for_reading(role, input_val, search_by) {
             }
             else {
                 if (role.match("radtech")) {
-                    $.each(response, function () { 
-                        let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                    if (search_by.match("last name")) {
                         temp = '';
-                        let index = 0;
-                        
-                        if (h5 == undefined || !h5.match(this.date)) {
-                            $("#pending-interpretation-body").append('\
-                                <div class="table-responsive mt-3">\
-                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
-                                    <table class="table table-hover text-center">\
-                                        <thead class="text-secondary">\
-                                            <tr>\
-                                                <th>XRAY NO</th>\
-                                                <th>FIRST NAME</th>\
-                                                <th>LAST NAME</th>\
-                                                <th>AGE</th>\
-                                                <th>GENDER</th>\
-                                                <th>HISTORY/PURPOSE</th>\
-                                                <th>ACTION/S</th>\
-                                            </tr>\
-                                        </thead>\
-                                        <tbody>\
-                                        </tbody>\
-                                    </table>\
-                                </div>\
-                            ');
-                        }
-                        
-                        let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
-                        temp += '<tr>';
-                        $.each(this, function () { 
-                            if (index == 6) {
-                                temp += '<td>';
-                                temp+= '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
-                                temp += '</td>';
-                            }
-                            if (index < 6)
-                                temp += '<td>'+this+'</td>';
-                            index++;
+                            temp+= '<div class="table-responsive mt-3">\
+                                <h5 class="text-center mb-4">Search result/s</h5>\
+                                <table class="table table-hover text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th>XRAY NO</th>\
+                                            <th>DATE</th>\
+                                            <th>FIRST NAME</th>\
+                                            <th>LAST NAME</th>\
+                                            <th>AGE</th>\
+                                            <th>GENDER</th>\
+                                            <th>HISTORY/PURPOSE</th>\
+                                            <th>ACTION/S</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'
+                        $.each(response, function () { 
+                            let index = 0;
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index < 7)
+                                    temp += '<td>'+this+'</td>'
+                                index++;
+                            });
+                            temp += '<td>';
+                            temp += '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
+                            temp += '</td>';
+                            temp += '</tr>';
                         });
-                        temp += '</tr>';
-                        tbody.append(temp);
-                    });
+                        temp += '</tbody>\
+                                </table>\
+                            </div>'
+                        $("#pending-interpretation-body").append(temp);
+                    }
+                    else {
+                        $.each(response, function () { 
+                            let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                            temp = '';
+                            let index = 0;
+                            
+                            if (h5 == undefined || !h5.match(this.date)) {
+                                $("#pending-interpretation-body").append('\
+                                    <div class="table-responsive mt-3">\
+                                        <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                        <table class="table table-hover text-center">\
+                                            <thead class="text-secondary">\
+                                                <tr>\
+                                                    <th>XRAY NO</th>\
+                                                    <th>FIRST NAME</th>\
+                                                    <th>LAST NAME</th>\
+                                                    <th>AGE</th>\
+                                                    <th>GENDER</th>\
+                                                    <th>HISTORY/PURPOSE</th>\
+                                                    <th>ACTION/S</th>\
+                                                </tr>\
+                                            </thead>\
+                                            <tbody>\
+                                            </tbody>\
+                                        </table>\
+                                    </div>\
+                                ');
+                            }
+                            
+                            let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index == 6) {
+                                    temp += '<td>';
+                                    temp+= '<a href="#" class="fa fa-trash-alt text-danger pending-interpretation-delete" style="font-size:1rem"></a>';
+                                    temp += '</td>';
+                                }
+                                if (index < 6)
+                                    temp += '<td>'+this+'</td>';
+                                index++;
+                            });
+                            temp += '</tr>';
+                            tbody.append(temp);
+                        });
+                    }
                 }
                 else {
-                    $.each(response, function () { 
-                        let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
-                        let temp = '';
-                        let index = 0;
-                        
-                        if (h5 == undefined || !h5.match(this.date)) {
-                            $("#pending-interpretation-body").append('\
-                                <div class="table-responsive mt-3">\
-                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
-                                    <table class="table table-hover text-center">\
-                                        <thead class="text-secondary">\
-                                            <tr>\
-                                                <th>XRAY NO</th>\
-                                                <th>FIRST NAME</th>\
-                                                <th>LAST NAME</th>\
-                                                <th>AGE</th>\
-                                                <th>GENDER</th>\
-                                                <th>HISTORY/PURPOSE</th>\
-                                                <th>ACTION/S</th>\
-                                            </tr>\
-                                        </thead>\
-                                        <tbody>\
-                                        </tbody>\
-                                    </table>\
-                                </div>\
-                            ');
-                        }
-                        
-                        let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
-                        temp += '<tr>';
-                        $.each(this, function () { 
-                            if (index == 7) {
-                                temp += '<td>';
-                                temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-view-patient mr-1" style="width:auto">VIEW PATIENT</a>';
-                                temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-interpret">INTERPRET</a>';
-                                temp += '</td>';
-                            }
-                            if (index < 6)
-                                temp += '<td>'+this+'</td>';
-                            index++;
+                    if (search_by.match("last name")) {
+                        temp = '';
+                            temp+= '<div class="table-responsive mt-3">\
+                                <h5 class="text-center mb-4">Search result/s</h5>\
+                                <table class="table table-hover text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th>XRAY NO</th>\
+                                            <th>DATE</th>\
+                                            <th>FIRST NAME</th>\
+                                            <th>LAST NAME</th>\
+                                            <th>AGE</th>\
+                                            <th>GENDER</th>\
+                                            <th>HISTORY/PURPOSE</th>\
+                                            <th>ACTION/S</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'
+                        $.each(response, function () { 
+                            let index = 0;
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index < 7)
+                                    temp += '<td>'+this+'</td>'
+                                index++;
+                            });
+                            temp += '<td>';
+                            temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-view-patient mr-1" style="width:auto">VIEW PATIENT</a>';
+                            temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-interpret">INTERPRET</a>';
+                            temp += '</td>';
+                            temp += '</tr>';
                         });
-                        temp += '</tr>';
-                        tbody.append(temp);
-                    });
+                        temp += '</tbody>\
+                                </table>\
+                            </div>'
+                        $("#pending-interpretation-body").append(temp);
+                    }
+                    else {
+                        $.each(response, function () { 
+                            let h5 = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).html();
+                            let temp = '';
+                            let index = 0;
+                            
+                            if (h5 == undefined || !h5.match(this.date)) {
+                                $("#pending-interpretation-body").append('\
+                                    <div class="table-responsive mt-3">\
+                                        <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                        <table class="table table-hover text-center">\
+                                            <thead class="text-secondary">\
+                                                <tr>\
+                                                    <th>XRAY NO</th>\
+                                                    <th>FIRST NAME</th>\
+                                                    <th>LAST NAME</th>\
+                                                    <th>AGE</th>\
+                                                    <th>GENDER</th>\
+                                                    <th>HISTORY/PURPOSE</th>\
+                                                    <th>ACTION/S</th>\
+                                                </tr>\
+                                            </thead>\
+                                            <tbody>\
+                                            </tbody>\
+                                        </table>\
+                                    </div>\
+                                ');
+                            }
+                            
+                            let tbody = $("#pending-interpretation-body").find('h5').eq($("#pending-interpretation-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index == 7) {
+                                    temp += '<td>';
+                                    temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-view-patient mr-1" style="width:auto">VIEW PATIENT</a>';
+                                    temp += '<a href="javascript:void(0)" class="badge badge-primary align-middle pending-interpretation-interpret">INTERPRET</a>';
+                                    temp += '</td>';
+                                }
+                                if (index < 6)
+                                    temp += '<td>'+this+'</td>';
+                                index++;
+                            });
+                            temp += '</tr>';
+                            tbody.append(temp);
+                        });
+                    }
                 }
             }
         },
@@ -2714,95 +2791,172 @@ function populate_for_printing(role, input_val, search_by) {
             }
             else {
                 if (role == 'radiologist') {
-                    $.each(response, function () { 
-                        let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
+                    if (search_by.match("last name")) {
                         temp = '';
-                        let index = 0;
-                        
-                        if (h5 == undefined || !h5.match(this.date)) {
-                            $("#interpretation-results-body").append('\
-                                <div class="table-responsive mt-3">\
-                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
-                                    <table class="table table-hover text-center">\
-                                        <thead class="text-secondary">\
-                                            <tr>\
-                                                <th>XRAY NO</th>\
-                                                <th>FIRST NAME</th>\
-                                                <th>LAST NAME</th>\
-                                                <th>AGE</th>\
-                                                <th>GENDER</th>\
-                                                <th>HISTORY/PURPOSE</th>\
-                                                <th>ACTION/S</th>\
-                                            </tr>\
-                                        </thead>\
-                                        <tbody>\
-                                        </tbody>\
-                                    </table>\
-                                </div>\
-                            ');
-                        }
-                        
-                        let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
-                        temp += '<tr>';
-                        $.each(this, function () { 
-                            if (index == 6) {
-                                temp += '<td>';
-                                    temp+= '<a href="javascript:void(0)" class="badge badge-primary align-middle interpretation-results-view mr-3">VIEW/EDIT</a>\
-                                            <a href="javascript:void(0)" class="fa fa-trash-alt text-danger align-middle interpretation-results-delete" style="font-size:1rem"></a>';
-                                temp += '</td>';
-                            }
-                            if (index < 6)
-                                temp += '<td>'+this+'</td>';
-                            index++;
+                            temp+= '<div class="table-responsive mt-3">\
+                                <h5 class="text-center mb-4">Search result/s</h5>\
+                                <table class="table table-hover text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th>XRAY NO</th>\
+                                            <th>DATE</th>\
+                                            <th>FIRST NAME</th>\
+                                            <th>LAST NAME</th>\
+                                            <th>AGE</th>\
+                                            <th>GENDER</th>\
+                                            <th>HISTORY/PURPOSE</th>\
+                                            <th>ACTION/S</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'
+                        $.each(response, function () { 
+                            let index = 0;
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index < 7)
+                                    temp += '<td>'+this+'</td>'
+                                index++;
+                            });
+                            temp += '<td>';
+                            temp+= '<a href="javascript:void(0)" class="badge badge-primary align-middle interpretation-results-view mr-3">VIEW/EDIT</a>\
+                                    <a href="javascript:void(0)" class="fa fa-trash-alt text-danger align-middle interpretation-results-delete" style="font-size:1rem"></a>';
+                            temp += '</td>';
+                            temp += '</tr>';
                         });
-                        temp += '</tr>';
-                        tbody.append(temp);
-                    });
+                        temp += '</tbody>\
+                                </table>\
+                            </div>'
+                        $("#interpretation-results-body").append(temp);
+                    }
+                    else {
+                        $.each(response, function () { 
+                            let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
+                            temp = '';
+                            let index = 0;
+                            
+                            if (h5 == undefined || !h5.match(this.date)) {
+                                $("#interpretation-results-body").append('\
+                                    <div class="table-responsive mt-3">\
+                                        <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                        <table class="table table-hover text-center">\
+                                            <thead class="text-secondary">\
+                                                <tr>\
+                                                    <th>XRAY NO</th>\
+                                                    <th>FIRST NAME</th>\
+                                                    <th>LAST NAME</th>\
+                                                    <th>AGE</th>\
+                                                    <th>GENDER</th>\
+                                                    <th>HISTORY/PURPOSE</th>\
+                                                    <th>ACTION/S</th>\
+                                                </tr>\
+                                            </thead>\
+                                            <tbody>\
+                                            </tbody>\
+                                        </table>\
+                                    </div>\
+                                ');
+                            }
+                            
+                            let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index == 6) {
+                                    temp += '<td>';
+                                        temp+= '<a href="javascript:void(0)" class="badge badge-primary align-middle interpretation-results-view mr-3">VIEW/EDIT</a>\
+                                                <a href="javascript:void(0)" class="fa fa-trash-alt text-danger align-middle interpretation-results-delete" style="font-size:1rem"></a>';
+                                    temp += '</td>';
+                                }
+                                if (index < 6)
+                                    temp += '<td>'+this+'</td>';
+                                index++;
+                            });
+                            temp += '</tr>';
+                            tbody.append(temp);
+                        });
+                    }
                 }
                 else {
-                    $.each(response, function () { 
-                        let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
-                        let temp = '';
-                        let index = 0;
-                        
-                        if (h5 == undefined || !h5.match(this.date)) {
-                            $("#interpretation-results-body").append('\
-                                <div class="table-responsive mt-3">\
-                                    <h5 class="text-center mb-4">'+this.date+'</h5>\
-                                    <table class="table table-hover text-center">\
-                                        <thead class="text-secondary">\
-                                            <tr>\
-                                                <th>XRAY NO</th>\
-                                                <th>FIRST NAME</th>\
-                                                <th>LAST NAME</th>\
-                                                <th>AGE</th>\
-                                                <th>GENDER</th>\
-                                                <th>HISTORY/PURPOSE</th>\
-                                                <th>ACTION/S</th>\
-                                            </tr>\
-                                        </thead>\
-                                        <tbody>\
-                                        </tbody>\
-                                    </table>\
-                                </div>\
-                            ');
-                        }
-                        
-                        let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
-                        temp += '<tr>';
-                        $.each(this, function () { 
-                            if (index == 7) {
-                                temp += '<td>\
-                                            <a href="javascript:void(0)" style="width:80%" class="badge badge-primary align-middle pending-interpretation-results-print-preview mr-2"><i class="fas fa-print mr-2"></i>PRINT</a>\
-                                        </td>';
-                            }
-                            if (index < 6)
-                                temp += '<td>'+this+'</td>';
-                            index++;
+                    if (search_by.match("last name")) {
+                        temp = '';
+                            temp+= '<div class="table-responsive mt-3">\
+                                <h5 class="text-center mb-4">Search result/s</h5>\
+                                <table class="table table-hover text-center">\
+                                    <thead class="text-secondary">\
+                                        <tr>\
+                                            <th>XRAY NO</th>\
+                                            <th>DATE</th>\
+                                            <th>FIRST NAME</th>\
+                                            <th>LAST NAME</th>\
+                                            <th>AGE</th>\
+                                            <th>GENDER</th>\
+                                            <th>HISTORY/PURPOSE</th>\
+                                            <th>ACTION/S</th>\
+                                        </tr>\
+                                    </thead>\
+                                    <tbody>'
+                        $.each(response, function () { 
+                            let index = 0;
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index < 7)
+                                    temp += '<td>'+this+'</td>'
+                                index++;
+                            });
+                            temp += '<td>\
+                                        <a href="javascript:void(0)" style="width:80%" class="badge badge-primary align-middle pending-interpretation-results-print-preview mr-2"><i class="fas fa-print mr-2"></i>PRINT</a>\
+                                    </td>';
+                            temp += '</tr>';
                         });
-                        temp += '</tr>';
-                        tbody.append(temp);
-                    });
+                        temp += '</tbody>\
+                                </table>\
+                            </div>'
+                        $("#interpretation-results-body").append(temp);
+                    }
+                    else {
+                        $.each(response, function () { 
+                            let h5 = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).html();
+                            let temp = '';
+                            let index = 0;
+                            
+                            if (h5 == undefined || !h5.match(this.date)) {
+                                $("#interpretation-results-body").append('\
+                                    <div class="table-responsive mt-3">\
+                                        <h5 class="text-center mb-4">'+this.date+'</h5>\
+                                        <table class="table table-hover text-center">\
+                                            <thead class="text-secondary">\
+                                                <tr>\
+                                                    <th>XRAY NO</th>\
+                                                    <th>FIRST NAME</th>\
+                                                    <th>LAST NAME</th>\
+                                                    <th>AGE</th>\
+                                                    <th>GENDER</th>\
+                                                    <th>HISTORY/PURPOSE</th>\
+                                                    <th>ACTION/S</th>\
+                                                </tr>\
+                                            </thead>\
+                                            <tbody>\
+                                            </tbody>\
+                                        </table>\
+                                    </div>\
+                                ');
+                            }
+                            
+                            let tbody = $("#interpretation-results-body").find('h5').eq($("#interpretation-results-body").find('h5').length-1).siblings().eq(0).find('tbody');
+                            temp += '<tr>';
+                            $.each(this, function () { 
+                                if (index == 7) {
+                                    temp += '<td>\
+                                                <a href="javascript:void(0)" style="width:80%" class="badge badge-primary align-middle pending-interpretation-results-print-preview mr-2"><i class="fas fa-print mr-2"></i>PRINT</a>\
+                                            </td>';
+                                }
+                                if (index < 6)
+                                    temp += '<td>'+this+'</td>';
+                                index++;
+                            });
+                            temp += '</tr>';
+                            tbody.append(temp);
+                        });
+                    }
                 }
             }
         },
@@ -2950,7 +3104,7 @@ function get_patient_list(data, temp1) {
                 h5.siblings().eq(0).find('tbody').append(temp);
             }
             else {
-                $('#patient-list-card-body-table').html('<h5 class="mt-5 mb-4">'+header+'</h5><p>No record/s found!</p>');
+                $('#patient-list-card-body-table').html('<h5 class="text-center mt-5 mb-4">'+header+'</h5><p class="text-center">No record/s found!</p>');
             }
             $("#patient-list-card-body-table").css('opacity', 1);
             $("#patient-list-search-form").css('opacity', 1);

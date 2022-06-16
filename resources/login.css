@@ -35,7 +35,7 @@ section {
 }
 .card {
     margin-top: 3rem;
-    width: 60rem;
+    width: 45rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     border-radius: 7px;
 }
@@ -58,11 +58,6 @@ section {
 .card-body {
     display: grid;
     place-content: center;
-}
-
-.carousel-inner img {
-    border-radius: 7px;
-    width: 100%;
 }
 
 #login-header {
@@ -91,7 +86,11 @@ section {
     -webkit-transition: none !important;
     transition: none !important;
 }
-
+.modal-body {
+    width: 25rem;
+    border-radius: 7px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
 .modal {
     padding-top: 6rem;
 }
@@ -129,22 +128,6 @@ section {
     top: 49%;
     left: 48%;
     z-index: 999;
-}
-
-.close-modal {
-    background: transparent;
-    border: none;
-    position: absolute;
-    top: -4rem;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.close-modal > * {
-    font-family: 'Roboto', sans-serif;
-    opacity: 50%;
-    color: white;
-    font-size: 1.2rem !important;
 }
 
 @media (max-width:992px){

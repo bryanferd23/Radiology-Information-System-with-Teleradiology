@@ -767,7 +767,7 @@
                 <h3 class="heading">Administration</h3>
                 <div id="send-registration-email" class="card">
                     <div class="card-header">
-                        Send registration email to the user
+                        User registration
                     </div>
                     <div class="card-body">
                         <form id="send-registration-email-form">

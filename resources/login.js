@@ -3,45 +3,15 @@ const regex_email = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))
 $(document).ready(function () {
     $('.alert').hide();
 
-    $('#x-ray-status').on('click', function(e) {
-        e.preventDefault();
-        $('#search-container .modal').modal('show');
-    })
-
-    $('#login').on('click', function(e) {
-        e.preventDefault();
-        $('#login-container .modal').addClass('fade');
-        $('#login-container .modal').modal('show');
-    })
-
     $('#forgot-pass-trigger').on('click', function() {
-        $('#login-container .modal').removeClass('fade');
-        $('#login-container .modal').modal('hide');
-        $('#forgot-pass-container .modal').modal('show');
+        $('#login-form').addClass('d-none');
+        $('#forgot-pass-container').removeClass('d-none');
     })
     $('#login-trigger').on('click', function(e) {
-        e.preventDefault();
-        $('#forgot-pass-container .modal').modal('hide');
-        $('#login-container .modal').removeClass('fade');
-        $('#login-container .modal').modal('show');
+        $('#login-form').removeClass('d-none');
+        $('#forgot-pass-container').addClass('d-none');
     })
 
-    $('#search-form').on('submit', function(e) {
-        $("#search-container .modal-body").addClass('ajax-loader');
-        e.preventDefault();
-
-        $('#search-response').html('');
-        $.ajax({
-            type: "GET",
-            url: "components/xray_status.php",
-            data: $(this).serialize(),
-            dataType: "html",
-            success: function (response) {
-                $("#search-container .modal-body").removeClass('ajax-loader');
-                $('#search-response').html(response);
-            }
-        });
-    })
 
     $('#login-form').on('submit', function(e) {
         e.preventDefault();
@@ -54,7 +24,6 @@ $(document).ready(function () {
         $('#login-form').css('opacity', .2);
         $("#login-container .modal-body").addClass('ajax-loader');
         $("#login-submit").attr('disabled');
-        $("#forgot-pass-trigger").off('click');
         
         $.ajax({
             type: "POST",
@@ -91,11 +60,6 @@ $(document).ready(function () {
                     $("#login-container .modal-body").removeClass('ajax-loader');
                     $("#login-submit").removeAttr('disabled');
                 },2000);
-                $('#forgot-pass-trigger').on('click', function() {
-                    $('#login-container .modal').removeClass('fade');
-                    $('#login-container .modal').modal('hide');
-                    $('#forgot-pass-container .modal').modal('show');
-                })
             }
         });
     })

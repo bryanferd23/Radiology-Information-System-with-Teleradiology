@@ -87,7 +87,7 @@
                 $stmt->bind_param('s', $_GET['input_val']);
             }
             if ($_GET['for_reading_by'] == 'last name') {
-                $stmt=$con->prepare('SELECT TR.x_ray_no, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose, EX.date 
+                $stmt=$con->prepare('SELECT TR.x_ray_no, EX.date, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose
                                     FROM examination EX, teleradiology TR INNER JOIN patients PT 
                                     WHERE TR.x_ray_no = EX.x_ray_no && EX.patient_id = PT.id && TR.stage = "for_reading" && PT.lname = ?');
                 $stmt->bind_param('s', $_GET['input_val']);
@@ -107,7 +107,7 @@
                 $stmt->bind_param('s', $_GET['input_val']);
             }
             if ($_GET['for_printing_by'] == 'last name') {
-                $stmt=$con->prepare('SELECT TR.x_ray_no, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose, EX.date 
+                $stmt=$con->prepare('SELECT TR.x_ray_no, EX.date, PT.fname, PT.lname, PT.age, PT.gender, EX.history_or_purpose, EX.date 
                                     FROM examination EX, teleradiology TR INNER JOIN patients PT 
                                     WHERE TR.x_ray_no = EX.x_ray_no && EX.patient_id = PT.id && TR.stage = "for_printing" && PT.lname = ?');
                 $stmt->bind_param('s', $_GET['input_val']);

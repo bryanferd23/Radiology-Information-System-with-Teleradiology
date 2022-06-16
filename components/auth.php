@@ -27,8 +27,10 @@
                         $remote_ip = substr(md5($_SERVER['REMOTE_ADDR']), 0, 32);
                         $user_agent = substr(md5($_SERVER['HTTP_USER_AGENT']), 0, 32);
 //---------------------------- fetch current login_tracker by the specific user ----------------------------------//
-                        $stmt=$con->prepare('SELECT attempts, unlock_time FROM login_tracker WHERE u_id = ? OR session_id = ? AND remote_ip = ? AND user_agent = ?');
-                        $stmt->bind_param('ssss', $uid, $session_id, $remote_ip, $user_agent);
+                        //$stmt=$con->prepare('SELECT attempts, unlock_time FROM login_tracker WHERE u_id = ? OR session_id = ? AND remote_ip = ? AND user_agent = ?');
+                        //$stmt->bind_param('ssss', $uid, $session_id, $remote_ip, $user_agent);
+                        $stmt=$con->prepare('SELECT attempts, unlock_time FROM login_tracker WHERE session_id = ? AND remote_ip = ? AND user_agent = ?');
+                        $stmt->bind_param('sss', $session_id, $remote_ip, $user_agent);
                         $stmt->execute();
                         $stmt->store_result();
 //---------------------------- if no record in login tracker table, will create one for added login security --------------------------------------//

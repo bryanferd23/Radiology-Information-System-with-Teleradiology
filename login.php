@@ -20,12 +20,6 @@
     <link rel="stylesheet" href='resources/login.css'>
   </head>
   <body>
-    <nav class="navbar sticky-top">
-      <!--
-      <a id="x-ray-status" href="#" class="nav-link bg-warning text-dark align-middle ml-auto rounded-pill">Status of X-Ray result</a>
-      -->
-      <a id="login" href="#" class="nav-link bg-warning text-dark align-middle ml-auto rounded-pill">Login</a>
-    </nav>
     <noscript>
       <style>
         #enable-js {
@@ -48,90 +42,9 @@
             <p class="lead">Visayas State University Infirmary - Radiology Department</p>
         </div>
         <div class="card-body">
-          <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-interval="false">
-            <ol class="carousel-indicators">
-              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-              <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-            </ol>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="resources/images/x-ray_room1.jpg" class="d-block" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="resources/images/x-ray_room2.jpg" class="d-block" alt="..." loading="lazy">
-              </div>
-              <div class="carousel-item">
-                <img src="resources/images/x-ray_room3.jpg" class="d-block" alt="..." loading="lazy">
-              </div>
-              <div class="carousel-item">
-                <img src="resources/images/x-ray_room4.jpg" class="d-block" alt="..." loading="lazy">
-              </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div>
           <div id="login-container">
-            <div id="x-ray-info" class="text-center">
-                  <!-- contacts goes here -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--
-    <section id="search-container">
-      <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="d-flex justify-content-center">
-                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
-                    <span>Click here to close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-              <div class="modal-header d-flex justify-content-center">
-                Check the status of your x-ray result
-              </div>
-              <div class="d-flex justify-content-center">
-                <form id="search-form">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <input type="text" name="status" id="search-x-ray-result" class="form-control" placeholder="Enter X-Ray no." aria-describedby="helpId" required>
-                      <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary input-group-text"><i class="fas fa-search mr-1" aria-hidden="true"></i> Search</button>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div id="search-response" class="text-center mt-5"  style="min-height: 100px;">
-                    
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-    -->
-    <!-- Modal -->
-    <section id="login-container">
-      <div class="modal fade" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="d-flex justify-content-center">
-                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
-                    <span>Click here to close</span>
-                </button>
-            </div>
-            <div class="modal-body">
+            <!-- login window goes here -->
+            <div class="modal-body border">
               <form id="login-form">
                 <div id="login-header">
                   <i class="fas fa-user-circle"></i>
@@ -173,59 +86,50 @@
                   <button type="submit" id="login-submit" class="btn btn-primary">Login</button>
                 </div>
               </form>
+
+              <!-- forgor pass goes here -->
+              <div id="forgot-pass-container" class="d-none">
+                <div id="forgot-pass-header">
+                  <a id="login-trigger" href="#"><i class="fas fa-angle-left align-middle"></i> Login</a>
+                </div>
+                <hr>
+                <div class="alert alert-secondary d-flex justify-content-center mb-2" role="alert">
+                    <strong>Note: </strong>
+                    <i class="ml-1">A new password will be sent to the email address associated with your account. Use the new password to login and change your password in settings.</i>
+                </div>
+                <form id="forgot-pass-form">
+                  <div class="form-row">
+                      <div id="forgot-pass-alert" class="alert w-100 text-center" role="alert">
+                          <!-- response goes here -->
+                      </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="email">Email address</label>
+                      <input type="email" class="form-control" name="email" id="email" required>
+                      <small class="form-text text-muted">
+                          Must be a valid e-mail address containing 3-32 characters long.
+                      </small>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="col-md-12 mb-3">
+                      <label for="email2">Confirm email address</label>
+                      <input type="text" class="form-control" name="email2" id="email2" required>
+                      <small class="form-text text-muted">
+                      </small>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <button type="submit" class="btn btn-primary ml-auto">Submit</button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Modal -->
-    <section id="forgot-pass-container">
-      <div class="modal" data-keyboard="false" tabindex="-1" aria-labelledby="unlock-modalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="d-flex justify-content-center">
-                <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
-                    <span>Click here to close</span>
-                </button>
-            </div>
-            <div class="modal-body">
-              <div id="forgot-pass-header">
-                <a id="login-trigger" href="#"><i class="fas fa-angle-left align-middle"></i> Login</a>
-              </div>
-              <hr>
-              <div class="alert alert-secondary d-flex justify-content-center mb-2" role="alert">
-                  <strong>Note: </strong>
-                  <i class="ml-1">A new password will be sent to the email address associated with your account. Use the new password to login and change your password in settings.</i>
-              </div>
-              <form id="forgot-pass-form">
-                <div class="form-row">
-                    <div id="forgot-pass-alert" class="alert w-100 text-center" role="alert">
-                        <!-- response goes here -->
-                    </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-12 mb-3">
-                    <label for="email">Email address</label>
-                    <input type="email" class="form-control" name="email" id="email" required>
-                    <small class="form-text text-muted">
-                        Must be a valid e-mail address containing 3-32 characters long.
-                    </small>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <div class="col-md-12 mb-3">
-                    <label for="email2">Confirm email address</label>
-                    <input type="text" class="form-control" name="email2" id="email2" required>
-                    <small class="form-text text-muted">
-                    </small>
-                  </div>
-                </div>
-                <div class="form-row">
-                  <button type="submit" class="btn btn-primary ml-auto">Submit</button>
-                </div>
-              </form>
-            </div>
+          
+          <div id="x-ray-info" class="text-center">
+                  <!-- contacts goes here -->
           </div>
         </div>
       </div>
