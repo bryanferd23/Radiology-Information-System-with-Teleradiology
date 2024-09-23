@@ -2,7 +2,7 @@
 
 **Overview**
 
-This project is a web-based Radiology Information System (RIS) developed to streamline radiology department workflows, focusing on X-Ray film digitization. The system automates patient record management, examination scheduling, report generation, and X-ray film digitization for seamless radiological data handling. The goal is to increase efficiency, reduce manual tasks, and improve accessibility of radiological images and records.
+This project is a web-based Radiology Information System (RIS) developed to streamline radiology department workflows, focusing on X-Ray film digitization. The system automates patient record management, report generation, and X-ray film digitization for seamless radiological data handling. The goal is to increase efficiency, reduce manual tasks, and improve accessibility of radiological images and records.
 
 **Features**
 
